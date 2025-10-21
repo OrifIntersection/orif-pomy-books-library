@@ -1,0 +1,7 @@
+[
+    {
+        "_id": "qwertz",
+        "Name": "John Smith",
+        "Loans": [ {"_id": "12345"} ]
+    }
+]

@@ -1,0 +1,14 @@
+[
+    {
+        "_id": "12345",
+        "Name": ["03.01.2025", "04.01.2025"],
+        "Book": { "_id": "abcde", "Title": "A chacun sa façon d'apprendre", "Author": ["Mel LEVINE, M.D."] },
+        "LoanedBy": { "_id": "qwertz", "Name": "John Smith" }
+    },
+    {
+        "_id": "12346",
+        "Date": ["01.01.2025", "02.01.2025"],
+        "Book": { "_id": "abcde", "Title": "A chacun sa façon d'apprendre", "Author": ["Mel LEVINE, M.D."] },
+        "LoanedBy": { "_id": "qwertz", "Name": "John Smith" }
+    }
+]
