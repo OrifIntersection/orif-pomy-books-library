@@ -1,15 +1,23 @@
-const express = require('express')
-const { getAllBooks, getBook, postBook, patchBook, deleteBook } = require('../handlers/booksHandler.js')
+const express = require("express");
+const {
+  getAllBooks,
+  getBook,
+  postBook,
+  patchBook,
+  deleteBook,
+} = require("../handlers/booksHandler.js");
 
-const router = express.Router()
+const router = express.Router();
 
-router.route('/')      //  -> '/api/v1/books/'
+router
+  .route("/") //  -> '/api/v1/books/'
   .get(getAllBooks)
-  .post(postBook)    
+  .post(postBook);
 
-router.route('/:id')   //  -> '/api/v1/books/:id'
+router
+  .route("/:id") //  -> '/api/v1/books/:id'
   .get(getBook)
   .patch(patchBook)
-  .delete(deleteBook)         
+  .delete(deleteBook);
 
-module.exports = router
+module.exports = router;
