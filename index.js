@@ -1,15 +1,42 @@
 // dependencies
-const fs = require("fs");
+const dotenv = require("dotenv");
 const morgan = require("morgan");
 const express = require("express");
+const { MongoClient, ServerApiVersion } = require("mongodb");
 
-// global variables
-const app = express();
-const port = 3000;
+// global environment vars
+dotenv.config({ path: "./config.env" });
+
+// connect to database
+/* const client = new MongoClient(process.env.DATABASE, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+});
+
+async function run() {
+  try {
+    // Connect the client to the server	(optional starting in v4.7)
+    await client.connect();
+    // Send a ping to confirm a successful connection
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } finally {
+    // Ensures that the client will close when you finish/error
+    await client.close();
+  }
+}
+
+// call the run function to connect to the database
+run().catch(console.dir); */
+
 
 // start server
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+const app = express();
+app.listen(process.env.PORT, () => {
+  console.log(`Example app listening on port ${process.env.PORT}`);
 });
 
 // global middleware
@@ -22,7 +49,6 @@ app.use((req, res, next) => {
 
 // routers
 const booksRouter = require("./dev-data/routes/booksRoute.js");
-const e = require("express");
 app.use("/api/v1/books", booksRouter);
 
 // handle all other routes
@@ -34,25 +60,3 @@ app.all("*all", (req, res) => {
   res.status(200).sendFile("public/index.html", { root: "." });
 });
 
-// temp code to clean temp.json
-const tempData = fs.readFileSync("dev-data/data/temp.json", "utf-8");
-const temp = JSON.parse(tempData);
-temp.forEach(element => {
-  Object.defineProperty(element, 'Title',  Object.getOwnPropertyDescriptor(element, 'Titre'));
-  Object.defineProperty(element, 'Author',  Object.getOwnPropertyDescriptor(element, 'Auteur·ice'));
-  Object.defineProperty(element, 'Subject',  Object.getOwnPropertyDescriptor(element, 'Sujet traité'));
-  Object.defineProperty(element, 'Location',  Object.getOwnPropertyDescriptor(element, 'Emplacement'));
-  Object.defineProperty(element, 'Genre',  Object.getOwnPropertyDescriptor(element, 'Genre'));
-  Object.defineProperty(element, 'ISBN',  Object.getOwnPropertyDescriptor(element, 'Code ISBN'));
-  Object.defineProperty(element, 'Loans',  { value: [], writable: true, enumerable: true, configurable: true });
-  delete element['Emprunt'];
-  delete element['Par'];
-  delete element['Date'];
-  delete element['Sujet traité'];
-  delete element['Emplacement'];
-  delete element['Code ISBN'];
-  delete element['Titre'];
-  delete element['Auteur·ice'];
-
-  console.log(element);
-}); 
