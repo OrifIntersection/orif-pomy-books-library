@@ -8,7 +8,7 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 dotenv.config({ path: "./config.env" });
 
 // connect to database
-/* const client = new MongoClient(process.env.DATABASE, {
+const client = new MongoClient(process.env.DATABASE, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
@@ -30,7 +30,7 @@ async function run() {
 }
 
 // call the run function to connect to the database
-run().catch(console.dir); */
+run().catch(console.dir);
 
 
 // start server
