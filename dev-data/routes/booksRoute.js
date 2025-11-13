@@ -1,11 +1,11 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   getAllBooks,
   getBook,
   postBook,
   patchBook,
   deleteBook,
-} = require("../handlers/booksHandler.js");
+} from "../handlers/booksHandler.js";
 
 const router = express.Router();
 
@@ -20,4 +20,4 @@ router
   .patch(patchBook)
   .delete(deleteBook);
 
-module.exports = router;
+export default router

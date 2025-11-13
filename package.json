@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Library API Backend",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "nodemon index.js"
   },
