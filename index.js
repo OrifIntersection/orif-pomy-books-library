@@ -7,7 +7,7 @@ import mongoConnect from "./dev-data/config/mongoConnect.js";
 
 
 // global environment vars
-dotenv.config({ path: "./dev-data/config/config.env" });
+dotenv.config({ path: "./config.env" });
 
 // call the run function to connect to the database
 mongoConnect(process.env.DATABASE).catch(console.dir);
