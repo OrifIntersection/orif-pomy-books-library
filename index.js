@@ -24,12 +24,12 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 // get all books data
-const booksData = fs.readFileSync("./dev-data/data/books.json", "utf-8");
-const books = JSON.parse(booksData);
+// const booksData = fs.readFileSync("./dev-data/data/books.json", "utf-8");
+// const books = JSON.parse(booksData);
 
 
 app.use((req, res, next) => {
-  req.body = books;
+  req.body = { books: "This is sample book data from middleware" };
   next();
 });
 
