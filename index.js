@@ -5,6 +5,7 @@ import express from "express";
 import mongoConnect from "./dev-data/config/mongoConnect.js";
 import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
+import fs from "fs";
 
 // global environment vars
 dotenv.config({ path: "./config.env" });
@@ -21,6 +22,16 @@ app.use((req, res, next) => {
 });
 app.use(express.json());
 app.use(morgan("dev"));
+
+// get all books data
+const booksData = fs.readFileSync("./dev-data/data/books.json", "utf-8");
+const books = JSON.parse(booksData);
+
+
+app.use((req, res, next) => {
+  req.body = books;
+  next();
+});
 
 
 // routers

@@ -1,10 +1,11 @@
-import fs from "fs";
-
-const booksData = fs.readFileSync("./dev-data/data/books.json", "utf-8");
-const books = JSON.parse(booksData);
-
 export function getAllBooks(req, res) {
-  res.status(200).json(books);
+  res.status(200).json({
+    status: "success",
+    results: req.body.length,
+    data: {
+      books: req.body,
+    },
+  });
 }
 
 export function getBook(req, res) {
