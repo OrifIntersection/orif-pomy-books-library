@@ -38,6 +38,15 @@ app.use((req, res, next) => {
     "Location": "This is a test location",
     "ISBN": "2-89565-089-6",
     "Loans": [{ "_id": "12345" }, { "_id": "12346" }]
+  },
+  {
+    "Genre": ["Techniques d'encadrement"],
+    "Title": "A chacun sa façon d'apprendre",
+    "Author": ["Mel LEVINE", "M.D."],
+    "Subject": ["Apprentissage et épanouissement personnel"],
+    "Location": "Bureau KOIR",
+    "ISBN": "2-89565-089-6",
+    "Loans": []
   }];
   next();
 });
