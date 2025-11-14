@@ -4,7 +4,7 @@ const booksData = fs.readFileSync("dev-data/data/books.json", "utf-8");
 const books = JSON.parse(booksData);
 
 export function getAllBooks(req, res) {
-  res.status(200).sendFile("public/index.html", { root: "." });
+  res.status(200).json(books);
 }
 
 export function getBook(req, res) {
