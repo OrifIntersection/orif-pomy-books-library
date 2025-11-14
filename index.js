@@ -29,7 +29,16 @@ app.use(morgan("dev"));
 
 
 app.use((req, res, next) => {
-  req.body = { books: "This is sample book data from middleware" };
+  req.body = [{
+    "_id": "abcde",
+    "Title": "Test for API Calling",
+    "Author": ["John Smith", "Jane Doe"],
+    "Genre": ["How to use APIs", "API Testing"],
+    "Subject": ["Learning APIs", "Software Testing"],
+    "Location": "This is a test location",
+    "ISBN": "2-89565-089-6",
+    "Loans": [{ "_id": "12345" }, { "_id": "12346" }]
+  }];
   next();
 });
 

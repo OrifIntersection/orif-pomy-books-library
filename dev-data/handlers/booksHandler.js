@@ -1,11 +1,5 @@
 export function getAllBooks(req, res) {
-  res.status(200).json({
-    status: "success",
-    results: req.body.length,
-    data: {
-      books: req.body,
-    },
-  });
+  res.status(200).json(req.body);
 }
 
 export function getBook(req, res) {
