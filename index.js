@@ -35,11 +35,9 @@ app.listen(process.env.PORT, () => {
 });
 
 // handle all other routes
-// app.get("/public/main.js", (req, res) => {
-//  res.status(200).sendFile("public/main.js", { root: "." });
-// });
-
-// app.all("*all", (req, res) => {
-//  res.status(200).sendFile("public/index.html", { root: "." });
-// });
-
+app.all("*all", (req, res) => {
+  res.status(404).json({
+    status: "fail",
+    message: `Can't find ${req.originalUrl} on this server!`,
+  });
+});
