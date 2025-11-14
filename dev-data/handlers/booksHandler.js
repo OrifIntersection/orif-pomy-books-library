@@ -1,6 +1,6 @@
 import fs from "fs";
 
-const booksData = fs.readFileSync("dev-data/data/books.json", "utf-8");
+const booksData = fs.readFileSync("./dev-data/data/books.json", "utf-8");
 const books = JSON.parse(booksData);
 
 export function getAllBooks(req, res) {
