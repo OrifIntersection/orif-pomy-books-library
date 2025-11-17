@@ -6,6 +6,7 @@ import mongoConnect from "./dev-data/config/mongoConnect.js";
 import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
 import fs from "fs";
+import path from "path";
 
 // global environment vars
 dotenv.config({ path: "./config.env" });
@@ -24,31 +25,39 @@ app.use(express.json());
 app.use(morgan("dev"));
 
 // get all books data
-// const booksData = fs.readFileSync("./dev-data/data/books.json", "utf-8");
-// const books = JSON.parse(booksData);
+const booksPath = path.join(process.cwd(), "dev-data", "data", "books.json");
+const booksData = fs.readFileSync(booksPath, "utf-8");
+const books = JSON.parse(booksData);
 
 
 app.use((req, res, next) => {
-  req.body = [{
-    "_id": "abcde",
-    "Title": "Test for API Calling",
-    "Author": ["John Smith", "Jane Doe"],
-    "Genre": ["How to use APIs", "API Testing"],
-    "Subject": ["Learning APIs", "Software Testing"],
-    "Location": "This is a test location",
-    "ISBN": "2-89565-089-6",
-    "Loans": [{ "_id": "12345" }, { "_id": "12346" }]
-  },
-  {
-    "Genre": ["Techniques d'encadrement"],
-    "Title": "A chacun sa façon d'apprendre",
-    "Author": ["Mel LEVINE", "M.D."],
-    "Subject": ["Apprentissage et épanouissement personnel"],
-    "Location": "Bureau KOIR",
-    "ISBN": "2-89565-089-6",
-    "Loans": []
-  }];
-  next();
+  if (books) {
+    req.body = books;
+    return next();
+  } else {
+
+    req.body = [{
+      "_id": "abcde",
+      "Title": "Test for API Calling",
+      "Author": ["John Smith", "Jane Doe"],
+      "Genre": ["How to use APIs", "API Testing"],
+      "Subject": ["Learning APIs", "Software Testing"],
+      "Location": "This is a test location",
+      "ISBN": "2-89565-089-6",
+      "Loans": [{ "_id": "12345" }, { "_id": "12346" }]
+    },
+    {
+      "Genre": ["Techniques d'encadrement"],
+      "Title": "A chacun sa façon d'apprendre",
+      "Author": ["Mel LEVINE", "M.D."],
+      "Subject": ["Apprentissage et épanouissement personnel"],
+      "Location": "Bureau KOIR",
+      "ISBN": "2-89565-089-6",
+      "Loans": []
+    }];
+    return next();
+  }
+
 });
 
 
