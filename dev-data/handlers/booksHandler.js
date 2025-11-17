@@ -1,5 +1,16 @@
+import fs from "fs";
+import path from "path";
+
+const booksPath = path.join(process.cwd(), "dev-data", "data", "books.json");
+const booksData = fs.readFileSync(booksPath, "utf-8");
+const books = JSON.parse(booksData);
+
 export function getAllBooks(req, res) {
-  res.status(200).json(req.body);
+  if (books) {
+    console.log("Getting all books...", req.requestTime);
+    req.body = books
+  }
+  res.status(200).json(req.body)
 }
 
 export function getBook(req, res) {
