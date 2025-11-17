@@ -6,11 +6,7 @@ const booksData = fs.readFileSync(booksPath, "utf-8");
 const books = JSON.parse(booksData);
 
 export function getAllBooks(req, res) {
-  if (books) {
-    console.log("Getting all books...", req.requestTime);
-    req.body = books
-  }
-  res.status(200).json(req.body)
+  res.status(200).json(books)
 }
 
 export function getBook(req, res) {
