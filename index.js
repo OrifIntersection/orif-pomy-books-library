@@ -21,7 +21,7 @@ app.use(morgan("dev"));
 app.use("/api/v1/books", booksRouter);
 
 // call the connect function to connect to the database
-mongoConnect(process.env.DATABASE).catch(console.dir);
+export const client = await mongoConnect(process.env.DATABASE).catch(console.dir);
 
 // start server
 app.listen(process.env.PORT, () => {
