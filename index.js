@@ -20,16 +20,7 @@ app.use(morgan("dev"));
 // routers
 app.use("/api/v1/books", booksRouter);
 
-let client;
-
-try {
-  client = await mongoConnect(process.env.DATABASE);
-} catch (err) {
-  console.error("Failed to connect to MongoDB:", err);
-  process.exit(1); // or throw err
-}
-
-export { client };
+export const client = await mongoConnect(process.env.DATABASE);
 
 // start server
 app.listen(process.env.PORT, () => {
