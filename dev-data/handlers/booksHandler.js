@@ -3,7 +3,7 @@ import path from "path";
 
 
 const { client } = path.join(process.cwd(), "index.js");
-const booksCollection = await client.db("Library_ORIF_Pomy").collection("Books");
+const booksCollection = client.db("Library_ORIF_Pomy").collection("Books");
 
 
 export async function getAllBooks(req, res) {
