@@ -1,8 +1,7 @@
 import fs from "fs";
 import path from "path";
+import { client } from "../../index.js";
 
-
-const { client } = path.join(process.cwd(), "index.js");
 const booksCollection = client.db("Library_ORIF_Pomy").collection("Books");
 
 
