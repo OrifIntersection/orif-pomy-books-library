@@ -1,9 +1,8 @@
 import fs from "fs";
 import path from "path";
-import { client } from "../../index.js";
+import { client } from "../config/client.js";
 
 const booksCollection = client.db("Library_ORIF_Pomy").collection("Books");
-
 
 export async function getAllBooks(req, res) {
   const books = await booksCollection.find({}).toArray();
