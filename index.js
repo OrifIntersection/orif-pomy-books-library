@@ -2,7 +2,6 @@
 import dotenv from "dotenv";
 import morgan from "morgan";
 import express from "express";
-import mongoConnect from "./dev-data/config/mongoConnect.js";
 import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
 
@@ -19,8 +18,6 @@ app.use(morgan("dev"));
 
 // routers
 app.use("/api/v1/books", booksRouter);
-
-export const client = await mongoConnect(process.env.DATABASE);
 
 // start server
 app.listen(process.env.PORT, () => {
