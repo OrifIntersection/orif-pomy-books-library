@@ -3,16 +3,19 @@ import { Book } from "../models/bookModel.js";
 export async function getAllBooks(req, res, next) {
   try {
     const books = await Book.find({}).lean();
-    console.log(books);
     res.status(200).json(books)
   } catch (error) {
     next(error);
   }
 }
 
-export function getBook(req, res) {
-  console.log(req.params, req.requestTime);
-  res.status(404).json("to be implemented");
+export async function getBook(req, res) {
+  try {
+    const book = await Book.findById(req.params.id).lean();
+    res.status(200).json(book);
+  } catch (error) {
+    next(error);
+  }
 }
 
 export async function postBook(req, res) {

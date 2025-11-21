@@ -23,6 +23,6 @@ const booksSchema = new mongoose.Schema({
     },
     ISBN: String,
     Loans: Array,
-}, { strict: false });
+});
 
 export const Book = mongoose.model("Book", booksSchema, "Books");
