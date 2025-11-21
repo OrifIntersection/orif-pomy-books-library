@@ -30,10 +30,13 @@ app.all("*all", (req, res) => {
 
 // connect to database via mongoose
 let dbConnected = false;
-mongoose.connect(process.env.DATABASE, { dbName: "Library_ORIF_Pomy"}).then(() => {
-  console.log("Connected to MongoDB via Mongoose");
-  dbConnected = true;
-});
+if (dbConnected === false) {
+  mongoose.connect(process.env.DATABASE, { dbName: "Library_ORIF_Pomy" }).then(() => {
+    console.log("Connected to MongoDB via Mongoose");
+    dbConnected = true;
+  });
+}
+
 
 // start server
 app.listen(process.env.PORT, () => {
