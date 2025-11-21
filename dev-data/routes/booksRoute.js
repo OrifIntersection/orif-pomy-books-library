@@ -7,6 +7,7 @@ import {
   deleteBook,
 } from "../handlers/booksHandler.js";
 
+
 const router = express.Router();
 
 router
@@ -15,7 +16,7 @@ router
   .post(postBook);
 
 router
-  .route("/:id") //  -> '/api/v1/books/:id'
+  .route("/:id") //  -> '/api/v1/books:id'
   .get(getBook)
   .patch(patchBook)
   .delete(deleteBook);

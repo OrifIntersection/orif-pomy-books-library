@@ -1,22 +1,30 @@
-import fs from "fs";
+import { Book } from "../models/bookModel.js";
 
-const booksData = fs.readFileSync("dev-data/data/books.json", "utf-8");
-const books = JSON.parse(booksData);
-
-export function getAllBooks(req, res) {
-  res.status(200).sendFile("public/index.html", { root: "." });
+export async function getAllBooks(req, res, next) {
+  try {
+    const books = await Book.find({}).lean();
+    res.status(200).json(books)
+  } catch (error) {
+    next(error);
+  }
 }
 
-export function getBook(req, res) {
-  console.log(req.params, req.requestTime);
-  res.status(404).json("to be implemented");
+export async function getBook(req, res) {
+  try {
+    const book = await Book.findById(req.params.id).lean();
+    res.status(200).json(book);
+  } catch (error) {
+    next(error);
+  }
 }
 
-export function postBook(req, res) {
-  console.log(req.body, req.requestTime);
+export async function postBook(req, res) {
+  const newBook = req.body;
+  const result = await booksCollection.insertOne(newBook);
+
   res.status(201).json({
     status: "success",
-    data: req.body,
+    data: result,
   });
 }
 
