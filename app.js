@@ -5,6 +5,7 @@ import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+
 // global environment vars
 dotenv.config({ path: "./config.env" });
 
@@ -28,7 +29,7 @@ app.all("*all", (req, res) => {
 });
 
 // connect to database via mongoose
-mongoose.connect(process.env.DATABASE).then(() => {
+mongoose.connect(process.env.DATABASE, { dbName: "Library_ORIF_Pomy"}).then(() => {
   console.log("Connected to MongoDB via Mongoose");
 });
 
