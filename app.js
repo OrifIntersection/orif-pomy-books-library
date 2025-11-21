@@ -4,6 +4,10 @@ import express from "express";
 import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+// global environment vars
+dotenv.config({ path: "./config.env" });
 
 // global middleware
 
