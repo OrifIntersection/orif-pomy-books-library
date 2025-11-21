@@ -3,7 +3,6 @@ import morgan from "morgan";
 import express from "express";
 import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import { connectToDatabase } from "./dev-data/config/mongoConnect.js";
 
@@ -11,7 +10,6 @@ import { connectToDatabase } from "./dev-data/config/mongoConnect.js";
 dotenv.config({ path: "./config.env" });
 
 // global middleware
-
 const app = express();
 
 export default async function appHandler(req, res) {
