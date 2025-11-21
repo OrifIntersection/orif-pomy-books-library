@@ -6,15 +6,15 @@ const booksSchema = new mongoose.Schema({
         required: [true, "A book must have a title"],
     },
     Author: {
-        type: String,
+        type: Array,
         required: [true, "A book must have an author"],
     },
     Genre: {
-        type: String,
+        type: Array,
         required: [true, "A book must have a genre"],
     },
     Subject: {
-        type: String,
+        type: Array,
         required: [true, "A book must have a subject"],
     },
     Location: {
@@ -23,6 +23,6 @@ const booksSchema = new mongoose.Schema({
     },
     ISBN: String,
     Loans: Array,
-});
+}, { strict: false });
 
 export const Book = mongoose.model("Book", booksSchema, "Books");

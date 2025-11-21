@@ -3,6 +3,7 @@ import { Book } from "../models/bookModel.js";
 export async function getAllBooks(req, res, next) {
   try {
     const books = await Book.find({}).lean();
+    console.log(books);
     res.status(200).json(books)
   } catch (error) {
     next(error);
