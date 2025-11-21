@@ -5,7 +5,8 @@ import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
 
 // global middleware
-export const app = express();
+
+const app = express();
 
 app.use(cors());
 app.options("/*all", cors());
@@ -22,3 +23,7 @@ app.all("*all", (req, res) => {
     message: `Can't find ${req.originalUrl} on this server!`,
   });
 });
+
+export default function appHandler(req, res) {
+  return app(req, res);
+}
