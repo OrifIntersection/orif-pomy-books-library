@@ -1,12 +1,12 @@
-import fs from "fs";
-import path from "path";
-import { client } from "../config/client.js";
+import { Book } from "../models/bookModel.js";
 
-const booksCollection = client.db("Library_ORIF_Pomy").collection("Books");
-
-export async function getAllBooks(req, res) {
-  const books = await booksCollection.find({}).toArray();
-  res.status(200).json(books)
+export async function getAllBooks(req, res, next) {
+  try {
+    const books = await Book.find({}).lean();
+    res.status(200).json(books)
+  } catch (error) {
+    next(error);
+  }
 }
 
 export function getBook(req, res) {
@@ -14,11 +14,13 @@ export function getBook(req, res) {
   res.status(404).json("to be implemented");
 }
 
-export function postBook(req, res) {
-  console.log(req.body);
+export async function postBook(req, res) {
+  const newBook = req.body;
+  const result = await booksCollection.insertOne(newBook);
+
   res.status(201).json({
     status: "success",
-    data: req.body,
+    data: result,
   });
 }
 

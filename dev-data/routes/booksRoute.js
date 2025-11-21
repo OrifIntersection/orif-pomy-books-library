@@ -16,7 +16,7 @@ router
   .post(postBook);
 
 router
-  .route("/:id") //  -> '/api/v1/books/:id'
+  .route("?search=id") //  -> '/api/v1/books?search=id'
   .get(getBook)
   .patch(patchBook)
   .delete(deleteBook);

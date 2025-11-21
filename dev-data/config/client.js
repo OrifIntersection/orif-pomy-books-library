@@ -1,3 +1,3 @@
-import mongoConnect from "./mongoConnect.js";
+/* import mongoConnect from "./mongoConnect.js";
 
-export const client = await mongoConnect(process.env.DATABASE);
+export const client = await mongoConnect(process.env.DATABASE); */

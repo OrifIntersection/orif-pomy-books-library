@@ -1,4 +1,4 @@
-// connect to database
+/* // connect to database
 import { MongoClient, ServerApiVersion } from "mongodb";
 
 export default async function mongoConnect(uri) {
@@ -16,4 +16,4 @@ export default async function mongoConnect(uri) {
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
     return client;
-}
+} */
