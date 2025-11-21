@@ -1,19 +1,18 @@
-/* // connect to database
-import { MongoClient, ServerApiVersion } from "mongodb";
+import mongoose from "mongoose";
 
-export default async function mongoConnect(uri) {
-    const client = new MongoClient(uri, {
-        serverApi: {
-            version: ServerApiVersion.v1,
-            strict: true,
-            deprecationErrors: true,
-        },
-    });
+let isConnected = false;
 
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
-    return client;
-} */
+export async function connectToDatabase() {
+  if (isConnected) {
+    // Use existing database connection
+    return;
+  }
+
+  if (!process.env.DATABASE) {
+    throw new Error("DATABASE connection string missing");
+  }
+
+  const db = await mongoose.connect(process.env.DATABASE);
+
+  isConnected = db.connections[0].readyState === 1;
+}

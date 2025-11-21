@@ -5,6 +5,7 @@ import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import { connectToDatabase } from "./dev-data/config/mongoConnect.js";
 
 // global environment vars
 dotenv.config({ path: "./config.env" });
@@ -12,6 +13,11 @@ dotenv.config({ path: "./config.env" });
 // global middleware
 
 const app = express();
+
+export default async function appHandler(req, res) {
+  await connectToDatabase();
+  return app(req, res);
+}
 
 app.use(cors());
 app.options("/*all", cors());
@@ -29,16 +35,3 @@ app.all("*all", (req, res) => {
   });
 });
 
-let isConnected = false;
-
-async function connectDB() {
-  if (!isConnected) {
-    const db = await mongoose.connect(process.env.DATABASE);
-    isConnected = db.connections[0].readyState === 1;
-  }
-}
-
-export default async function appHandler(req, res) {
-  await connectDB();
-  return app(req, res);
-}
