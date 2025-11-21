@@ -1,5 +1,6 @@
 import { useParams } from "react-router";
 import { useState, useEffect } from "react";
+import "./SingleBook.css";
 
 function BookHead() {
   return (
@@ -27,7 +28,15 @@ function BookBody({ book }) {
   );
 }
 
-export default function Book() {
+function EditBook() {
+  return <button type="button">Modifier</button>;
+}
+
+function BorrowBook() {
+  return <button type="button">Emprunter</button>;
+}
+
+function Book() {
   const [book, setBook] = useState(null);
   const { id } = useParams();
 
@@ -61,5 +70,15 @@ export default function Book() {
     </table>
   ) : (
     <p>loading...</p>
+  );
+}
+
+export default function BookLayout() {
+  return (
+    <>
+      <EditBook />
+      <BorrowBook />
+      <Book />
+    </>
   );
 }

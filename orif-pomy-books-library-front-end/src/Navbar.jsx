@@ -8,7 +8,7 @@ function Navbar() {
       <p>
         Orif Pomy Bibliothèque
         <Link to="/books" className="link">Livres</Link>
-        <Link to="/newbook" className="link">+ Ajouter une livre</Link>
+        <Link to="/newbook" className="link">+ Ajouter un livre</Link>
         <Link to="/login" className="login">Login</Link>
       </p>
     </header>
