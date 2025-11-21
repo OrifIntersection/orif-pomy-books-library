@@ -4,7 +4,7 @@ import express from "express";
 import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
 import dotenv from "dotenv";
-
+import mongoose from "mongoose";
 // global environment vars
 dotenv.config({ path: "./config.env" });
 
