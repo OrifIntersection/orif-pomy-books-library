@@ -1,24 +1,16 @@
-// dependencies
-import morgan from "morgan";
-import express from "express";
-import cors from "cors";
-import booksRouter from "./dev-data/routes/booksRoute.js"
+import { app } from "./app.js";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
 
-// global middleware
-export const app = express();
+// global environment vars
+dotenv.config({ path: "./config.env" });
 
-app.use(cors());
-app.options("/*all", cors());
-app.use(express.json());
-app.use(morgan("dev"));
+// connect to database via mongoose
+mongoose.connect(process.env.DATABASE).then(() => {
+  console.log("Connected to MongoDB via Mongoose");
+});
 
-// routers
-app.use("/api/v1/books", booksRouter);
-
-// handle all other routes
-app.all("*all", (req, res) => {
-  res.status(404).json({
-    status: "fail",
-    message: `Can't find ${req.originalUrl} on this server!`,
-  });
+// start server
+app.listen(process.env.PORT, () => {
+  console.log(`Example app listening on port ${process.env.PORT}`);
 });
