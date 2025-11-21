@@ -4,18 +4,12 @@ import express from "express";
 import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
 import dotenv from "dotenv";
-import { connectToDatabase } from "./dev-data/config/mongoConnect.js";
 
 // global environment vars
 dotenv.config({ path: "./config.env" });
 
 // global middleware
 const app = express();
-
-export default async function appHandler(req, res) {
-  await connectToDatabase();
-  return app(req, res);
-}
 
 app.use(cors());
 app.options("/*all", cors());
@@ -33,3 +27,12 @@ app.all("*all", (req, res) => {
   });
 });
 
+// connect to database via mongoose
+mongoose.connect(process.env.DATABASE).then(() => {
+  console.log("Connected to MongoDB via Mongoose");
+});
+
+// start server
+app.listen(process.env.PORT, () => {
+  console.log(`Example app listening on port ${process.env.PORT}`);
+});

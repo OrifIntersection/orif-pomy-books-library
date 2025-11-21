@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 
-let isConnected = false;
-
 export async function connectToDatabase() {
   if (isConnected) {
     // Use existing database connection
