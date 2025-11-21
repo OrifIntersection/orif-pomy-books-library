@@ -3,6 +3,7 @@ import morgan from "morgan";
 import express from "express";
 import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
+import mongoose from "mongoose";
 
 // global middleware
 
@@ -24,6 +25,16 @@ app.all("*all", (req, res) => {
   });
 });
 
-export default function appHandler(req, res) {
+let isConnected = false;
+
+async function connectDB() {
+  if (!isConnected) {
+    const db = await mongoose.connect(process.env.DATABASE);
+    isConnected = db.connections[0].readyState === 1;
+  }
+}
+
+export default async function appHandler(req, res) {
+  await connectDB();
   return app(req, res);
 }
