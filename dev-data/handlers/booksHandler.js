@@ -3,14 +3,18 @@ import { Book } from "../models/bookModel.js";
 export async function getAllBooks(req, res, next) {
   try {
     const queryParams = req.query;
+
+    if (req.query && Object.keys(req.query).length === 0) {
+      const books = await Book.find().lean();
+      return res.status(200).json(books);
+    }
+
     const queryObject = {};
 
     queryObject[queryParams.searchType] = {
       $regex: queryParams.search,
       $options: "i"
     };
-
-    console.log("Query Parameters:", queryObject);
     const books = await Book.find(queryObject).lean();
     res.status(200).json(books)
   } catch (error) {
