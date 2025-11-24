@@ -5,7 +5,10 @@ export async function getAllBooks(req, res, next) {
     const queryParams = req.query;
     const queryObject = {};
 
-    queryObject[queryParams.searchType] = queryParams.search;
+    queryObject[queryParams.searchType] = {
+      $regex: queryParams.search,
+      $options: "i"
+    };
 
     console.log("Query Parameters:", queryObject);
     const books = await Book.find(queryObject).lean();
