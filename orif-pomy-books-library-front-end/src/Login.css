@@ -1,4 +1,4 @@
-form {
+.loginForm, .bookForm {
   width: 300px;
   margin: 80px auto;
   padding: 25px;
@@ -12,14 +12,16 @@ form {
   font-family: sans-serif;
 }
 
-label {
+.loginForm label,
+.bookForm label {
   font-size: 15px;
   font-weight: 600;
   margin-bottom: -8px;
 }
 
-input[type="text"],
-input[type="password"] {
+.loginForm input[type="text"],
+.loginForm input[type="password"],
+.bookForm input[type="text"] {
   padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -28,13 +30,15 @@ input[type="password"] {
   transition: border 0.2s, box-shadow 0.2s;
 }
 
-input[type="text"]:focus,
-input[type="password"]:focus {
+.loginForm input[type="text"]:focus,
+.loginForm input[type="password"]:focus,
+.bookForm input[type="text"]:focus {
   border-color: rgb(150, 180, 180);
   box-shadow: 0 0 4px rgb(150, 160, 160);
 }
 
-input[type="submit"] {
+.loginForm input[type="submit"],
+.bookForm input[type="submit"] {
   margin-top: 10px;
   padding: 10px;
   background: rgb(150, 180, 180);
@@ -46,6 +50,7 @@ input[type="submit"] {
   transition: background 0.2s;
 }
 
-input[type="submit"]:hover {
+.loginForm input[type="submit"]:hover,
+.bookForm input[type="submit"]:hover {
   background: rgb(120, 150, 150);
 }

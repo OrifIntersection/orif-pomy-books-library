@@ -1,27 +1,12 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import "./BookTable.css";
 
-function BookTableBody({ books, search, searchType }) {
+function BookTableBody({ book }) {
   const navigate = useNavigate();
 
-  const searchedBooks = books.filter((book) => {
-    const selection = book[searchType];
-
-    if (Array.isArray(selection)) {
-      return selection.join(", ").toLowerCase().includes(search.toLowerCase());
-    }
-
-    if (typeof selection === "string") {
-      return selection.toLowerCase().includes(search.toLowerCase());
-    }
-
-    return false;
-  });
-
-  return searchedBooks.map((book) => (
+  return (
     <tr
-      key={book._id}
       onClick={() => navigate(`/books/${book._id}`)}
       style={{ cursor: "pointer" }}
     >
@@ -32,7 +17,7 @@ function BookTableBody({ books, search, searchType }) {
       <td>{book.Location}</td>
       <td>{book.ISBN}</td>
     </tr>
-  ));
+  );
 }
 
 function BookTableHead() {
@@ -48,63 +33,88 @@ function BookTableHead() {
   );
 }
 
-function BookTableContent({ search, searchType }) {
-  const [books, setBooks] = useState([]);
+function EditBook() {
+  return <button type="button">Modifier</button>;
+}
 
-  // fetch books data from API
+function BorrowBook() {
+  return <button type="button">Emprunter</button>;
+}
+
+function BookButtons({ books }) {
+  return books.length === 1 ? (
+    <div className="bookButtons">
+      <EditBook />
+      <BorrowBook />
+    </div>
+  ) : (
+    <></>
+  );     
+}
+
+function BookTableContent({ searchParams }) {
+  const [books, setBooks] = useState([]);
+  const { id } = useParams();
+
+  // fetch books data from API, check if an id is specified
   useEffect(() => {
     async function getAPI() {
       try {
+        const query = searchParams.toString()
         const res = await fetch(
-          `https://orif-pomy-books-library.vercel.app/api/v1/books`
+          `https://orif-pomy-books-library.vercel.app/api/v1/books/${id ?? ""}${
+            query ? `?${query}` : ""
+          }`
         );
+
         if (res.ok) {
           const resBooks = await res.json();
-          setBooks(resBooks);
+          if (Array.isArray(resBooks)) setBooks(resBooks);
+          else setBooks([resBooks]);
         }
       } catch (error) {
         console.log(error);
       }
     }
     getAPI();
-  }, []);
+  }, [id, searchParams]);
 
   return books ? (
-    <table>
-      <thead>
-        <tr>
-          <BookTableHead />
-        </tr>
-      </thead>
-      <tbody>
-        <BookTableBody books={books} search={search} searchType={searchType} />
-      </tbody>
-    </table>
+    <>
+      <BookButtons books={books}/>
+      <table>
+        <thead>
+          <tr>
+            <BookTableHead />
+          </tr>
+        </thead>
+        <tbody>
+          {books.map((book) => (
+            <BookTableBody
+              key={book._id}
+              book={book}
+            />
+          ))}
+        </tbody>
+      </table>
+    </>
   ) : (
     <p>Loading...</p>
   );
 }
 
-function SearchBookTable({ setSearch, setSearchType }) {
-  function handleSearchValue(e) {
-    setSearch(e.target.value);
-  }
-
-  function handleSearchType(e) {
-    setSearchType(e.target.value);
-  }
-
+function SearchBookTable({ submitSearch }) {
   return (
-    <>
+    <form action={submitSearch} className="searchForm">
       <div>
         <label htmlFor="search-books">Recherche de livres : </label>
-        <input type="search" id="search-books" onChange={handleSearchValue} />
+        <input type="search" id="search-books" name="search" />
       </div>
       <div>
         <label htmlFor="search-type">
           Selectionnez le type de recherche :{" "}
         </label>
-        <select id="search-type" name="search" onChange={handleSearchType}>
+        <select id="search-type" name="search-type">
           <option value="Title">Titre</option>
           <option value="Author">Auteur</option>
           <option value="Genre">Genre</option>
@@ -112,18 +122,25 @@ function SearchBookTable({ setSearch, setSearchType }) {
           <option value="Location">Emplacement</option>
         </select>
       </div>
-    </>
+      <input type="submit" value="Recherche" />
+    </form>
   );
 }
 
 function BookTable() {
-  const [search, setSearch] = useState("");
-  const [searchType, setSearchType] = useState("Title");
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  function submitSearch(formData) {
+    const search = formData.get("search");
+    const searchType = formData.get("search-type");
+
+    setSearchParams({ search: search, searchType: searchType });
+  }
 
   return (
     <>
-      <SearchBookTable setSearch={setSearch} setSearchType={setSearchType} />
-      <BookTableContent search={search} searchType={searchType} />
+      <SearchBookTable submitSearch={submitSearch} />
+      <BookTableContent searchParams={searchParams} />
     </>
   );
 }

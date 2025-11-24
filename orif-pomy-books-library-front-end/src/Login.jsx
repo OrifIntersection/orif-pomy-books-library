@@ -19,14 +19,14 @@ export default function Login() {
   }
 
   return (
-    <>
-      <form action={submitLogin}>
+    
+      <form action={submitLogin} className="loginForm">
         <label htmlFor="username">Utilisateur: </label>
         <input type="text" id="username" name="user" />
         <label htmlFor="password">Mot de passe: </label>
         <input type="password" id="password" name="pass" />
         <input type="submit" value="Login" />
       </form>
-    </>
+
   );
 }

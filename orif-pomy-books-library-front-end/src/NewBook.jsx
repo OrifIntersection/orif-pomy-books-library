@@ -1,6 +1,3 @@
-import { useState, useEffect } from "react";
-import "./NewBook.css";
-
 export default function NewBook() {
   async function submitBook(formData) {
     try {
@@ -23,7 +20,7 @@ export default function NewBook() {
 
   return (
     <>
-      <form action={submitBook}>
+      <form action={submitBook} className="bookForm">
         <label htmlFor="title">Titre: </label>
         <input type="text" id="title" name="title" required/>
         <label htmlFor="author">Auteur: </label>
