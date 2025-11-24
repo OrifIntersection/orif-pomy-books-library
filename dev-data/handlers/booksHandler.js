@@ -2,7 +2,9 @@ import { Book } from "../models/bookModel.js";
 
 export async function getAllBooks(req, res, next) {
   try {
-    const books = await Book.find({}).lean();
+    const queryParams = req.query;
+    console.log("Query Parameters:", queryParams);
+    const books = await Book.find(queryParams).lean();
     res.status(200).json(books)
   } catch (error) {
     next(error);
@@ -19,13 +21,17 @@ export async function getBook(req, res) {
 }
 
 export async function postBook(req, res) {
-  const newBook = req.body;
-  const result = await booksCollection.insertOne(newBook);
+  try {
+    const newBook = req.body;
+    const result = await booksCollection.insertOne(newBook);
 
-  res.status(201).json({
-    status: "success",
-    data: result,
-  });
+    res.status(201).json({
+      status: "success",
+      data: result,
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 export function patchBook(req, res) {
