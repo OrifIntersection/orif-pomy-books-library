@@ -3,8 +3,12 @@ import { Book } from "../models/bookModel.js";
 export async function getAllBooks(req, res, next) {
   try {
     const queryParams = req.query;
-    console.log("Query Parameters:", queryParams);
-    const books = await Book.find(queryParams).lean();
+    const queryObject = {};
+
+    Object.defineProperty(queryObject, queryParams.searchType, queryParams.search);
+
+    console.log("Query Parameters:", queryObject);
+    const books = await Book.find(queryObject).lean();
     res.status(200).json(books)
   } catch (error) {
     next(error);
