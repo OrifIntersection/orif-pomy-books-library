@@ -53,7 +53,7 @@ function BookButtons({ books }) {
 }
 
 function BookTableContent({ searchParams }) {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState();
   const { id } = useParams();
 
   // fetch books data from API, check if an id is specified
