@@ -1,4 +1,7 @@
-.loginForm, .bookForm {
+/* CSS for loginForm, bookForm, searchForm */
+
+.loginForm, 
+.bookForm {
   width: 300px;
   margin: 80px auto;
   padding: 25px;
@@ -38,7 +41,8 @@
 }
 
 .loginForm input[type="submit"],
-.bookForm input[type="submit"] {
+.bookForm input[type="submit"],
+.searchForm input[type="submit"] {
   margin-top: 10px;
   padding: 10px;
   background: rgb(150, 180, 180);
@@ -50,7 +54,12 @@
   transition: background 0.2s;
 }
 
+.searchForm input[type="submit"] {
+  margin-left: 30px;
+}
+
 .loginForm input[type="submit"]:hover,
-.bookForm input[type="submit"]:hover {
+.bookForm input[type="submit"]:hover,
+.searchForm input[type="submit"]:hover {
   background: rgb(120, 150, 150);
 }

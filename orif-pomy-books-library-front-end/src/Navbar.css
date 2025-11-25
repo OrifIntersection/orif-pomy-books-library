@@ -1,4 +1,6 @@
-header {
+/* navbar CSS */
+
+.navbar {
   width: 100%; 
   padding: 30px 0px 30px 0px;
   margin-bottom: 20px;
@@ -8,17 +10,14 @@ header {
   filter: drop-shadow(2px 2px 4px #707070);
 }
 
-header p {
+.navbar p {
   display: flex;
   align-items: center;
-}
-
-p {
   margin: 0px 30px 0px 30px;
   text-shadow: 0px 1px 0px black;
 }
 
-.login {
+.navbar .login {
   color: white;
   background: rgb(160, 190, 190);
   margin: 0px 0px;
@@ -29,14 +28,14 @@ p {
   margin-left: auto; /* pushes Login to the right */
 }
 
-.login:hover { 
+.navbar .login:hover { 
   border-color: rgb(145, 175, 175);
   color: rgb(130, 165, 175);
   background: #ffffff;
   transition: background 0.2s ease;
 }
 
-.link {
+.navbar .link {
   color: white;
   background: rgb(160, 190, 190);
   margin:  0px 0px 0px 30px;
@@ -46,7 +45,7 @@ p {
   text-decoration-line: none;
 }
 
-.link:hover { 
+.navbar .link:hover { 
   border-color: rgb(145, 175, 175);
   color: rgb(130, 165, 175);
   background: #ffffff;

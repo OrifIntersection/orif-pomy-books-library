@@ -6,7 +6,7 @@ import "./Navbar.css";
 function Navbar() {
   return (
     <>
-      <header>
+      <header className="navbar">
         <p>
           Orif Pomy Bibliothèque
           <Link to="/books" className="link">

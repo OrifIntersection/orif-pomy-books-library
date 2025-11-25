@@ -82,7 +82,7 @@ function BookTableContent({ searchParams }) {
   return books ? (
     <>
       <BookButtons books={books}/>
-      <table>
+      <table className="bookTable">
         <thead>
           <tr>
             <BookTableHead />
