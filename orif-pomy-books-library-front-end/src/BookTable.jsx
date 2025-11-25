@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router";
+import { useNavigate, useParams, useSearchParams, Link } from "react-router";
 import "./BookTable.css";
 
 function BookTableBody({ book }) {
+
+  //
+  // useNavigate will set the current URL to include the book ID
+  // this will query the API -> getBookById
+  //
+
   const navigate = useNavigate();
 
   return (
@@ -33,55 +39,38 @@ function BookTableHead() {
   );
 }
 
-function EditBook() {
-  return <button type="button">Modifier</button>;
+function EditBook({ book }) {
+  return <Link className="bookButtons" to={`/books/${book._id}/modify`}>Modifier Livre</Link>;
 }
 
-function BorrowBook() {
-  return <button type="button">Emprunter</button>;
+function BorrowBook({ book }) {
+  return <Link className="bookButtons" to={`/books/${book._id}/borrow`}>Emprunter Livre</Link>;
 }
 
 function BookButtons({ books }) {
+
+  //
+  // BookButtons only show when a single book is available
+  // we can then use this book ID to update & PATCH the API, or POST the API to borrow the book
+  //
+
   return books.length === 1 ? (
-    <div className="bookButtons">
-      <EditBook />
-      <BorrowBook />
-    </div>
-  ) : (
-    <></>
-  );     
+    <>
+      <EditBook book={books[0]}/>
+      <BorrowBook book={books[0]}/>
+    </>
+  ) : null
 }
 
-function BookTableContent({ searchParams }) {
-  const [books, setBooks] = useState();
-  const { id } = useParams();
+function BookTableContent({ books }) {
 
-  // fetch books data from API, check if an id is specified
-  useEffect(() => {
-    async function getAPI() {
-      try {
-        const query = searchParams.toString()
-        const res = await fetch(
-          `https://orif-pomy-books-library.vercel.app/api/v1/books/${id ?? ""}${
-            query ? `?${query}` : ""
-          }`
-        );
+  //
+  // Renders BookTableHead and BookTableBody 
+  // (based on the number of books found)
+  //
 
-        if (res.ok) {
-          const resBooks = await res.json();
-          if (Array.isArray(resBooks)) setBooks(resBooks);
-          else setBooks([resBooks]);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getAPI();
-  }, [id, searchParams]);
-
-  return books ? (
+  return (
     <>
-      <BookButtons books={books}/>
       <table className="bookTable">
         <thead>
           <tr>
@@ -90,20 +79,21 @@ function BookTableContent({ searchParams }) {
         </thead>
         <tbody>
           {books.map((book) => (
-            <BookTableBody
-              key={book._id}
-              book={book}
-            />
+            <BookTableBody key={book._id} book={book} />
           ))}
         </tbody>
       </table>
     </>
-  ) : (
-    <p>Loading...</p>
   );
 }
 
 function SearchBookTable({ submitSearch }) {
+
+  //
+  // This search form will only show when multiple books are available
+  // if a single book is found, it will no longer show (see BookTable conditional return)
+  //
+
   return (
     <form action={submitSearch} className="searchForm">
       <div>
@@ -129,6 +119,13 @@ function SearchBookTable({ submitSearch }) {
 
 function BookTable() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [books, setBooks] = useState();
+  const { id } = useParams();
+
+  //
+  // function to set search queries to the URL whenever the SearchBookTable form is submitted
+  // this will automatically query the API via useEffect
+  //
 
   function submitSearch(formData) {
     const search = formData.get("search");
@@ -137,11 +134,44 @@ function BookTable() {
     setSearchParams({ search: search, searchType: searchType });
   }
 
-  return (
+  //
+  // query the API based on an ID (if present) and the search queries (if present)
+  // defaults to return all books
+  //
+
+  useEffect(() => {
+    async function getAPI() {
+      try {
+        const query = searchParams.toString();
+        const res = await fetch(
+          `https://orif-pomy-books-library.vercel.app/api/v1/books/${id ?? ""}${
+            query ? `?${query}` : ""
+          }`
+        );
+
+        if (res.ok) {
+          const resBooks = await res.json();
+          if (Array.isArray(resBooks)) setBooks(resBooks);
+          else setBooks([resBooks]);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getAPI();
+  }, [id, searchParams]);
+
+  return books ? (
     <>
-      <SearchBookTable submitSearch={submitSearch} />
-      <BookTableContent searchParams={searchParams} />
+      {books.length === 1 ? (
+        <BookButtons books={books} />
+      ) : (
+        <SearchBookTable submitSearch={submitSearch} />
+      )}
+      <BookTableContent books={books} />
     </>
+  ) : (
+    <p className="loadingBar">Loading...</p>
   );
 }
 

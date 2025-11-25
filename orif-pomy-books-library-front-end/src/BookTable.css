@@ -63,15 +63,36 @@
 
 /* bookButtons CSS */
 
-.bookButtons button {
-  margin-top: 10px;
-  padding: 10px;
+.bookButtons {
+  padding: 12px;
   background: rgb(150, 180, 180);
   color: white;
   border: none;
   border-radius: 8px;
-  font-size: 1rem;
+  font-size: 16px;
   cursor: pointer;
   transition: background 0.2s;
-  margin-left: 8px;
+  margin-left: 16px;
+  text-decoration: none;
+}
+
+.bookButtons:hover {
+  background: rgb(120, 150, 150);
+  color: white;
+}
+
+
+/* loadingBar CSS */
+
+.loadingBar {
+  width: 200px;
+  height: 40px;
+  margin-left: 20px;
+  background: rgb(150, 180, 180);
+  color: white;
+  border-radius: 4px;
+  overflow: hidden;
+  text-align: center;
+  align-content: center;
+
 }

@@ -1,7 +1,8 @@
 /* CSS for loginForm, bookForm, searchForm */
 
 .loginForm, 
-.bookForm {
+.bookForm,
+.modifyForm {
   width: 300px;
   margin: 80px auto;
   padding: 25px;
@@ -16,7 +17,8 @@
 }
 
 .loginForm label,
-.bookForm label {
+.bookForm label,
+.modifyForm label {
   font-size: 15px;
   font-weight: 600;
   margin-bottom: -8px;
@@ -24,7 +26,8 @@
 
 .loginForm input[type="text"],
 .loginForm input[type="password"],
-.bookForm input[type="text"] {
+.bookForm input[type="text"],
+.modifyForm input[type="text"] {
   padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -35,14 +38,16 @@
 
 .loginForm input[type="text"]:focus,
 .loginForm input[type="password"]:focus,
-.bookForm input[type="text"]:focus {
+.bookForm input[type="text"]:focus,
+.modifyForm input[type="text"]:focus {
   border-color: rgb(150, 180, 180);
   box-shadow: 0 0 4px rgb(150, 160, 160);
 }
 
 .loginForm input[type="submit"],
 .bookForm input[type="submit"],
-.searchForm input[type="submit"] {
+.searchForm input[type="submit"],
+.modifyForm input[type="submit"] {
   margin-top: 10px;
   padding: 10px;
   background: rgb(150, 180, 180);
@@ -60,6 +65,7 @@
 
 .loginForm input[type="submit"]:hover,
 .bookForm input[type="submit"]:hover,
-.searchForm input[type="submit"]:hover {
+.searchForm input[type="submit"]:hover,
+.modifyForm input[type="submit"]:hover {
   background: rgb(120, 150, 150);
 }
