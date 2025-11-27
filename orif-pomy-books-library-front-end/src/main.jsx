@@ -3,17 +3,19 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
 import "./index.css";
 import BookTable from "./BookTable.jsx";
+import ModifyBook from "./ModifyBook.jsx";
 import NewBook from "./NewBook.jsx"
 import Login from "./Login.jsx";
-import MainLayout from "./MainLayout.jsx";
-import SingleBook from "./SingleBook.jsx";
+import Navbar from "./Navbar.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<MainLayout />}>
-        <Route path="/books" element={<BookTable />} />
-        <Route path="/books/:id" element={<SingleBook />} />
+      <Route element={<Navbar />}>
+        <Route path="/books?" element={<BookTable />} />
+        <Route path="/books/:id" element={<BookTable />} />
+        <Route path="/books/:id/modify" element={<ModifyBook />} />
+        <Route path="/books/:id/borrow" element={<BookTable />} />
         <Route path="/newbook" element={<NewBook />} />
         <Route path="/login" element={<Login />} />
       </Route>

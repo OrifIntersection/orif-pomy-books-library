@@ -1,51 +1,17 @@
-div { 
+/* searchForm CSS */
+
+.searchForm div {
   padding: 4px;
 }
 
-table {
-  width: 100%;
-  table-layout: fixed;
-  margin-top: 20px;
-  border: 2px solid rgb(180, 190, 190);
-  border-collapse: collapse;
-  font-size: 14px;
-  background: #fff;
-}
-
-thead th {
-  background: rgb(200, 215, 215);
-  text-align: left;
-  padding: 14px;
-  border-bottom: 2px solid rgb(180, 190, 190);
-  font-weight: bold;
-}
-
-tbody td {
-  padding: 14px 14px;
-  border-bottom: 1px solid #eee;
-}
-
-tbody tr:nth-child(even) {
-  background: #fafafa;
-}
-
-tbody tr:hover {
-  background: #eaeffc;
-  transition: background 0.2s ease;
-}
-
-label {
+.searchForm label {
   margin: 14px;
   font-size: 14px;
   font-weight: bold;
 }
 
-.id {
-  width: 2%;
-}
-
-input[type="search"],
-select {
+.searchForm input[type="search"],
+.searchForm select {
   padding: 8px;
   border: 1px solid #585858;
   border-radius: 3px;
@@ -55,8 +21,78 @@ select {
   background: #fff;
 }
 
-input[type="search"]:focus,
-select:focus {
+.searchForm input[type="search"]:focus,
+.searchForm select:focus {
   border-color: #4a90e2;
   box-shadow: 0 0 4px rgba(74, 144, 226, 0.4);
+}
+
+/* bookTable CSS */
+
+.bookTable {
+  width: 100%;
+  table-layout: fixed;
+  margin-top: 20px;
+  border: 2px solid rgb(180, 190, 190);
+  border-collapse: collapse;
+  font-size: 14px;
+  background: #fff;
+}
+
+.bookTable thead th {
+  background: rgb(200, 215, 215);
+  text-align: left;
+  padding: 14px;
+  border-bottom: 2px solid rgb(180, 190, 190);
+  font-weight: bold;
+}
+
+.bookTable tbody td {
+  padding: 14px 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.bookTable tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
+.bookTable tbody tr:hover {
+  background: #eaeffc;
+  transition: background 0.2s ease;
+}
+
+/* bookButtons CSS */
+
+.bookButtons {
+  padding: 12px;
+  background: rgb(150, 180, 180);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 16px;
+  text-decoration: none;
+}
+
+.bookButtons:hover {
+  background: rgb(120, 150, 150);
+  color: white;
+}
+
+
+/* loadingBar CSS */
+
+.loadingBar {
+  width: 200px;
+  height: 40px;
+  margin-left: 20px;
+  background: rgb(150, 180, 180);
+  color: white;
+  border-radius: 4px;
+  overflow: hidden;
+  text-align: center;
+  align-content: center;
+
 }
