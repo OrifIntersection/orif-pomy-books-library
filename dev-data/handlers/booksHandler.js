@@ -22,7 +22,7 @@ export async function getAllBooks(req, res, next) {
   }
 }
 
-export async function getBook(req, res) {
+export async function getBook(req, res, next) {
   try {
     const queryId = req.params.id;
 
@@ -33,7 +33,7 @@ export async function getBook(req, res) {
   }
 }
 
-export async function postBook(req, res) {
+export async function postBook(req, res, next) {
   try {
     const newBook = req.body;
     const createdBook = await booksCollection.insertOne(newBook, { lean: true });
@@ -49,7 +49,7 @@ export async function postBook(req, res) {
   }
 }
 
-export async function patchBook(req, res) {
+export async function patchBook(req, res, next) {
   try {
     const queryId = req.params.id;
     const updatedData = req.body;
@@ -66,7 +66,7 @@ export async function patchBook(req, res) {
   }
 }
 
-export async function deleteBook(req, res) {
+export async function deleteBook(req, res, next) {
   try {
     const queryId = req.params.id;
 
