@@ -70,7 +70,10 @@ export async function deleteBook(req, res, next) {
   try {
     const queryId = req.params.id;
 
-    await Book.findByIdAndDelete(queryId);
+    const deletedBook = await Book.findByIdAndDelete(queryId, { lean: true });
+
+    console.log("Deleted book with ID:", queryId, "Details:", deletedBook);
+
     res.status(204).json({
       status: "success",
       message: `Book has been deleted`,
