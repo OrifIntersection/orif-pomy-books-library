@@ -16,6 +16,19 @@ app.use(cors());
 app.options("/*all", cors());
 app.use(express.json());
 app.use(morgan("dev"));
+app.use((req, res, next) => {
+  console.log("request body: ", 
+    req.body, 
+    "request params: ", 
+    req.params, 
+    "request query: ", 
+    req.query, 
+    "request method: ", 
+    req.method, 
+    "request url: ", 
+    req.originalUrl);
+  next();
+})
 
 // routers
 app.use("/api/v1/books", booksRouter);
