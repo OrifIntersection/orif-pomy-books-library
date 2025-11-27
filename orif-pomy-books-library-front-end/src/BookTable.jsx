@@ -3,7 +3,6 @@ import { useNavigate, useParams, useSearchParams, Link } from "react-router";
 import "./BookTable.css";
 
 function BookTableBody({ book }) {
-
   //
   // useNavigate will set the current URL to include the book ID
   // this will query the API -> getBookById
@@ -39,33 +38,30 @@ function BookTableHead() {
   );
 }
 
-function EditBook({ book }) {
-  return <Link className="bookButtons" to={`/books/${book._id}/modify`}>Modifier Livre</Link>;
-}
-
-function BorrowBook({ book }) {
-  return <Link className="bookButtons" to={`/books/${book._id}/borrow`}>Emprunter Livre</Link>;
-}
-
-function BookButtons({ books }) {
-
+function BookButtons({ bookId }) {
   //
   // BookButtons only show when a single book is available
   // we can then use this book ID to update & PATCH the API, or POST the API to borrow the book
   //
 
-  return books.length === 1 ? (
-    <>
-      <EditBook book={books[0]}/>
-      <BorrowBook book={books[0]}/>
-    </>
-  ) : null
+  return (
+    <div>
+      <Link className="bookButtons" to={`/books/${bookId}/modify`}>
+        Modifier Livre
+      </Link>
+      <Link className="bookButtons" to={`/books/${bookId}/borrow`}>
+        Emprunter Livre
+      </Link>
+      <Link className="bookButtons" to={`/books/${bookId}/delete`}>
+        Supprimer Livre
+      </Link>
+    </div>
+  );
 }
 
 function BookTableContent({ books }) {
-
   //
-  // Renders BookTableHead and BookTableBody 
+  // Renders BookTableHead and BookTableBody
   // (based on the number of books found)
   //
 
@@ -88,7 +84,6 @@ function BookTableContent({ books }) {
 }
 
 function SearchBookTable({ submitSearch }) {
-
   //
   // This search form will only show when multiple books are available
   // if a single book is found, it will no longer show (see BookTable conditional return)
@@ -153,6 +148,8 @@ function BookTable() {
           const resBooks = await res.json();
           if (Array.isArray(resBooks)) setBooks(resBooks);
           else setBooks([resBooks]);
+        } else {
+          alert("Une erreur est survenue sur le serveur");
         }
       } catch (error) {
         console.log(error);
@@ -161,10 +158,16 @@ function BookTable() {
     getAPI();
   }, [id, searchParams]);
 
+  
+  //
+  // need to fix for if an ID has correct syntax but doesn't exist
+  // returns an emtpy object on setBooks => [{}]
+  //
+  
   return books ? (
     <>
       {books.length === 1 ? (
-        <BookButtons books={books} />
+        <BookButtons bookId={books[0]._id} />
       ) : (
         <SearchBookTable submitSearch={submitSearch} />
       )}
