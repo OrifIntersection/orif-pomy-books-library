@@ -4,7 +4,7 @@ export async function getAllBooks(req, res, next) {
   try {
     const queryParams = req.query;
 
-    if (req.query && Object.keys(req.query).length === 0) {
+    if (queryParams && Object.keys(queryParams).length === 0) {
       const books = await Book.find().lean();
       return res.status(200).json(books);
     }
@@ -24,7 +24,9 @@ export async function getAllBooks(req, res, next) {
 
 export async function getBook(req, res) {
   try {
-    const book = await Book.findById(req.params.id).lean();
+    const queryId = req.params.id;
+
+    const book = await Book.findById(queryId).lean();
     res.status(200).json(book);
   } catch (error) {
     next(error);
@@ -34,23 +36,46 @@ export async function getBook(req, res) {
 export async function postBook(req, res) {
   try {
     const newBook = req.body;
-    const result = await booksCollection.insertOne(newBook);
+    const createdBook = await booksCollection.insertOne(newBook, { lean: true });
 
-    res.status(201).json({
+    console.log("New book created with ID:", createdBook);
+
+    res.status(200).json({
       status: "success",
-      data: result,
+      data: createdBook,
     });
   } catch (error) {
     next(error);
   }
 }
 
-export function patchBook(req, res) {
-  console.log(req.body, req.requestTime);
-  res.status(404).json("to be implemented");
+export async function patchBook(req, res) {
+  try {
+    const queryId = req.params.id;
+    const updatedData = req.body;
+
+    console.log("Updating book with ID:", queryId, "with data:", updatedData);
+
+    const updatedBook = await Book.findByIdAndUpdate(queryId, updatedData, { new: true, lean: true });
+    res.status(200).json({
+      status: "success",
+      data: updatedBook,
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
-export function deleteBook(req, res) {
-  console.log(req.params, req.requestTime);
-  res.status(404).json("to be implemented");
+export async function deleteBook(req, res) {
+  try {
+    const queryId = req.params.id;
+
+    await Book.findByIdAndDelete(queryId);
+    res.status(204).json({
+      status: "success",
+      message: `Book has been deleted`,
+    });
+  } catch (error) {
+    next(error);
+  }
 }
