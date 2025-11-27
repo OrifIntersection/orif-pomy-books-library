@@ -36,7 +36,7 @@ export async function getBook(req, res, next) {
 export async function postBook(req, res, next) {
   try {
     const newBook = req.body;
-    const createdBook = await booksCollection.insertOne(newBook, { lean: true });
+    const createdBook = await Book.insertOne(newBook, { lean: true });
 
     console.log("New book created with ID:", createdBook);
 
