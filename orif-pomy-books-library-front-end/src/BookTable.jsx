@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams, Link } from "react-router";
 import "./BookTable.css";
+import APIHandler from "./utils/APIHandler.jsx";
+const booksAPIHandler = new APIHandler("books");
 
 function BookTableBody({ book }) {
   //
@@ -136,34 +138,18 @@ function BookTable() {
 
   useEffect(() => {
     async function getAPI() {
-      try {
-        const query = searchParams.toString();
-        const res = await fetch(
-          `https://orif-pomy-books-library.vercel.app/api/v1/books/${id ?? ""}${
-            query ? `?${query}` : ""
-          }`
-        );
-
-        if (res.ok) {
-          const resBooks = await res.json();
-          if (Array.isArray(resBooks)) setBooks(resBooks);
-          else setBooks([resBooks]);
-        } else {
-          alert("Une erreur est survenue sur le serveur");
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      const body = await booksAPIHandler.get(searchParams, id);
+      if (Array.isArray(body.data)) setBooks(body.data);
+      else setBooks([body.data]);
     }
     getAPI();
   }, [id, searchParams]);
 
-  
   //
   // need to fix for if an ID has correct syntax but doesn't exist
   // returns an emtpy object on setBooks => [{}]
   //
-  
+
   return books ? (
     <>
       {books.length === 1 ? (
