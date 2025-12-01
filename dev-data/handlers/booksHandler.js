@@ -130,7 +130,7 @@ export async function deleteBook(req, res, next) {
       });
     }
 
-    res.status(204).json({
+    res.status(200).json({
       status: "success",
       message: `Book has been deleted`,
       data: deletedBook,
