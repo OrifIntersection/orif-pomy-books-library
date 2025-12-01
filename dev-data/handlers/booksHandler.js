@@ -52,7 +52,7 @@ export async function getBook(req, res, next) {
       });
     }
 
-    const book = await Book.findById(bookId, {lean: true})
+    const book = await Book.findById(bookId);
 
     if (!book) {
       return res.status(404).json({
@@ -160,7 +160,7 @@ export async function deleteBook(req, res, next) {
         message: `No book found with ID: ${bookId}`,
       });
     }
-    
+
     res.status(200).json({
       status: "success",
       message: `Book has been deleted`,
