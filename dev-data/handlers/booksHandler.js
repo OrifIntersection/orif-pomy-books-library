@@ -1,173 +1,92 @@
 import { Book } from "../models/bookModel.js";
+import AppError from "../utils/AppError.js";
 
 export async function getAllBooks(req, res, next) {
-  try {
+  //
+  //  Search functionality, if no query params, return all books
+  // 
 
-    //
-    //  Search functionality, if no query params, return all books
-    // 
+  const { search, searchType, sort } = req.query;
 
-    const { search, searchType, sort } = req.query;
+  let booksQuery = Book.find().lean();
+  if (searchType && search) booksQuery = booksQuery.where(searchType).equals(new RegExp(search, "i"));
+  if (sort) booksQuery = booksQuery.sort(sort);
+  const books = await booksQuery;
 
-    let booksQuery = Book.find().lean();
+  if (books.length === 0) throw new AppError("No books found matching the criteria.", 404);
 
-    if (searchType && search) booksQuery = booksQuery.where(searchType).equals(new RegExp(search, "i"));
-    if (sort) booksQuery = booksQuery.sort(sort);
-
-    const books = await booksQuery;
-
-    if (books.length === 0) {
-      return res.status(404).json({
-        status: "fail",
-        message: `No books found matching the search criteria.`,
-      });
-    }
-
-    return res.status(200).json({
-      status: "success",
-      message: `Books retrieved successfully.`,
-      results: books.length,
-      data: books,
-    });
-
-
-  } catch (error) {
-    next(error);
-  }
+  return res.status(200).json({
+    status: "success",
+    message: `Books retrieved successfully.`,
+    results: books.length,
+    data: books,
+  });
 }
 
 export async function getBook(req, res, next) {
-  try {
+  //
+  //  Get a single book by ID
+  //
 
-    //
-    //  Get a single book by ID
-    //
+  const bookId = req.params.id;
 
-    const bookId = req.params.id;
+  if (!bookId) throw new AppError("No book ID provided.", 400);
 
-    if (!bookId) {
-      return res.status(400).json({
-        status: "fail",
-        message: "No book ID provided.",
-      });
-    }
+  const book = await Book.findById(bookId);
 
-    const book = await Book.findById(bookId);
+  if (!book) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
-    if (!book) {
-      return res.status(404).json({
-        status: "fail",
-        message: `No book found with ID: ${bookId}`,
-      });
-    }
-
-    return res.status(200).json({
-      status: "success",
-      message: `Book with ID: ${bookId} retrieved successfully.`,
-      data: book,
-    });
-
-  } catch (error) {
-    next(error);
-  }
+  return res.status(200).json({
+    status: "success",
+    message: `Book with ID: ${bookId} retrieved successfully.`,
+    data: book,
+  });
 }
 
 export async function postBook(req, res, next) {
-  try {
+  const newBookData = req.body;
 
-    const newBookData = req.body;
+  if (!newBookData) throw new AppError("No book data provided.", 400);
 
-    if (!newBookData) {
-      return res.status(400).json({
-        status: "fail",
-        message: "No book data provided.",
-      });
-    }
+  const createdBook = await Book.create(newBookData);
 
-    const createdBook = await Book.create(newBookData);
-
-    if (!createdBook) {
-      return res.status(400).json({
-        status: "fail",
-        message: "Failed to create book.",
-      });
-    }
-
-    res.status(201).json({
-      status: "success",
-      data: createdBook,
-    });
-
-  } catch (error) {
-    next(error);
-  }
+  res.status(201).json({
+    status: "success",
+    data: createdBook,
+  });
 }
 
 export async function patchBook(req, res, next) {
-  try {
-    const bookId = req.params.id;
-    const updatedBookData = req.body;
+  const bookId = req.params.id;
+  const updatedBookData = req.body;
 
-    if (!updatedBookData) {
-      return res.status(400).json({
-        status: "fail",
-        message: "No update data provided.",
-      });
-    }
+  if (!updatedBookData) throw new AppError("No book data provided for update.", 400);
 
-    if (!bookId) {
-      return res.status(400).json({
-        status: "fail",
-        message: "No book ID provided.",
-      });
-    }
+  if (!bookId) throw new AppError("No book ID provided.", 400);
 
-    const updatedBook = await Book.findByIdAndUpdate(bookId, updatedBookData, { new: true, lean: true });
+  const updatedBook = await Book.findByIdAndUpdate(bookId, updatedBookData, { new: true, lean: true });
 
-    if (!updatedBook) {
-      return res.status(404).json({
-        status: "fail",
-        message: `No book found with ID: ${bookId}`,
-      });
-    }
+  if (!updatedBook) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
-    res.status(200).json({
-      status: "success",
-      data: updatedBook,
-    });
-
-  } catch (error) {
-    next(error);
-  }
+  res.status(200).json({
+    status: "success",
+    data: updatedBook,
+  });
 }
 
 export async function deleteBook(req, res, next) {
-  try {
-    const bookId = req.params.id;
+  const bookId = req.params.id;
 
-    if (!bookId) {
-      return res.status(400).json({
-        status: "fail",
-        message: "No book ID provided.",
-      });
-    }
+  if (!bookId) throw new AppError("No book ID provided.", 400);
 
-    const deletedBook = await Book.findByIdAndDelete(bookId, { lean: true });
+  const deletedBook = await Book.findByIdAndDelete(bookId, { lean: true });
 
-    if (!deletedBook) {
-      return res.status(404).json({
-        status: "fail",
-        message: `No book found with ID: ${bookId}`,
-      });
-    }
+  if (!deletedBook) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
-    res.status(200).json({
-      status: "success",
-      message: `Book has been deleted`,
-      data: deletedBook,
-    });
+  res.status(200).json({
+    status: "success",
+    message: `Book has been deleted`,
+    data: deletedBook,
+  });
 
-  } catch (error) {
-    next(error);
-  }
 }
