@@ -40,18 +40,13 @@ if (dbConnected === false) {
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const status = err.status || 'error';
+  const message = err.message || 'Internal Server Error';
 
   console.error(err);
 
-  let error = { ...err };
-
-  if (error.name === "ValidationError") error = new AppError(`Invalid data input: ${error.message}`, 400);
-  if (error.name === "CastError") error = new AppError(`Invalid ${error.path}: ${error.value}.`, 400);
-  if (error.code && error.code === 11000) error = new AppError(`Duplicate field value: ${JSON.stringify(error.keyValue)}. Please use another value!`, 400);
-
-  if (error.isOperational) res.status(statusCode).json({
-    status: status,
-    message: error.message
+  if (err.isOperational) res.status(statusCode).json({
+    status,
+    message,
   });
 
 

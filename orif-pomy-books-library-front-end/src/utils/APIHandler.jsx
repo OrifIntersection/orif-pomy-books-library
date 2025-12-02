@@ -27,6 +27,7 @@ export default class APIHandler {
       if (res.status === 500) throw new Error("There was an unexpected error on the server");
       
       const body = await res.json();
+      console.log(body);
       if (body.status === "fail") throw new Error(body.message);
 
       console.log(`@${options.method}@ from ${this.url}: ${body.status}`);
@@ -35,7 +36,7 @@ export default class APIHandler {
       return body;
 
     } catch (error) {
-      console.log(error.message);
+      console.error(error);
       throw error;
     }
   }
