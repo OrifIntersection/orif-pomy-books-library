@@ -71,7 +71,6 @@ export async function postBook(req, res, next) {
 
 export async function patchBook(req, res, next) {
 
-
   const bookId = req.params.id;
   const updatedBookData = req.body;
 

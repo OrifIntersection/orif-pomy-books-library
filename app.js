@@ -38,7 +38,13 @@ app.use((err, req, res, next) => {
   //
 
   if (err.name === "CastError") return next(new AppError(`${err.value} is not what ${err.path} expects as a value: ${err.kind}`, 400));
+  if (err.name === "ValidationError") {
+    const messages = Object.values(err.errors).map(el => el.message);
+    return next(new AppError(`Invalid input data. ${messages.join(". ")}`, 400));
+  }
+
   next(err);
+
 })
 
 app.use((err, req, res, next) => { 
@@ -65,7 +71,9 @@ app.use((err, req, res, next) => {
   });
 })
 
-// connect to database via mongoose
+
+
+// connect to database via mongoose (unncessesary for vercel deployment)
 let dbConnected = false;
 if (dbConnected === false) {
   mongoose.connect(process.env.DATABASE, { dbName: "Library_ORIF_Pomy" }).then(() => {
