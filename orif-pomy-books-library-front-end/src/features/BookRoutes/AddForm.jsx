@@ -12,7 +12,7 @@ export default function NewBook() {
     const formData = new FormData(e.target);
 
     try {
-      await booksAPIHandler.post({
+      const body = await booksAPIHandler.post({
         Title: formData.get("title"),
         Author: formData.get("author").split(", "),
         Genre: formData.get("genre").split(", "),
@@ -23,7 +23,7 @@ export default function NewBook() {
 
       alert("le livre à été crée");
 
-      navigate("/books");
+      navigate("/books/" + body.data._id);
     } catch (error) {
       console.error(error);
       alert("Une erreur est survenue lors de la création du livre");

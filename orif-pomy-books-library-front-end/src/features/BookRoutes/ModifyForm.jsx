@@ -52,7 +52,7 @@ export default function ModifyBook() {
 
       alert("le livre à été modifié !")
 
-      navigate("/books");
+      navigate("/books/" + id);
     } catch (error) {
       console.error(error);
       alert("Une erreur est survenue lors de la modification du livre");
@@ -108,7 +108,6 @@ export default function ModifyBook() {
         id="isbn"
         name="isbn"
         defaultValue={book.ISBN}
-        required
       />
       <input type="submit" value="Envoyer" />
     </form>

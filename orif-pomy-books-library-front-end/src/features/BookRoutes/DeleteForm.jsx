@@ -47,7 +47,7 @@ export default function ModifyBook() {
   if (Object.keys(book).length === 0) {
     return (
       <form className="deleteForm">
-        <p>Ce livre n'existe pas/plus</p>
+        <p>Ce livre n'existe pas ou plus !</p>
       </form>
     );
   }

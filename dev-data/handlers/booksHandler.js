@@ -8,7 +8,7 @@ export async function getAllBooks(req, res, next) {
 
   const { search, searchType, sort } = req.query;
 
-  let booksQuery = Book.find().lean();
+  let booksQuery = Book.find();
   if (searchType && search) booksQuery = booksQuery.where(searchType).equals(new RegExp(search, "i"));
   if (sort) booksQuery = booksQuery.sort(sort);
   const books = await booksQuery;
@@ -64,7 +64,7 @@ export async function patchBook(req, res, next) {
 
   if (!bookId) throw new AppError("No book ID provided.", 400);
 
-  const updatedBook = await Book.findByIdAndUpdate(bookId, updatedBookData, { new: true, lean: true });
+  const updatedBook = await Book.findByIdAndUpdate(bookId, updatedBookData, { new: true });
 
   if (!updatedBook) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
@@ -79,7 +79,7 @@ export async function deleteBook(req, res, next) {
 
   if (!bookId) throw new AppError("No book ID provided.", 400);
 
-  const deletedBook = await Book.findByIdAndDelete(bookId, { lean: true });
+  const deletedBook = await Book.findByIdAndDelete(bookId);
 
   if (!deletedBook) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
