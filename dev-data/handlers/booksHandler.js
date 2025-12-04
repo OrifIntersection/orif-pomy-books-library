@@ -92,21 +92,25 @@ export async function patchBook(req, res, next) {
 }
 
 export async function deleteBook(req, res, next) {
+  try {
+    const bookId = req.params.id;
+
+    if (!bookId) throw new AppError("No book ID provided.", 400);
+
+    const deletedBook = await Book.findByIdAndDelete(bookId);
+
+    if (!deletedBook) throw new AppError(`No book found with ID: ${bookId}`, 404);
+
+    res.status(200).json({
+      status: "success",
+      message: `Book has been deleted`,
+      data: deletedBook,
+    });
 
 
-  const bookId = req.params.id;
-
-  if (!bookId) throw new AppError("No book ID provided.", 400);
-
-  const deletedBook = await Book.findByIdAndDelete(bookId);
-
-  if (!deletedBook) throw new AppError(`No book found with ID: ${bookId}`, 404);
-
-  res.status(200).json({
-    status: "success",
-    message: `Book has been deleted`,
-    data: deletedBook,
-  });
+  } catch (error) {
+    next(error);
+  }
 
 
 }
