@@ -5,6 +5,7 @@ import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import AppError from "./dev-data/utils/AppError.js";
 
 // global environment vars
 dotenv.config({ path: "./config.env" });

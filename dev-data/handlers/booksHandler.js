@@ -92,7 +92,7 @@ export async function patchBook(req, res, next) {
 }
 
 export async function deleteBook(req, res, next) {
-  try {
+
     const bookId = req.params.id;
 
     if (!bookId) throw new AppError("No book ID provided.", 400);
@@ -106,11 +106,5 @@ export async function deleteBook(req, res, next) {
       message: `Book has been deleted`,
       data: deletedBook,
     });
-
-
-  } catch (error) {
-    next(error);
-  }
-
 
 }
