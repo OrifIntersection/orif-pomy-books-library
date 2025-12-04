@@ -29,7 +29,23 @@ app.all("*all", (req, res) => {
 });
 
 // global error handling middleware
+
 app.use((err, req, res, next) => {
+
+  //
+  // use to handle mongoose/express operational errors before reaching the final error handler
+  //
+
+  if (err.name === "CastError") return next(new AppError(`${err.value} is not what ${err.path} expects as a value: ${err.kind}`, 400));
+  next(err);
+})
+
+app.use((err, req, res, next) => { 
+
+  //
+  // final error handling middleware
+  //
+
   const statusCode = err.statusCode || 500;
   const status = err.status || 'error';
   const message = err.message || 'Internal Server Error';
