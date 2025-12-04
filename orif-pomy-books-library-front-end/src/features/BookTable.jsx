@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams, Link } from "react-router";
-import "./BookTable.css";
-import APIHandler from "./utils/APIHandler.jsx";
+import APIHandler from "../utils/APIHandler.jsx";
 const booksAPIHandler = new APIHandler("books");
 
 function BookTableBody({ book }) {
@@ -22,12 +21,11 @@ function BookTableBody({ book }) {
       <td>{book.Genre.join(", ")}</td>
       <td>{book.Subject.join(", ")}</td>
       <td>{book.Location}</td>
-      <td>{book.ISBN}</td>
     </tr>
   );
 }
 
-function BookTableHead({searchParams, setSearchParams}) {
+function BookTableHead({searchParams, setSearchParams, books}) {
   function sortBooks(e) {
 
     //
@@ -48,30 +46,49 @@ function BookTableHead({searchParams, setSearchParams}) {
     setSearchParams(currentParams);
   }
 
+  function sortIcon(column) {
+
+    //
+    //  Render icon dynamically based on current sort state
+    //  If only one book is available, no sort icon is shown
+    //
+
+    if (books.length === 1) return;
+
+    if (searchParams.get("sort") === column) {
+      return "↑";
+    } else if (searchParams.get("sort") === `-${column}`) {
+      return "↓";
+    } 
+
+    return "⇅";
+
+  }
+
   return (
     <>
       <th>
         Titre
-        <button className="sortButton" name="Title" onClick={sortBooks}>⇅</button>
+        <button className="sortButton" name="Title" onClick={sortBooks}>{sortIcon("Title")}</button>
       </th>
       <th>Auteur
-        <button className="sortButton" name="Author" onClick={sortBooks}>⇅</button>
+        <button className="sortButton" name="Author" onClick={sortBooks}>{sortIcon("Author")}</button>
       </th>
       <th>Genre
-        <button className="sortButton" name="Genre" onClick={sortBooks}>⇅</button>
+        <button className="sortButton" name="Genre" onClick={sortBooks}>{sortIcon("Genre")}</button>
       </th>
       <th>Sujet
-        <button className="sortButton" name="Subject" onClick={sortBooks}>⇅</button>
+        <button className="sortButton" name="Subject" onClick={sortBooks}>{sortIcon("Subject")}</button>
       </th>
       <th>Emplacement
-        <button className="sortButton" name="Location" onClick={sortBooks}>⇅</button>
+        <button className="sortButton" name="Location" onClick={sortBooks}>{sortIcon("Location")}</button>
       </th>
-      <th>ISBN</th>
     </>
   );
 }
 
 function BookButtons({ bookId }) {
+
   //
   // BookButtons only show when a single book is available
   // we can then use this book ID to update & PATCH the API, or POST the API to borrow the book
@@ -93,6 +110,7 @@ function BookButtons({ bookId }) {
 }
 
 function BookTableContent({ books, searchParams, setSearchParams }) {
+
   //
   // Renders BookTableHead and BookTableBody
   // (based on the number of books found)
@@ -103,7 +121,7 @@ function BookTableContent({ books, searchParams, setSearchParams }) {
       <table className="bookTable">
         <thead>
           <tr>
-            <BookTableHead searchParams={searchParams} setSearchParams={setSearchParams} />
+            <BookTableHead searchParams={searchParams} setSearchParams={setSearchParams} books={books} />
           </tr>
         </thead>
         <tbody>

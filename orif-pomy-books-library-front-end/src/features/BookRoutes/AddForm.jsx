@@ -1,4 +1,4 @@
-import APIHandler from "../utils/APIHandler";
+import APIHandler from "../../utils/APIHandler";
 import { useNavigate } from "react-router";
 
 const booksAPIHandler = new APIHandler("books")

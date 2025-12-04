@@ -1,7 +1,5 @@
-import { useState, useEffect } from "react";
 import { Outlet } from "react-router";
 import { Link } from "react-router";
-import "./Navbar.css";
 
 function Navbar() {
   return (

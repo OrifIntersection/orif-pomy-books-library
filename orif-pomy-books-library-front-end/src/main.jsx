@@ -1,15 +1,17 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
-import "./index.css";
-import "./Forms.css";
-import BookTable from "./BookTable.jsx";
-import ModifyBook from "./BookRoutes/ModifyBook.jsx";
-import DeleteBook from "./BookRoutes/DeleteBook.jsx";
-import NewBook from "./BookRoutes/NewBook.jsx";
-import BorrowBook from "./BookRoutes/BorrowBook.jsx";
-import Login from "./UserRoutes/Login.jsx";
-import Navbar from "./Navbar.jsx";
+import "./styles/index.css";
+import "./styles/Forms.css";
+import "./styles/BookTable.css";
+import "./styles/Navbar.css";
+import BookTable from "./features/BookTable.jsx";
+import ModifyBook from "./features/BookRoutes/ModifyForm.jsx";
+import DeleteBook from "./features/BookRoutes/DeleteForm.jsx";
+import NewBook from "./features/BookRoutes/AddForm.jsx";
+import BorrowBook from "./features/BookRoutes/BorrowForm.jsx";
+import Login from "./features/UserRoutes/Login.jsx";
+import Navbar from "./features/Navbar.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>

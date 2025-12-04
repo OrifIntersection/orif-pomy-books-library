@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
-import APIHandler from "../utils/APIHandler.jsx";
+import APIHandler from "../../utils/APIHandler.jsx";
 
 const booksAPIHandler = new APIHandler("books");
 
