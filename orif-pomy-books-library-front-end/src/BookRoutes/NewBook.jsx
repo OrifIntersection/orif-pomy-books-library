@@ -1,5 +1,5 @@
 import APIHandler from "../utils/APIHandler";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 
 const booksAPIHandler = new APIHandler("books")
 
@@ -10,18 +10,25 @@ export default function NewBook() {
     e.preventDefault();
 
     const formData = new FormData(e.target);
-    await booksAPIHandler.post({
-      Title: formData.get("title"),
-      Author: formData.get("author").split(", "),
-      Genre: formData.get("genre").split(", "),
-      Subject: formData.get("subject").split(", "),
-      Location: formData.get("location"),
-      ISBN: formData.get("isbn"),
-    });
 
-    alert("le livre à été crée");
+    try {
+      await booksAPIHandler.post({
+        Title: formData.get("title"),
+        Author: formData.get("author").split(", "),
+        Genre: formData.get("genre").split(", "),
+        Subject: formData.get("subject").split(", "),
+        Location: formData.get("location"),
+        ISBN: formData.get("isbn"),
+      });
 
-    navigate("/books");
+      alert("le livre à été crée");
+
+      navigate("/books");
+    } catch (error) {
+      console.error(error);
+      alert("Une erreur est survenue lors de la création du livre");
+    }
+
   }
 
   return (

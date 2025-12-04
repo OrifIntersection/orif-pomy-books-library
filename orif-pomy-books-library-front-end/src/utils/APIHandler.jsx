@@ -25,18 +25,16 @@ export default class APIHandler {
       const res = await fetch(this.url, options);
 
       if (res.status === 500) throw new Error("There was an unexpected error on the server");
-      
+
       const body = await res.json();
-      console.log(body);
+
       if (body.status === "fail") throw new Error(body.message);
 
       console.log(`@${options.method}@ from ${this.url}: ${body.status}`);
       if (body.message) console.log(body.message);
 
       return body;
-
     } catch (error) {
-      console.error(error);
       throw error;
     }
   }
@@ -51,7 +49,7 @@ export default class APIHandler {
     if (id) this.url = new URL(id, `${this.url}/`)
     if (params.size > 0) this.url = new URL(`${this.url}?${params.toString()}`);
 
-    return this.fetchAPI({ method: "GET", headers: { "Content-Type": "application/json" }});
+    return this.fetchAPI({ method: "GET", headers: { "Content-Type": "application/json" } });
   }
 
   post(body) {

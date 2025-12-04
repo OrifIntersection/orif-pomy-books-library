@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import APIHandler from "../utils/APIHandler.jsx";
 
 const booksAPIHandler = new APIHandler("books");
@@ -8,6 +8,7 @@ const booksAPIHandler = new APIHandler("books");
 export default function ModifyBook() {
   const [book, setBook] = useState({});
   const { id } = useParams();
+  const navigate = useNavigate();
 
 
   //
@@ -17,8 +18,13 @@ export default function ModifyBook() {
 
   useEffect(() => {
     async function getAPI() {
-      const body = await booksAPIHandler.get("", id)
-      setBook(body.data);
+      try {
+        const body = await booksAPIHandler.get("", id)
+        setBook(body.data);
+      } catch (error) {
+        console.error(error);
+      }
+
     }
     getAPI();
   }, []);
@@ -32,8 +38,10 @@ export default function ModifyBook() {
     e.preventDefault();
 
     const formData = new FormData(e.target);
-    
-    await booksAPIHandler.patch({
+
+    try {
+
+      await booksAPIHandler.patch({
         Title: formData.get("title"),
         Author: formData.get("author").split(", "),
         Genre: formData.get("genre").split(", "),
@@ -42,7 +50,14 @@ export default function ModifyBook() {
         ISBN: formData.get("isbn"),
       }, id);
 
-    alert("le livre à été modifié !")
+      alert("le livre à été modifié !")
+
+      navigate("/books");
+    } catch (error) {
+      console.error(error);
+      alert("Une erreur est survenue lors de la modification du livre");
+    }
+
   }
 
   return Object.keys(book).length >= 1 ? (

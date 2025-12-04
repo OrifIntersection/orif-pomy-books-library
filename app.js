@@ -17,6 +17,27 @@ app.options("/*all", cors());
 app.use(express.json());
 app.use(morgan(":method :url :status :response-time ms - :res[content-length]"));
 
+// global error handling middleware
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const status = err.status || 'error';
+  const message = err.message || 'Internal Server Error';
+
+  console.error(err);
+
+  if (err.isOperational) res.status(statusCode).json({
+    status,
+    message,
+  });
+
+
+  res.status(statusCode).json({
+    status: 'error',
+    message: 'Something went very wrong!'
+  });
+})
+
+
 // routers
 app.use("/api/v1/books", booksRouter);
 
@@ -37,24 +58,6 @@ if (dbConnected === false) {
   });
 }
 
-app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  const status = err.status || 'error';
-  const message = err.message || 'Internal Server Error';
-
-  console.error(err);
-
-  if (err.isOperational) res.status(statusCode).json({
-    status,
-    message,
-  });
-
-
-  res.status(statusCode).json({
-    status: 'error',
-    message: 'Something went very wrong!'
-  });
-})
 
 
 // start server

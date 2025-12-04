@@ -27,14 +27,45 @@ function BookTableBody({ book }) {
   );
 }
 
-function BookTableHead() {
+function BookTableHead({searchParams, setSearchParams}) {
+  function sortBooks(e) {
+
+    //
+    // function to set sort queries to the URL whenever a sort button is clicked
+    // this will automatically query the API via useEffect
+    //
+
+    const sortBy = e.target.name;
+    let currentParams = Object.fromEntries([...searchParams]);
+
+    if (currentParams.sort === sortBy) {
+      currentParams.sort = `-${sortBy}`;
+      setSearchParams(currentParams);
+      return;
+    } 
+
+    currentParams.sort = sortBy;
+    setSearchParams(currentParams);
+  }
+
   return (
     <>
-      <th>Titre</th>
-      <th>Auteur</th>
-      <th>Genre</th>
-      <th>Sujet</th>
-      <th>Emplacement</th>
+      <th>
+        Titre
+        <button className="sortButton" name="Title" onClick={sortBooks}>⇅</button>
+      </th>
+      <th>Auteur
+        <button className="sortButton" name="Author" onClick={sortBooks}>⇅</button>
+      </th>
+      <th>Genre
+        <button className="sortButton" name="Genre" onClick={sortBooks}>⇅</button>
+      </th>
+      <th>Sujet
+        <button className="sortButton" name="Subject" onClick={sortBooks}>⇅</button>
+      </th>
+      <th>Emplacement
+        <button className="sortButton" name="Location" onClick={sortBooks}>⇅</button>
+      </th>
       <th>ISBN</th>
     </>
   );
@@ -61,7 +92,7 @@ function BookButtons({ bookId }) {
   );
 }
 
-function BookTableContent({ books }) {
+function BookTableContent({ books, searchParams, setSearchParams }) {
   //
   // Renders BookTableHead and BookTableBody
   // (based on the number of books found)
@@ -72,7 +103,7 @@ function BookTableContent({ books }) {
       <table className="bookTable">
         <thead>
           <tr>
-            <BookTableHead />
+            <BookTableHead searchParams={searchParams} setSearchParams={setSearchParams} />
           </tr>
         </thead>
         <tbody>
@@ -85,14 +116,31 @@ function BookTableContent({ books }) {
   );
 }
 
-function SearchBookTable({ submitSearch }) {
+function SearchBookTable({ setSearchParams }) {
+
+  //
+  // function to set search queries to the URL whenever the SearchBookTable form is submitted
+  // this will automatically query the API via useEffect
+  //
+
+  function submitSearch(e) {
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+
+    const search = formData.get("search");
+    const searchType = formData.get("search-type");
+
+    setSearchParams({ search: search, searchType: searchType });
+  }
+
   //
   // This search form will only show when multiple books are available
   // if a single book is found, it will no longer show (see BookTable conditional return)
   //
 
   return (
-    <form action={submitSearch} className="searchForm">
+    <form onSubmit={submitSearch} className="searchForm">
       <div>
         <label htmlFor="search-books">Recherche de livres : </label>
         <input type="search" id="search-books" name="search" />
@@ -119,17 +167,6 @@ function BookTable() {
   const [books, setBooks] = useState();
   const { id } = useParams();
 
-  //
-  // function to set search queries to the URL whenever the SearchBookTable form is submitted
-  // this will automatically query the API via useEffect
-  //
-
-  function submitSearch(formData) {
-    const search = formData.get("search");
-    const searchType = formData.get("search-type");
-
-    setSearchParams({ search: search, searchType: searchType });
-  }
 
   //
   // query the API based on an ID (if present) and the search queries (if present)
@@ -138,12 +175,17 @@ function BookTable() {
 
   useEffect(() => {
     async function getAPI() {
-      const body = await booksAPIHandler.get(searchParams, id);
-      if (Array.isArray(body.data)) setBooks(body.data);
-      else setBooks([body.data]);
+      try {
+        const body = await booksAPIHandler.get(searchParams, id);
+        if (Array.isArray(body.data)) setBooks(body.data);
+        else setBooks([body.data]);
+      } catch (error) {
+        console.error(error);
+      }
+
     }
     getAPI();
-  }, [id, searchParams]);
+  }, [id, setSearchParams]);
 
   //
   // need to fix for if an ID has correct syntax but doesn't exist
@@ -155,9 +197,9 @@ function BookTable() {
       {books.length === 1 ? (
         <BookButtons bookId={books[0]._id} />
       ) : (
-        <SearchBookTable submitSearch={submitSearch} />
+        <SearchBookTable setSearchParams={setSearchParams} />
       )}
-      <BookTableContent books={books} />
+      <BookTableContent books={books} searchParams={searchParams} setSearchParams={setSearchParams} />
     </>
   ) : (
     <p className="loadingBar">Loading...</p>

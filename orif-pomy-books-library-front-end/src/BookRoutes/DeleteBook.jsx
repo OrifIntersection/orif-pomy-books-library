@@ -16,8 +16,12 @@ export default function ModifyBook() {
 
   useEffect(() => {
     async function getAPI() {
-      const body = await booksAPIHandler.get("", id)
-      setBook(body.data);
+      try {
+        const body = await booksAPIHandler.get("", id)
+        setBook(body.data);
+      } catch (error) {
+        console.error(error);
+      }
     }
     getAPI();
   }, []);
@@ -28,9 +32,16 @@ export default function ModifyBook() {
 
   async function deleteBook(e) {
     e.preventDefault();
-    await booksAPIHandler.delete(id) 
-    alert('le livre à été supprimé')
-    navigate("/books");
+
+    try {
+      await booksAPIHandler.delete(id)
+      alert('le livre à été supprimé')
+      navigate("/books");
+    } catch (error) {
+      console.error(error);
+      alert("Une erreur est survenue lors de la suppression du livre");
+    }
+
   }
 
   if (Object.keys(book).length === 0) {
