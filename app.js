@@ -17,6 +17,17 @@ app.options("/*all", cors());
 app.use(express.json());
 app.use(morgan(":method :url :status :response-time ms - :res[content-length]"));
 
+// routers
+app.use("/api/v1/books", booksRouter);
+
+// handle all other routes
+app.all("*all", (req, res) => {
+  res.status(404).json({
+    status: "fail",
+    message: `Can't find ${req.originalUrl} on this server!`,
+  });
+});
+
 // global error handling middleware
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -36,18 +47,6 @@ app.use((err, req, res, next) => {
     message: 'Something went very wrong!'
   });
 })
-
-
-// routers
-app.use("/api/v1/books", booksRouter);
-
-// handle all other routes
-app.all("*all", (req, res) => {
-  res.status(404).json({
-    status: "fail",
-    message: `Can't find ${req.originalUrl} on this server!`,
-  });
-});
 
 // connect to database via mongoose
 let dbConnected = false;
