@@ -12,19 +12,22 @@ import NewBook from "./features/BookRoutes/AddForm.jsx";
 import BorrowBook from "./features/BookRoutes/BorrowForm.jsx";
 import Login from "./features/UserRoutes/Login.jsx";
 import Navbar from "./features/Navbar.jsx";
+import AuthProvider from "./utils/AuthProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
-    <Routes>
-      <Route element={<Navbar />}>
-        <Route path="/books?" element={<BookTable />} />
-        <Route path="/books/:id" element={<BookTable />} />
-        <Route path="/books/:id/modify" element={<ModifyBook />} />
-        <Route path="/books/:id/borrow" element={<BookTable />} />
-        <Route path="/books/:id/delete" element={<DeleteBook />} />
-        <Route path="/newbook" element={<NewBook />} />
-        <Route path="/login" element={<Login />} />
-      </Route>
-    </Routes>
-  </BrowserRouter>
+  <AuthProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Navbar />}>
+          <Route path="/books?" element={<BookTable />} />
+          <Route path="/books/:id" element={<BookTable />} />
+          <Route path="/books/:id/modify" element={<ModifyBook />} />
+          <Route path="/books/:id/borrow" element={<BookTable />} />
+          <Route path="/books/:id/delete" element={<DeleteBook />} />
+          <Route path="/newbook" element={<NewBook />} />
+          <Route path="/login" element={<Login />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </AuthProvider>
 );

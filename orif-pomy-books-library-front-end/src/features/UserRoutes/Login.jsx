@@ -1,29 +1,29 @@
-import { useState, useEffect } from "react";
+import APIHandler from "../../utils/APIHandler";
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
+const collaboratorHandler = new APIHandler("collaborators");
 
 export default function Login() {
   async function submitLogin(formData) {
+    const { user, setUser } = useContext(AuthContext);
+
     try {
-      const res = await fetch(
-        "https://orif-pomy-books-library.vercel.app/api/v1/collaborators",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            username: formData.get("user"),
-            password: formData.get("pass"),
-          }),
-        }
-      );
-    } catch (error) {}
+      const res = await collaboratorHandler.post({ email: formData.get("email") });
+      const body = await res.json();
+      setUser(body.data);
+
+      console.log(user);
+
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
       <form action={submitLogin} className="loginForm">
-        <label htmlFor="username">Utilisateur: </label>
-        <input type="text" id="username" name="user" />
-        <label htmlFor="password">Mot de passe: </label>
-        <input type="password" id="password" name="pass" />
+        <label htmlFor="username">Email: </label>
+        <input type="text" id="email" name="email" />
         <input type="submit" value="Login" />
       </form>
 
