@@ -34,8 +34,9 @@ export async function login(req, res, next) {
 
     if (!email) throw new AppError("an email must be provided", 400);
 
+    const user = await Collaborator.findOne().where("Email").equals(email.toLowerCase())
 
-    const user = await Collaborator.find().where("Email").equals(email.toLowerCase())
+    if(!user) throw new AppError(`no user found with email: ${email}`, 404);
 
     res.status(200).json({
         status: "success",
