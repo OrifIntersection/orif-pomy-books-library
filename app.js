@@ -70,16 +70,12 @@ app.use((err, req, res, next) => {
   });
 })
 
-
-
-// connect to database via mongoose (unncessesary for vercel deployment)
-let dbConnected = false;
-if (dbConnected === false) {
-  mongoose.connect(process.env.DATABASE, { dbName: "Library_ORIF_Pomy" }).then(() => {
+// connect to database via mongoose
+await mongoose.connect(process.env.DATABASE, { dbName: "Library_ORIF_Pomy" }).then(() => {
     console.log("Connected to MongoDB via Mongoose");
-    dbConnected = true;
+
   });
-}
+
 
 
 
