@@ -6,6 +6,7 @@ import {
   patchBook,
   deleteBook,
 } from "../handlers/booksHandler.js";
+import { protect } from "../handlers/authHandler.js"
 
 
 const router = express.Router();
@@ -13,12 +14,12 @@ const router = express.Router();
 router
   .route("/") //  -> '/api/v1/books/'
   .get(getAllBooks)
-  .post(postBook);
+  .post(protect, postBook);
 
 router
   .route("/:id") //  -> '/api/v1/books/:id'
   .get(getBook)
-  .patch(patchBook)
-  .delete(deleteBook);
+  .patch(protect, patchBook)
+  .delete(protect, deleteBook);
 
 export default router
