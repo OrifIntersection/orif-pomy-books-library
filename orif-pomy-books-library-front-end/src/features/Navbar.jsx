@@ -1,7 +1,10 @@
-import { Outlet } from "react-router";
-import { Link } from "react-router";
+import { Outlet, Link } from "react-router";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext.jsx";
 
 function Navbar() {
+  const { user } = useContext(AuthContext);
+
   return (
     <>
       <header className="navbar">

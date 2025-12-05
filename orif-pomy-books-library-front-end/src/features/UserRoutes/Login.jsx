@@ -5,13 +5,12 @@ import { AuthContext } from "../../contexts/AuthContext";
 const collaboratorHandler = new APIHandler("collaborators/login");
 
 export default function Login() {
-  const { user, setUser } = useContext(AuthContext);
+  const { setUser } = useContext(AuthContext);
   async function submitLogin(formData) {
 
 
     try {
       const body = await collaboratorHandler.post({ email: formData.get("email") });
-      console.log(body)
       setUser(body.data);
     } catch (error) {
       console.error(error);

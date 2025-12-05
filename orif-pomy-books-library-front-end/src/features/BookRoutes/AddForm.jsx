@@ -1,10 +1,13 @@
 import APIHandler from "../../utils/APIHandler";
+import { AuthContext } from "../../contexts/AuthContext";
+import { useContext } from "react";
 import { useNavigate } from "react-router";
 
 const booksAPIHandler = new APIHandler("books")
 
 export default function NewBook() {
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
 
   async function submitBook(e) {
     e.preventDefault();
@@ -13,6 +16,7 @@ export default function NewBook() {
 
     try {
       const body = await booksAPIHandler.post({
+        id: user.id,
         Title: formData.get("title"),
         Author: formData.get("author").split(", "),
         Genre: formData.get("genre").split(", "),
