@@ -1,5 +1,4 @@
 // dependencies
-import morgan from "morgan";
 import express from "express";
 import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
@@ -14,10 +13,8 @@ dotenv.config({ path: "./config.env" });
 // global middleware
 const app = express();
 
-app.use(cors());
-app.options("/*all", cors());
+app.use(cors({ origin: "https://ideal-trout-5g7x9xxvxg462p-5173.app.github.dev" }));
 app.use(express.json());
-app.use(morgan(":method :url :status :response-time ms - :res[content-length]"));
 
 // routers
 app.use("/api/v1/books", booksRouter);
