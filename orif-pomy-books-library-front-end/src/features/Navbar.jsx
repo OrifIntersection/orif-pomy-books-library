@@ -16,9 +16,15 @@ function Navbar() {
           <Link to="/newbook" className="link">
             + Ajouter un livre
           </Link>
-          <Link to="/login" className="login">
-            Login
-          </Link>
+          {user ? (
+            <Link to={`/collaborators/${user.id}`} className="login">
+              {user.name}
+            </Link>
+          ) : (
+            <Link to="/login" className="login">
+              Login
+            </Link>
+          )}
         </p>
       </header>
       <Outlet />

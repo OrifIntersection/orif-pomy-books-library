@@ -1,13 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router";
 import APIHandler from "../../utils/APIHandler";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const booksAPIHandler = new APIHandler("books");
 
 export default function ModifyBook() {
   const [book, setBook] = useState({});
+  const { user } = useContext(AuthContext);
   const { id } = useParams();
   const navigate = useNavigate();
+
+  if (user) booksAPIHandler.setAuth(user.id)
 
   //
   // useEffect to getBookById from the API
@@ -17,7 +21,7 @@ export default function ModifyBook() {
   useEffect(() => {
     async function getAPI() {
       try {
-        const body = await booksAPIHandler.get("", id)
+        const body = await booksAPIHandler.get("", id);
         setBook(body.data);
       } catch (error) {
         console.error(error);
@@ -34,14 +38,13 @@ export default function ModifyBook() {
     e.preventDefault();
 
     try {
-      await booksAPIHandler.delete(id)
-      alert('le livre à été supprimé')
+      await booksAPIHandler.delete(id);
+      alert("le livre à été supprimé");
       navigate("/books");
     } catch (error) {
       console.error(error);
       alert("Une erreur est survenue lors de la suppression du livre");
     }
-
   }
 
   if (Object.keys(book).length === 0) {

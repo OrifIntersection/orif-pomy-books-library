@@ -3,11 +3,13 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { useContext } from "react";
 import { useNavigate } from "react-router";
 
-const booksAPIHandler = new APIHandler("books")
+const booksAPIHandler = new APIHandler("books");
 
 export default function NewBook() {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+
+  if (user) booksAPIHandler.setAuth(user.id);
 
   async function submitBook(e) {
     e.preventDefault();
@@ -16,7 +18,6 @@ export default function NewBook() {
 
     try {
       const body = await booksAPIHandler.post({
-        id: user.id,
         Title: formData.get("title"),
         Author: formData.get("author").split(", "),
         Genre: formData.get("genre").split(", "),
@@ -32,7 +33,6 @@ export default function NewBook() {
       console.error(error);
       alert("Une erreur est survenue lors de la création du livre");
     }
-
   }
 
   return (
