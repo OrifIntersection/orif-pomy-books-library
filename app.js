@@ -3,12 +3,12 @@ import express from "express";
 import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
 import collaboratorsRouter from "./dev-data/routes/collaboratorsRoute.js"
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 import mongoose from "mongoose";
 import AppError from "./dev-data/utils/AppError.js";
 
 // global environment vars
-dotenv.config({ path: "./config.env" });
+// dotenv.config({ path: "./config.env" });
 
 // global middleware
 const app = express();
