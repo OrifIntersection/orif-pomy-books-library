@@ -1,4 +1,4 @@
-import AppError from "../utils/AppError";
+import AppError from "../utils/AppError.js";
 import { Collaborator } from "../models/collaboratorModel.js";
 
 export async function protect(req, res, next) {
