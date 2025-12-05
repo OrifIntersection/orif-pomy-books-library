@@ -70,6 +70,8 @@ app.use((err, req, res, next) => {
   });
 })
 
+console.log(process.env.DATABASE);
+
 // connect to database via mongoose
 await mongoose.connect(process.env.DATABASE, { dbName: "Library_ORIF_Pomy" }).then(() => {
     console.log("Connected to MongoDB via Mongoose");
