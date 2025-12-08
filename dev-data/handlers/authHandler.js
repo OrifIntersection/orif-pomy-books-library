@@ -8,9 +8,9 @@ export async function protect(req, res, next) {
 
   const { id } = req.body;
 
-  const currentUser = await Collaborator.findById(id);
+  const currentCollaborator = await Collaborator.findById(id);
 
-  req.userId = currentUser._id;
+  req.collaboratorId = currentCollaborator._id;
 
   next();
 }
@@ -41,15 +41,15 @@ export async function login(req, res, next) {
 
   if (!email) throw new AppError("an email must be provided", 400);
 
-  const user = await Collaborator.findOne()
+  const collaborator = await Collaborator.findOne()
     .where("Email")
     .equals(email.toLowerCase());
 
-  if (!user) throw new AppError(`no user found with email: ${email}`, 404);
+  if (!collaborator) throw new AppError(`no collaborator found with email: ${email}`, 404);
 
   res.status(200).json({
     status: "success",
-    message: `user with email: ${email} has logged in successfully`,
-    data: { id: user._id, name: user.Name },
+    message: `collaborator with email: ${email} has logged in successfully`,
+    data: { id: collaborator._id, name: collaborator.Name },
   });
 }

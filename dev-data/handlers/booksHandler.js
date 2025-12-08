@@ -3,6 +3,7 @@ import { Collaborator } from "../models/collaboratorModel.js";
 import AppError from "../utils/AppError.js";
 
 export async function getAllBooks(req, res, next) {
+
   //
   //  Search functionality, if no query params, return all books
   //
@@ -27,9 +28,13 @@ export async function getAllBooks(req, res, next) {
 }
 
 export async function getBook(req, res, next) {
+
   //
   //  Get a single book by ID
   //  This will populate the chosen books ActiveLoan, CreatedBy, and OwnedBy
+  //  Only relevant fields are selected
+  //  There is no way to modify this query from the front-end
+  //  This is probably not ideal for an API
   //
 
   const bookId = req.params.id;
@@ -37,7 +42,7 @@ export async function getBook(req, res, next) {
   if (!bookId) throw new AppError("No book ID provided.", 400);
 
   const book = await Book.findById(bookId)
-    .populate("ActiveLoan")
+    .populate({ path: "ActiveLoan", select: "StartDate EndDate" })
     .populate({ path: "CreatedBy", select: "Name" })
     .populate({ path: "OwnedBy", select: "Name" });
 
@@ -58,12 +63,12 @@ export async function postBook(req, res, next) {
   //
 
   const newBookData = req.body;
-  const userId = req.userId;
+  const collaboratorId = req.collaboratorId;
 
   if (!newBookData) throw new AppError("No book data provided", 400);
-  if (!userId) throw new AppError("You are not logged in", 401);
+  if (!collaboratorId) throw new AppError("You are not logged in", 401);
 
-  newBookData.CreatedBy = userId;
+  newBookData.CreatedBy = collaboratorId;
   const createdBook = await Book.create(newBookData);
 
   res.status(201).json({
@@ -106,7 +111,7 @@ export async function patchBook(req, res, next) {
 export async function deleteBook(req, res, next) {
   //
   //  Find book by ID, then delete
-  //  User must be logged in
+  //  Collaborator must be logged in
   //  Deletion could also be handled with a simple Deleted: T/F field
   //  This would preserve the data
   //
