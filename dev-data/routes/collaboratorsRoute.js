@@ -7,6 +7,7 @@ const router = express.Router();
 router.post("/login", login);           // /api/v1/collaborators/login
 router.post("/signup", signup);         // /api/v1/collaborators/signup
 
-router.route("/:id").get(protect, getCollaborator)
+// need to protect route "/:id" + get, but get routes cannot handle auth at the moment.
+router.route("/:id").get(getCollaborator)
 
 export default router;
