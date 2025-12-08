@@ -10,7 +10,6 @@ export async function getCollaborator(req, res, next) {
   const collaboratorId = req.params.id;
 
   const currentUser = await Collaborator.findById(collaboratorId)
-    .populate("AddedBooks")
     .populate("OwnedBooks")
     .populate("Loans");
 

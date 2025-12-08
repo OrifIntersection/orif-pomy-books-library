@@ -13,7 +13,7 @@ function BookTableBody({ book }) {
 
   return (
     <tr
-      onClick={() => navigate(`/books/${book._id}`)}
+      onClick={() => navigate(`/livres/${book._id}`)}
       style={{ cursor: "pointer" }}
     >
       <td>{book.Title}</td>
@@ -96,13 +96,13 @@ function BookButtons({ bookId }) {
 
   return (
     <div>
-      <Link className="bookButtons" to={`/books/${bookId}/modify`}>
+      <Link className="bookButtons" to={`/livres/${bookId}/modifier`}>
         Modifier Livre
       </Link>
-      <Link className="bookButtons" to={`/books/${bookId}/borrow`}>
+      <Link className="bookButtons" to={`/livres/${bookId}/emprunter`}>
         Emprunter Livre
       </Link>
-      <Link className="bookButtons" to={`/books/${bookId}/delete`}>
+      <Link className="bookButtons" to={`/livres/${bookId}/supprimer`}>
         Supprimer Livre
       </Link>
     </div>
