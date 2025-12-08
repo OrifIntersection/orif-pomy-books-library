@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import booksRouter from "./dev-data/routes/booksRoute.js"
 import collaboratorsRouter from "./dev-data/routes/collaboratorsRoute.js"
+import loansRouter from "./dev-data/routes/loansRoute.js"
 // import dotenv from "dotenv";
 import mongoose from "mongoose";
 import AppError from "./dev-data/utils/AppError.js";
@@ -19,6 +20,7 @@ app.use(express.json());
 // routers
 app.use("/api/v1/books", booksRouter);
 app.use("/api/v1/collaborators", collaboratorsRouter);
+app.use("/api/v1/loans", loansRouter)
 
 // handle all other routes
 app.all("*all", (req, res) => {
