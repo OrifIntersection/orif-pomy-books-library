@@ -1,5 +1,5 @@
 import { Book } from "../models/bookModel.js";
-import { User } from "../models/userModel.js";
+import { Collaborator } from "../models/collaboratorModel.js";
 import AppError from "../utils/AppError.js";
 
 export async function getAllBooks(req, res, next) {
@@ -56,7 +56,7 @@ export async function postBook(req, res, next) {
   newBookData.CreatedBy = userId;
   const createdBook = await Book.create(newBookData);
 
-  await User.findByIdAndUpdate(
+  await Collaborator.findByIdAndUpdate(
     userId,
     { $push: { AddedBooks: createdBook._id } },
     { new: true }
