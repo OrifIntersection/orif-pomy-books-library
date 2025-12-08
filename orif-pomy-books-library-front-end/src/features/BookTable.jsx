@@ -87,24 +87,30 @@ function BookTableHead({searchParams, setSearchParams, books}) {
   );
 }
 
-function BookButtons({ bookId }) {
+function SingleBook({ book }) {
 
   //
-  // BookButtons only show when a single book is available
+  // SingleBook only show when a single book is available
   // we can then use this book ID to update & PATCH the API, or POST the API to borrow the book
   //
 
+  console.log(book);
+
   return (
     <div>
-      <Link className="bookButtons" to={`/livres/${bookId}/modifier`}>
+      <Link className="bookButtons" to={`/livres/${book._id}/modifier`}>
         Modifier Livre
       </Link>
-      <Link className="bookButtons" to={`/livres/${bookId}/emprunter`}>
+      <Link className="bookButtons" to={`/livres/${book._id}/emprunter`}>
         Emprunter Livre
       </Link>
-      <Link className="bookButtons" to={`/livres/${bookId}/supprimer`}>
+      <Link className="bookButtons" to={`/livres/${book._id}/supprimer`}>
         Supprimer Livre
       </Link>
+      <p>{book.AddedBy}</p>
+      <p>{book.OwnedBy}</p>
+      <p>{book.ActiveLoan}</p>
+      <p>{book.CreatedOn}</p>
     </div>
   );
 }
@@ -213,7 +219,7 @@ function BookTable() {
   return books ? (
     <>
       {books.length === 1 ? (
-        <BookButtons bookId={books[0]._id} />
+        <SingleBook book={books[0]} />
       ) : (
         <SearchBookTable setSearchParams={setSearchParams} />
       )}
