@@ -6,10 +6,18 @@ import AppError from "../utils/AppError.js";
 export async function getAllLoans(req, res, next) {
 
   //
-  //  Return all loans that are not returned
+  //  Return all loans
+  //  Accepts query for Returned true/false
   //
 
-  const loans = await Loan.find({ Returned: false });
+  const { returned } = req.query;
+
+  let loansQuery = Loan.find();
+
+  // if returned exists as string "true" or "false", finds the loans that are "true" returned, or "false" not returned.
+  if (returned) loansQuery = loansQuery.find({ Returned: returned === "true" })
+
+  const loans = await loansQuery;
 
   if (loans.length === 0) throw new AppError("No active loans found.", 404);
 
