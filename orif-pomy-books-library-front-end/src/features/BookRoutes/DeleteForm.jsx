@@ -40,7 +40,7 @@ export default function ModifyBook() {
     try {
       await booksAPIHandler.delete(id);
       alert("le livre à été supprimé");
-      navigate("/books");
+      navigate("/livres");
     } catch (error) {
       console.error(error);
       alert("Une erreur est survenue lors de la suppression du livre");

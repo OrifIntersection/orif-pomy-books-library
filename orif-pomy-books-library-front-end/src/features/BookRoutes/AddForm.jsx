@@ -28,7 +28,7 @@ export default function NewBook() {
 
       alert("le livre à été crée");
 
-      navigate("/books/" + body.data._id);
+      navigate("/livres/" + body.data._id);
     } catch (error) {
       console.error(error);
       alert("Une erreur est survenue lors de la création du livre");

@@ -10,6 +10,7 @@ import ModifyForm from "./features/BookRoutes/ModifyForm.jsx";
 import DeleteForm from "./features/BookRoutes/DeleteForm.jsx";
 import AddForm from "./features/BookRoutes/AddForm.jsx";
 import BorrowBook from "./features/BookRoutes/BorrowForm.jsx";
+import UserPage from "./features/UserRoutes/UserPage.jsx";
 import Login from "./features/UserRoutes/Login.jsx";
 import Navbar from "./features/Navbar.jsx";
 import AuthProvider from "./utils/AuthProvider.jsx";
@@ -19,13 +20,14 @@ createRoot(document.getElementById("root")).render(
     <BrowserRouter>
       <Routes>
         <Route element={<Navbar />}>
-          <Route path="/books?" element={<BookTable />} />
-          <Route path="/books/:id" element={<BookTable />} />
-          <Route path="/books/:id/modify" element={<ModifyForm />} />
-          <Route path="/books/:id/borrow" element={<BookTable />} />
-          <Route path="/books/:id/delete" element={<DeleteForm />} />
-          <Route path="/addbook" element={<AddForm />} />
+          <Route path="/livres?" element={<BookTable />} />
+          <Route path="/livres/:id" element={<BookTable />} />
+          <Route path="/livres/:id/modifier" element={<ModifyForm />} />
+          <Route path="/livres/:id/emprunter" element={<BookTable />} />
+          <Route path="/livres/:id/supprimer" element={<DeleteForm />} />
+          <Route path="/nouvelle-livre" element={<AddForm />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/collaborateurs/moi" element={<UserPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

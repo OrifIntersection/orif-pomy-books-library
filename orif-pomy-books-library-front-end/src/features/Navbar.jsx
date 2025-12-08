@@ -10,14 +10,14 @@ function Navbar() {
       <header className="navbar">
         <p>
           Orif Pomy Bibliothèque
-          <Link to="/books" className="link">
+          <Link to="/livres" className="link">
             Livres
           </Link>
-          <Link to="/newbook" className="link">
+          <Link to="/nouvelle-livre" className="link">
             + Ajouter un livre
           </Link>
           {user ? (
-            <Link to={`/collaborators/${user.id}`} className="login">
+            <Link to="/collaborateurs/moi" className="login">
               {user.name}
             </Link>
           ) : (

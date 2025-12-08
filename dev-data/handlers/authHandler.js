@@ -2,10 +2,12 @@ import AppError from "../utils/AppError.js";
 import { Collaborator } from "../models/collaboratorModel.js";
 
 export async function protect(req, res, next) {
+
+  if (!req.body?.id)
+    throw new AppError("you must be logged in to access this route. Furthermore, GET routes cannot have a body.", 401);
+
   const { id } = req.body;
 
-  if (!id)
-    throw new AppError("you must be logged in to access this route", 401);
 
   const currentUser = await Collaborator.findById(id);
 

@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router";
 import APIHandler from "../../utils/APIHandler.jsx";
 import { AuthContext } from "../../contexts/AuthContext";
 
-  const booksAPIHandler = new APIHandler("books");
+const booksAPIHandler = new APIHandler("books");
 
 export default function ModifyBook() {
   const [book, setBook] = useState({});
@@ -54,7 +54,7 @@ export default function ModifyBook() {
 
       alert("le livre à été modifié !")
 
-      navigate("/books/" + id);
+      navigate("/livres/" + id);
     } catch (error) {
       console.error(error);
       alert("Une erreur est survenue lors de la modification du livre");

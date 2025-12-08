@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 
-const collaboratorHandler = new APIHandler("collaborators/login");
+const collaboratorsAPIHandler = new APIHandler("collaborators/login");
 
 export default function Login() {
   const navigate = useNavigate();
@@ -12,14 +12,14 @@ export default function Login() {
   async function submitLogin(formData) {
 
     try {
-      const body = await collaboratorHandler.post({
+      const body = await collaboratorsAPIHandler.post({
         email: formData.get("email"),
       });
       setUser(body.data);
 
       alert("succès!")
 
-      navigate("/books")
+      navigate("/livres")
     } catch (error) {
       console.error(error);
     }
