@@ -26,24 +26,26 @@ export async function postLoan(req, res, next) {
   //
   //    Create a new loan
   //    Save to book and collaborator records
+  //    Only the Collaborator and Book IDs are required
+  //    ReturnDays is optional, defaults to two weeks.
   //
 
-  const { BookID, CollaboratorID, ReturnDays } = req.body;
-  if (!BookID || !CollaboratorID) throw new AppError("a book and a collaborator are required to create a loan.", 400);
+  const { Book, Collaborator, ReturnDays } = req.body;
+  if (!Book || !Collaborator) throw new AppError("a book and a collaborator are required to create a loan.", 400);
 
-  const book = await Book.findById(BookID);
-  if (!book) throw new AppError(`No book found with ID: ${BookID}`, 404);
+  const book = await Book.findById(Book);
+  if (!book) throw new AppError(`No book found with ID: ${Book}`, 404);
 
-  const collaborator = await Collaborator.findById(CollaboratorID);
-  if (!collaborator) throw new AppError(`No collaborator found with ID: ${CollaboratorID}`, 404);
+  const collaborator = await Collaborator.findById(Collaborator);
+  if (!collaborator) throw new AppError(`No collaborator found with ID: ${Collaborator}`, 404);
 
-  let document = new Loan({ BookID, CollaboratorID });
-  if (ReturnDays) document.ReturnDate = new Date(Date.now() + ReturnDays * 24 * 60 * 60 * 1000);
+  let document = new Loan({ Book, Collaborator });
+  if (ReturnDays) document.EndDate = new Date(Date.now() + ReturnDays * 24 * 60 * 60 * 1000);
 
   const newLoan = await document.save();
 
   // Update book and collaborator records
-  book.Loans.push(newLoan._id);
+  book.ActiveLoan.push(newLoan._id);
   await book.save();
 
   collaborator.Loans.push(newLoan._id);

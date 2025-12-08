@@ -1,34 +1,39 @@
 import mongoose from "mongoose";
 
 const collaboratorSchema = new mongoose.Schema({
-    Name: {
-        type: String,
-        required: [true, "A collaborator must have a name"],
-    },
-    Email: {
-        type: String,
-        required: [true, "A collaborator must have an email"],
-        unique: true,
-    },
-    AddedBooks: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: "Book",
-        default: [],
-    },
-    OwnedBooks: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: "Book",
-        default: [],
-    },
-    Loans: {
-        type: [mongoose.Schema.Types.ObjectId],
-        ref: "Loan",
-        default: [],
-    },
-    JoinedDate: {
-        type: Date,
-        default: Date.now(),
-    },
+  Name: {
+    type: String,
+    required: [true, "A collaborator must have a name"],
+  },
+
+  Email: {
+    type: String,
+    required: [true, "A collaborator must have an email"],
+    unique: true,
+  },
+
+  // Password: {},
+  OwnedBooks: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Book",
+    default: [],
+  },
+
+  Loans: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Loan",
+    default: [],
+  },
+
+  CreatedOn: {
+    type: Date,
+    default: Date.now(),
+  },
+
 });
 
-export const Collaborator = mongoose.model("Collaborator", collaboratorSchema, "Collaborators");
+export const Collaborator = mongoose.model(
+  "Collaborator",
+  collaboratorSchema,
+  "Collaborators"
+);

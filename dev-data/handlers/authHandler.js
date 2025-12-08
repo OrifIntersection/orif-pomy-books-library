@@ -8,10 +8,8 @@ export async function protect(req, res, next) {
 
   const { id } = req.body;
 
+  await Collaborator.findById(id);
 
-  const currentUser = await Collaborator.findById(id);
-
-  req.userId = currentUser._id;
   next();
 }
 

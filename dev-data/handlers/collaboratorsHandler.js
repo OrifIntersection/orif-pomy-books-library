@@ -3,8 +3,11 @@ import AppError from "../utils/AppError.js";
 
 export async function getCollaborator(req, res, next) {
 
-  // temporary way to circumnavigate auth.
-  const collaboratorId = req.userId ? req.userId : req.params.id;
+  // 
+  // 
+  //
+
+  const collaboratorId = req.params.id;
 
   const currentUser = await Collaborator.findById(collaboratorId)
     .populate("AddedBooks")

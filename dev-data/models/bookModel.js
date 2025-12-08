@@ -26,14 +26,18 @@ const booksSchema = new mongoose.Schema({
         required: [true, "A user must be logged in to create a book"],
         ref: "Collaborator",
     },
-    Owner: {
+    CreatedOn: {
+        type: Date,
+        default: Date.now(),
+    },
+    OwnedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Collaborator",
     },
-    Loans: {
-        type: [mongoose.Schema.Types.ObjectId],
+    ActiveLoan: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Loan",
-        default: [],
+        default: null,
     },
 });
 
