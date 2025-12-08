@@ -107,7 +107,7 @@ function SingleBook({ book }) {
       <Link className="bookButtons" to={`/livres/${book._id}/supprimer`}>
         Supprimer Livre
       </Link>
-      <p>{book.AddedBy}</p>
+      <p>{book.CreatedBy.Name}</p>
       <p>{book.OwnedBy}</p>
       <p>{book.ActiveLoan}</p>
       <p>{book.CreatedOn}</p>

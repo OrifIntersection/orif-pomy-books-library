@@ -3,7 +3,6 @@ import { Collaborator } from "../models/collaboratorModel.js";
 import AppError from "../utils/AppError.js";
 
 export async function getAllBooks(req, res, next) {
-
   //
   //  Search functionality, if no query params, return all books
   //
@@ -28,7 +27,6 @@ export async function getAllBooks(req, res, next) {
 }
 
 export async function getBook(req, res, next) {
-
   //
   //  Get a single book by ID
   //  This will populate the chosen books ActiveLoan, CreatedBy, and OwnedBy
@@ -38,7 +36,10 @@ export async function getBook(req, res, next) {
 
   if (!bookId) throw new AppError("No book ID provided.", 400);
 
-  const book = await Book.findById(bookId).populate("ActiveLoan").populate("CreatedBy").populate("OwnedBy");
+  const book = await Book.findById(bookId)
+    .populate("ActiveLoan")
+    .populate({ path: "CreatedBy", field: "Name" })
+    .populate({ path: "OwnedBy", field: "Name" });
 
   if (!book) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
@@ -50,13 +51,11 @@ export async function getBook(req, res, next) {
 }
 
 export async function postBook(req, res, next) {
-
   //
   // Create a new book, add to database
   // Collaborator must be logged in
   // The collaborator creating the book will be added to Book.CreatedBy
   //
-
 
   const newBookData = req.body;
   const userId = req.userId;
@@ -73,10 +72,7 @@ export async function postBook(req, res, next) {
   });
 }
 
-
-
 export async function patchBook(req, res, next) {
-
   //
   // Find book by ID, then update
   // Only Title, Author, Genre, Subject, Location can be modified
@@ -108,7 +104,6 @@ export async function patchBook(req, res, next) {
 }
 
 export async function deleteBook(req, res, next) {
-
   //
   //  Find book by ID, then delete
   //  User must be logged in
