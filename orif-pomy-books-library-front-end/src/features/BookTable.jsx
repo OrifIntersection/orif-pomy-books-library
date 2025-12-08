@@ -94,8 +94,6 @@ function SingleBook({ book }) {
   // we can then use this book ID to update & PATCH the API, or POST the API to borrow the book
   //
 
-  console.log(book);
-
   return (
     <div>
       <Link className="bookButtons" to={`/livres/${book._id}/modifier`}>
@@ -107,7 +105,7 @@ function SingleBook({ book }) {
       <Link className="bookButtons" to={`/livres/${book._id}/supprimer`}>
         Supprimer Livre
       </Link>
-      <p>{book.CreatedBy.Name}</p>
+      <p>{book.CreatedBy?.Name}</p>
       <p>{book.OwnedBy}</p>
       <p>{book.ActiveLoan}</p>
       <p>{book.CreatedOn}</p>

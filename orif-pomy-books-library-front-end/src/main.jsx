@@ -9,7 +9,7 @@ import BookTable from "./features/BookTable.jsx";
 import ModifyForm from "./features/BookRoutes/ModifyForm.jsx";
 import DeleteForm from "./features/BookRoutes/DeleteForm.jsx";
 import AddForm from "./features/BookRoutes/AddForm.jsx";
-import BorrowBook from "./features/BookRoutes/BorrowForm.jsx";
+import BorrowForm from "./features/BookRoutes/BorrowForm.jsx";
 import UserPage from "./features/UserRoutes/UserPage.jsx";
 import Login from "./features/UserRoutes/Login.jsx";
 import Navbar from "./features/Navbar.jsx";
@@ -23,7 +23,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/livres?" element={<BookTable />} />
           <Route path="/livres/:id" element={<BookTable />} />
           <Route path="/livres/:id/modifier" element={<ModifyForm />} />
-          <Route path="/livres/:id/emprunter" element={<BookTable />} />
+          <Route path="/livres/:id/emprunter" element={<BorrowForm />} />
           <Route path="/livres/:id/supprimer" element={<DeleteForm />} />
           <Route path="/nouvelle-livre" element={<AddForm />} />
           <Route path="/login" element={<Login />} />

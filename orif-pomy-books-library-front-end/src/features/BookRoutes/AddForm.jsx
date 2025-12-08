@@ -23,7 +23,6 @@ export default function NewBook() {
         Genre: formData.get("genre").split(", "),
         Subject: formData.get("subject").split(", "),
         Location: formData.get("location"),
-        ISBN: formData.get("isbn"),
       });
 
       alert("le livre à été crée");
@@ -57,8 +56,6 @@ export default function NewBook() {
         Emplacement <span>*</span>:{" "}
       </label>
       <input type="text" id="location" name="location" required />
-      <label htmlFor="isbn">ISBN: </label>
-      <input type="text" id="isbn" name="isbn" />
       <input type="submit" value="Envoyer" />
     </form>
   );
