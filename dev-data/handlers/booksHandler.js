@@ -31,13 +31,14 @@ export async function getBook(req, res, next) {
 
   //
   //  Get a single book by ID
+  //  This will populate the chosen books ActiveLoan, CreatedBy, and OwnedBy
   //
 
   const bookId = req.params.id;
 
   if (!bookId) throw new AppError("No book ID provided.", 400);
 
-  const book = await Book.findById(bookId);
+  const book = await Book.findById(bookId).populate("ActiveLoan").populate("CreatedBy").populate("OwnedBy");
 
   if (!book) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
