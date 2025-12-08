@@ -1,21 +1,22 @@
 import { Book } from "../models/bookModel.js";
+import { User } from "../models/userModel.js";
 import AppError from "../utils/AppError.js";
 
 export async function getAllBooks(req, res, next) {
-
   //
   //  Search functionality, if no query params, return all books
-  // 
-
+  //
 
   const { search, searchType, sort } = req.query;
 
   let booksQuery = Book.find();
-  if (searchType && search) booksQuery = booksQuery.where(searchType).equals(new RegExp(search, "i"));
+  if (searchType && search)
+    booksQuery = booksQuery.where(searchType).equals(new RegExp(search, "i"));
   if (sort) booksQuery = booksQuery.sort(sort);
   const books = await booksQuery;
 
-  if (books.length === 0) throw new AppError("No books found matching the criteria.", 404);
+  if (books.length === 0)
+    throw new AppError("No books found matching the criteria.", 404);
 
   return res.status(200).json({
     status: "success",
@@ -23,16 +24,12 @@ export async function getAllBooks(req, res, next) {
     results: books.length,
     data: books,
   });
-
 }
 
 export async function getBook(req, res, next) {
-
   //
   //  Get a single book by ID
   //
-
-
 
   const bookId = req.params.id;
 
@@ -47,38 +44,42 @@ export async function getBook(req, res, next) {
     message: `Book with ID: ${bookId} retrieved successfully.`,
     data: book,
   });
-
-
 }
 
 export async function postBook(req, res, next) {
-
-
   const newBookData = req.body;
+  const userId = req.userId;
 
-  if (!newBookData) throw new AppError("No book data provided.", 400);
+  if (!newBookData) throw new AppError("No book data provided", 400);
+  if (!userId) throw new AppError("You are not logged in", 401);
 
+  newBookData.CreatedBy = userId;
   const createdBook = await Book.create(newBookData);
+
+  await User.findByIdAndUpdate(
+    userId,
+    { $push: { AddedBooks: createdBook._id } },
+    { new: true }
+  );
 
   res.status(201).json({
     status: "success",
     data: createdBook,
   });
-
-
-
 }
 
 export async function patchBook(req, res, next) {
-
   const bookId = req.params.id;
   const updatedBookData = req.body;
 
-  if (!updatedBookData) throw new AppError("No book data provided for update.", 400);
+  if (!updatedBookData)
+    throw new AppError("No book data provided for update.", 400);
 
   if (!bookId) throw new AppError("No book ID provided.", 400);
 
-  const updatedBook = await Book.findByIdAndUpdate(bookId, updatedBookData, { new: true });
+  const updatedBook = await Book.findByIdAndUpdate(bookId, updatedBookData, {
+    new: true,
+  });
 
   if (!updatedBook) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
@@ -86,24 +87,20 @@ export async function patchBook(req, res, next) {
     status: "success",
     data: updatedBook,
   });
-
-
 }
 
 export async function deleteBook(req, res, next) {
+  const bookId = req.params.id;
 
-    const bookId = req.params.id;
+  if (!bookId) throw new AppError("No book ID provided.", 400);
 
-    if (!bookId) throw new AppError("No book ID provided.", 400);
+  const deletedBook = await Book.findByIdAndDelete(bookId);
 
-    const deletedBook = await Book.findByIdAndDelete(bookId);
+  if (!deletedBook) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
-    if (!deletedBook) throw new AppError(`No book found with ID: ${bookId}`, 404);
-
-    res.status(200).json({
-      status: "success",
-      message: `Book has been deleted`,
-      data: deletedBook,
-    });
-
+  res.status(200).json({
+    status: "success",
+    message: `Book has been deleted`,
+    data: deletedBook,
+  });
 }

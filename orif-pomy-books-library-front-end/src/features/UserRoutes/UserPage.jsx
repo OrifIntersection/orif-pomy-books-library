@@ -24,6 +24,6 @@ export default function UserPage() {
     getAPI();
   }, []);
 
-
+  console.log(userInfo);
   return userInfo ? <p>Reçu</p> : <p>Loading...</p>
 }
