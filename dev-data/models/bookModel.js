@@ -21,6 +21,11 @@ const booksSchema = new mongoose.Schema({
         type: String,
         required: [true, "A book must have a location"],
     },
+    CreatedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: [true, "A user must be logged in to create a book"],
+        ref: "Collaborator",
+    },
     Owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Collaborator",

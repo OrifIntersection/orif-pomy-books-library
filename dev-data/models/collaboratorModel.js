@@ -10,7 +10,12 @@ const collaboratorSchema = new mongoose.Schema({
         required: [true, "A collaborator must have an email"],
         unique: true,
     },
-    Books: {
+    AddedBooks: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Book",
+        default: [],
+    },
+    OwnedBooks: {
         type: [mongoose.Schema.Types.ObjectId],
         ref: "Book",
         default: [],

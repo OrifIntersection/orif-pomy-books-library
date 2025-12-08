@@ -9,7 +9,7 @@ export async function protect(req, res, next) {
 
   const currentUser = await Collaborator.findById(id);
 
-  req.user = currentUser;
+  req.userId = currentUser._id;
   next();
 }
 
@@ -19,6 +19,7 @@ export async function signup(req, res, next) {
   //
 
   const { name, email } = req.body;
+
   if (!name || !email)
     throw new AppError("an email and a name must be provided.", 400);
 
