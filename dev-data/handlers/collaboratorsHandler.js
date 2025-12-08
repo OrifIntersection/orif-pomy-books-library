@@ -2,7 +2,11 @@ import { Collaborator } from "../models/collaboratorModel.js";
 import AppError from "../utils/AppError.js";
 
 export async function getCollaborator(req, res, next) {
-  const currentUser = await Collaborator.findById(req.userId)
+
+  // temporary way to circumnavigate auth.
+  const collaboratorId = req.userId ? req.userId : req.params.id;
+
+  const currentUser = await Collaborator.findById(collaboratorId)
     .populate("AddedBooks")
     .populate("OwnedBooks")
     .populate("Loans");
