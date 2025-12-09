@@ -32,7 +32,8 @@ export default function AddForm() {
     try {
       const body = await loansAPIHandler.post({ BookID: book._id, EndDate });
       alert("Le livre a été emprunté avec succès !");
-      console.log(body.message);
+
+      navigate(`/livres/${book._id}`);
     } catch (error) {
       console.error(error);
     }
