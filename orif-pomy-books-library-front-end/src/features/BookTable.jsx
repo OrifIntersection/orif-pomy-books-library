@@ -23,6 +23,8 @@ function BookTableBody({ book }) {
       <td>{book.Genre.join(", ")}</td>
       <td>{book.Subject.join(", ")}</td>
       <td>{book.Location}</td>
+      {book.ActiveLoan ? <td>Emprunté</td> : <td>Disponible</td>}
+
     </tr>
   );
 }
@@ -94,6 +96,12 @@ function BookTableHead({ searchParams, setSearchParams, books }) {
         Emplacement
         <button className="sortButton" name="Location" onClick={sortBooks}>
           {sortIcon("Location")}
+        </button>
+      </th>
+      <th>
+        Disponilibité
+        <button className="sortButton" name="ActiveLoan" onClick={sortBooks}>
+          {sortIcon("ActiveLoan")}
         </button>
       </th>
     </>

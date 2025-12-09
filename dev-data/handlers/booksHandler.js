@@ -10,13 +10,13 @@ export async function getAllBooks(req, res, next) {
   const { search, searchType, sort } = req.query;
 
   let booksQuery = Book.find();
+  booksQuery = booksQuery.populate({ path: "ActiveLoan" });
 
   if (searchType && search)
     booksQuery = booksQuery.where(searchType).equals(new RegExp(search, "i"));
 
   if (sort) booksQuery = booksQuery.sort(sort);
 
-  const booksQuery = booksQuery.populate({ path: "ActiveLoan" });
   const books = await booksQuery;
 
   if (books.length === 0)
