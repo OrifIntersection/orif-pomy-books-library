@@ -38,13 +38,13 @@ function BookTableHead({ searchParams, setSearchParams, books }) {
     const sortBy = e.target.name;
     let currentParams = Object.fromEntries([...searchParams]);
 
-    if (currentParams.sort === sortBy) {
-      currentParams.sort = `-${sortBy}`;
+    if (currentParams.sortQuery === sortBy) {
+      currentParams.sortQuery = `-${sortBy}`;
       setSearchParams(currentParams);
       return;
     }
 
-    currentParams.sort = sortBy;
+    currentParams.sortQuery = sortBy;
     setSearchParams(currentParams);
   }
 
@@ -56,9 +56,9 @@ function BookTableHead({ searchParams, setSearchParams, books }) {
 
     if (books.length === 1) return;
 
-    if (searchParams.get("sort") === column) {
+    if (searchParams.get("sortQuery") === column) {
       return "↑";
-    } else if (searchParams.get("sort") === `-${column}`) {
+    } else if (searchParams.get("sortQuery") === `-${column}`) {
       return "↓";
     }
 
