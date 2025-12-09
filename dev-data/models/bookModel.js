@@ -48,4 +48,7 @@ booksSchema.virtual("ActiveLoan", {
     match: { Returned: false } // Only return the active loan
 });
 
+booksSchema.set("toObject", { virtuals: true });
+booksSchema.set("toJSON", { virtuals: true });
+
 export const Book = mongoose.model("Book", booksSchema, "Books");
