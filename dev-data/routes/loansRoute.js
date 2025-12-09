@@ -2,7 +2,7 @@ import express from "express";
 import {
     getAllLoans,
     postLoan,
-    patchLoan,
+    deleteLoan,
 } from "../handlers/loansHandler.js";
 
 import { protect } from "../handlers/authHandler.js";
@@ -15,6 +15,6 @@ router
     .post(protect, postLoan);
 
 router.route("/:id") //  -> '/api/v1/loans/:id'
-    .delete(protect, patchLoan);
+    .delete(protect, deleteLoan);
 
 export default router;
