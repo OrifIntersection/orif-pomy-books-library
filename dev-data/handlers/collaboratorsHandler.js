@@ -1,10 +1,22 @@
 import { Collaborator } from "../models/collaboratorModel.js";
 import AppError from "../utils/AppError.js";
 
+//
+//  Only get and getAll functions for collaborators
+//  Other functions should be handled via authHandler.js
+//
+
+export async function getAllCollaborators(req, res, next) {
+  //
+  //  Return all collaborators
+  //
+}
+
 export async function getCollaborator(req, res, next) {
 
   // 
   //  Logic should ideally check if the requester is the same as the requested collaborator
+  //  Render other user profile page or own profile page accordingly on front end...
   //
 
   const collaboratorId = req.params.id;
@@ -25,3 +37,5 @@ export async function getCollaborator(req, res, next) {
     data: currentUser,
   });
 }
+
+

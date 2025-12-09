@@ -52,11 +52,10 @@ export async function getAllBooks(req, res, next) {
 }
 
 export async function getBook(req, res, next) {
+
   //
   //  Get a single book by ID
   //  This will populate the chosen books ActiveLoan, ModifiedBy fields
-  //  There is no way to modify this query from the front-end
-  //  This is probably not ideal for an API
   //
 
   const bookId = req.params.id;
@@ -83,7 +82,9 @@ export async function postBook(req, res, next) {
   // The collaborator creating the book will be added to Book.ModifiedBy
   //
 
-  const newBookData = req.body;
+  const { Title, Author, Genre, Subject, Location } = req.body;
+
+  const newBookData = { Title, Author, Genre, Subject, Location };
   const collaboratorId = req.collaboratorId;
 
   if (!newBookData) throw new AppError("No book data provided", 400);
@@ -92,7 +93,7 @@ export async function postBook(req, res, next) {
   newBookData.ModifiedBy = collaboratorId;
   const createdBook = await Book.create(newBookData);
 
-  res.status(201).json({
+  res.status(201).json({  
     status: "success",
     data: createdBook,
   });
@@ -134,6 +135,7 @@ export async function patchBook(req, res, next) {
 }
 
 export async function deleteBook(req, res, next) {
+  
   //
   //  Find book by ID, then delete
   //  Collaborator must be logged in

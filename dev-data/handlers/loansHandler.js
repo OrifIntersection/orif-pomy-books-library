@@ -2,12 +2,10 @@ import { Loan } from "../models/loanModel.js";
 import AppError from "../utils/AppError.js";
 
 export async function getAllLoans(req, res, next) {
-
   //
   //  Return all loans
   //  Accepts query for Returned true/false
   //
-
   const { returned } = req.query;
 
   let loansQuery = Loan.find();
@@ -25,6 +23,20 @@ export async function getAllLoans(req, res, next) {
     results: loans.length,
     data: loans,
   });
+}
+
+export async function getLoan(req, res, next) {
+  //
+  //  Get a single loan by ID
+  //  Unsure when this would be used
+  //
+}
+
+export async function patchLoan(req, res, next) {
+  //
+  // Update EndDate of a loan
+  // Only EndDate can be modified
+  //
 }
 
 export async function postLoan(req, res, next) {
@@ -61,6 +73,7 @@ export async function deleteLoan(req, res, next) {
 
   //
   //  Mark a loan as returned
+  //  Should check that the requester's ID matches the loan's Collaborator ID
   //
 
   const { id } = req.params;
@@ -74,3 +87,5 @@ export async function deleteLoan(req, res, next) {
     data: loan,
   });
 }
+
+
