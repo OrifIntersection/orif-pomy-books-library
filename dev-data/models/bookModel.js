@@ -30,16 +30,22 @@ const booksSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
-    ActiveLoan: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Loan",
-        default: null,
-    },
 /*     OwnedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Collaborator",
     }, */
 
+});
+
+
+// To be used alongside .populate("ActiveLoan") in queries
+
+booksSchema.virtual("ActiveLoan", {
+    ref: "Loan",
+    localField: "_id",
+    foreignField: "Book",
+    justOne: true,
+    match: { Returned: false } // Only return the active loan
 });
 
 export const Book = mongoose.model("Book", booksSchema, "Books");

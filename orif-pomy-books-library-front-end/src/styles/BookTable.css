@@ -1,5 +1,4 @@
 
-
 /* bookTable CSS */
 
 .bookTable {
@@ -55,6 +54,7 @@
 }
 
 
+
 /* loadingBar CSS */
 
 .loadingBar {
@@ -76,4 +76,8 @@
   border: none;
   cursor: pointer;
   font-size: 14px;
+}
+
+.singleBookDetails p {
+  margin-left: 16px;
 }

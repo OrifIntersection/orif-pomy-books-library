@@ -27,9 +27,8 @@ function BookTableBody({ book }) {
   );
 }
 
-function BookTableHead({searchParams, setSearchParams, books}) {
+function BookTableHead({ searchParams, setSearchParams, books }) {
   function sortBooks(e) {
-
     //
     // function to set sort queries to the URL whenever a sort button is clicked
     // this will automatically query the API via useEffect
@@ -42,14 +41,13 @@ function BookTableHead({searchParams, setSearchParams, books}) {
       currentParams.sort = `-${sortBy}`;
       setSearchParams(currentParams);
       return;
-    } 
+    }
 
     currentParams.sort = sortBy;
     setSearchParams(currentParams);
   }
 
   function sortIcon(column) {
-
     //
     //  Render icon dynamically based on current sort state
     //  If only one book is available, no sort icon is shown
@@ -61,43 +59,55 @@ function BookTableHead({searchParams, setSearchParams, books}) {
       return "↑";
     } else if (searchParams.get("sort") === `-${column}`) {
       return "↓";
-    } 
+    }
 
     return "⇅";
-
   }
 
   return (
     <>
       <th>
         Titre
-        <button className="sortButton" name="Title" onClick={sortBooks}>{sortIcon("Title")}</button>
+        <button className="sortButton" name="Title" onClick={sortBooks}>
+          {sortIcon("Title")}
+        </button>
       </th>
-      <th>Auteur
-        <button className="sortButton" name="Author" onClick={sortBooks}>{sortIcon("Author")}</button>
+      <th>
+        Auteur
+        <button className="sortButton" name="Author" onClick={sortBooks}>
+          {sortIcon("Author")}
+        </button>
       </th>
-      <th>Genre
-        <button className="sortButton" name="Genre" onClick={sortBooks}>{sortIcon("Genre")}</button>
+      <th>
+        Genre
+        <button className="sortButton" name="Genre" onClick={sortBooks}>
+          {sortIcon("Genre")}
+        </button>
       </th>
-      <th>Sujet
-        <button className="sortButton" name="Subject" onClick={sortBooks}>{sortIcon("Subject")}</button>
+      <th>
+        Sujet
+        <button className="sortButton" name="Subject" onClick={sortBooks}>
+          {sortIcon("Subject")}
+        </button>
       </th>
-      <th>Emplacement
-        <button className="sortButton" name="Location" onClick={sortBooks}>{sortIcon("Location")}</button>
+      <th>
+        Emplacement
+        <button className="sortButton" name="Location" onClick={sortBooks}>
+          {sortIcon("Location")}
+        </button>
       </th>
     </>
   );
 }
 
 function SingleBook({ book }) {
-
   //
   // SingleBook only show when a single book is available
   // we can then use this book ID to update & PATCH the API, or POST the API to borrow the book
   //
 
   return (
-    <div>
+    <div className="singleBookDetails">
       <Link className="bookButtons" to={`/livres/${book._id}/modifier`}>
         Modifier Livre
       </Link>
@@ -107,15 +117,24 @@ function SingleBook({ book }) {
       <Link className="bookButtons" to={`/livres/${book._id}/supprimer`}>
         Supprimer Livre
       </Link>
-      <p>Ce livre {book.ModifiedBy?.Name}</p>
-      <p>{book.ActiveLoan?.EndDate}</p>
-      <p>{book.ModifiedOn}</p>
+      <p>
+        Ce livre a été dernièrement modifié par:{" "}
+        {book.ModifiedBy?.Name || "inconnu"} le{" "}
+        {new Date(book.ModifiedOn).toLocaleDateString("fr-FR")}
+      </p>
+      {book.ActiveLoan ? (
+        <p>
+          Ce livre est emprunté jusqu'au{" "}
+          {new Date(book.ActiveLoan.EndDate).toLocaleDateString("fr-FR")}
+        </p>
+      ) : (
+        <p>Ce livre peut être emprunté</p>
+      )}
     </div>
   );
 }
 
 function BookTableContent({ books, searchParams, setSearchParams }) {
-
   //
   // Renders BookTableHead and BookTableBody
   // (based on the number of books found)
@@ -126,7 +145,11 @@ function BookTableContent({ books, searchParams, setSearchParams }) {
       <table className="bookTable">
         <thead>
           <tr>
-            <BookTableHead searchParams={searchParams} setSearchParams={setSearchParams} books={books} />
+            <BookTableHead
+              searchParams={searchParams}
+              setSearchParams={setSearchParams}
+              books={books}
+            />
           </tr>
         </thead>
         <tbody>
@@ -144,7 +167,6 @@ function BookTable() {
   const [books, setBooks] = useState();
   const { id } = useParams();
 
-
   //
   // query the API based on an ID (if present) and the search queries (if present)
   // defaults to return all books
@@ -159,7 +181,6 @@ function BookTable() {
       } catch (error) {
         console.error(error);
       }
-
     }
     getAPI();
   }, [id, setSearchParams]);
@@ -176,7 +197,11 @@ function BookTable() {
       ) : (
         <GetForm setSearchParams={setSearchParams} />
       )}
-      <BookTableContent books={books} searchParams={searchParams} setSearchParams={setSearchParams} />
+      <BookTableContent
+        books={books}
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+      />
     </>
   ) : (
     <p className="loadingBar">Loading...</p>
