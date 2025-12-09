@@ -3,12 +3,12 @@ import { Collaborator } from "../models/collaboratorModel.js";
 import AppError from "../utils/AppError.js";
 
 export async function getAllBooks(req, res, next) {
-  
+
   //
   //  Search functionality, if no query params, return all books
   //
 
-  const { search, searchType, sort } = req.query;
+  const { search, searchType, sortQuery } = req.query;
 
   let booksQuery = Book.find();
   booksQuery = booksQuery.populate({ path: "ActiveLoan" });
@@ -16,7 +16,7 @@ export async function getAllBooks(req, res, next) {
   if (searchType && search)
     booksQuery = booksQuery.where(searchType).equals(new RegExp(search, "i"));
 
-  if (sort) booksQuery = booksQuery.sort(sort);
+  if (sortQuery) booksQuery = booksQuery.sort(sortQuery);
 
   const books = await booksQuery;
 
@@ -27,14 +27,14 @@ export async function getAllBooks(req, res, next) {
   // Additional sorting for ActiveLoan since it is virtual and cannot be sorted in the query
   //
 
-  if (sort === "ActiveLoan")
+  if (sortQuery === "ActiveLoan")
     books.sort((a, b) => {
       if (a.ActiveLoan && !b.ActiveLoan) return -1;
       else if (!a.ActiveLoan && b.ActiveLoan) return 1;
       else return 0;
     });
 
-  if (sort === "-ActiveLoan")
+  if (sortQuery === "-ActiveLoan")
     books.sort((a, b) => {
       if (a.ActiveLoan && !b.ActiveLoan) return 1;
       else if (!a.ActiveLoan && b.ActiveLoan) return -1;

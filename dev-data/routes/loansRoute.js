@@ -15,6 +15,6 @@ router
     .post(protect, postLoan);
 
 router.route("/:id") //  -> '/api/v1/loans/:id'
-    .patch(protect, patchLoan);
+    .delete(protect, patchLoan);
 
 export default router;

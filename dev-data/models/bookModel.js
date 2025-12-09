@@ -39,6 +39,7 @@ const booksSchema = new mongoose.Schema({
 
 
 // To be used alongside .populate("ActiveLoan") in queries
+// Will get the active loan for the book, if it exists
 
 booksSchema.virtual("ActiveLoan", {
     ref: "Loan",

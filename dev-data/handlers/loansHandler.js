@@ -1,6 +1,4 @@
 import { Loan } from "../models/loanModel.js";
-import { Book } from "../models/bookModel.js";
-import { Collaborator } from "../models/collaboratorModel.js";
 import AppError from "../utils/AppError.js";
 
 export async function getAllLoans(req, res, next) {
@@ -43,14 +41,12 @@ export async function postLoan(req, res, next) {
 
   if (!BookID || !CollaboratorID) throw new AppError("a book and a collaborator are required to create a loan.", 400);
 
+  // logic to check if the book is already on loan
+  const existingLoan = await Loan.exists({ Book: BookID, Returned: false });
+  if (existingLoan) throw new AppError("This book is already on loan and cannot be borrowed.", 400);
+
   let loan = new Loan({ Book: BookID, Collaborator: CollaboratorID });
   if (EndDate) loan.EndDate = new Date(EndDate);
-
-  // find the book to be loaned, check if it is already on loan
-  const book = await Book.findById(BookID).populate({ path: "ActiveLoan" });
-  if (!book) throw new AppError(`No book found with ID: ${BookID}`, 404);
-  // => Check if ActiveLoan exists
-  if (book.ActiveLoan) throw new AppError("This book is already on loan and cannot be borrowed.", 400);
 
   const newLoan = await loan.save();
 
@@ -61,11 +57,10 @@ export async function postLoan(req, res, next) {
   });
 }
 
-export async function patchLoan(req, res, next) {
+export async function deleteLoan(req, res, next) {
 
   //
   //  Mark a loan as returned
-  //  Also need to implement extending loan functionality
   //
 
   const { id } = req.params;
