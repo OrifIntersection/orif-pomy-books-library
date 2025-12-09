@@ -31,8 +31,7 @@ export async function getBook(req, res, next) {
 
   //
   //  Get a single book by ID
-  //  This will populate the chosen books ActiveLoan, CreatedBy, and OwnedBy
-  //  Only relevant fields are selected
+  //  This will populate the chosen books ActiveLoan, ModifiedBy fields
   //  There is no way to modify this query from the front-end
   //  This is probably not ideal for an API
   //
@@ -43,7 +42,7 @@ export async function getBook(req, res, next) {
 
   const book = await Book.findById(bookId)
     .populate({ path: "ActiveLoan" })
-    .populate({ path: "ModifiedBy", select: "Name" })
+    .populate({ path: "ModifiedBy" });
 
   if (!book) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
