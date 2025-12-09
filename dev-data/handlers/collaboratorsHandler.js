@@ -4,7 +4,7 @@ import AppError from "../utils/AppError.js";
 export async function getCollaborator(req, res, next) {
 
   // 
-  // 
+  //  Logic should ideally check if the requester is the same as the requested collaborator
   //
 
   const collaboratorId = req.params.id;

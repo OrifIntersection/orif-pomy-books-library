@@ -30,15 +30,16 @@ const booksSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
-    OwnedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Collaborator",
-    },
     ActiveLoan: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Loan",
         default: null,
     },
+/*     OwnedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Collaborator",
+    }, */
+
 });
 
 export const Book = mongoose.model("Book", booksSchema, "Books");

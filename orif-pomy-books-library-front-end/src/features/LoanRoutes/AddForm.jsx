@@ -26,6 +26,18 @@ export default function AddForm() {
 
   if (user) loansAPIHandler.setAuth(user.id);
 
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const EndDate = e.target.EndDate.value;
+    try {
+      const body = await loansAPIHandler.post({ BookID: book._id, EndDate });
+      alert("Le livre a été emprunté avec succès !");
+      console.log(body.message);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return book ? (
     <>
       <p>
@@ -40,7 +52,7 @@ export default function AddForm() {
           {new Date(book.ActiveLoan.EndDate).toDateString()}`
         </p>
       ) : (
-        <form className="borrowForm">
+        <form className="borrowForm" onSubmit={handleSubmit}>
           <label htmlFor="EndDate">
             Veuillez selectionner quand vous souhaitez rendre le livre: {" "}
           </label>

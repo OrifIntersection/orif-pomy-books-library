@@ -33,34 +33,21 @@ export async function postLoan(req, res, next) {
 
   //
   //    Create a new loan
-  //    Save to book and collaborator records
   //    Only the Book ID is required
   //    ReturnDays is optional, defaults to two weeks.
-  //    Collaborator ID is set onto the request, after authProtect
+  //    Collaborator ID is set onto the request after authProtect
+  //    => user must be logged in to create a loan
   //
 
-  const { BookID, ReturnDays } = req.body;
+  const { BookID, EndDate } = req.body;
   const CollaboratorID = req.collaboratorId;
 
   if (!BookID || !CollaboratorID) throw new AppError("a book and a collaborator are required to create a loan.", 400);
 
-  const book = await Book.findById(BookID);
-  if (!book) throw new AppError(`No book found with ID: ${BookID}`, 404);
-
-  const collaborator = await Collaborator.findById(CollaboratorID);
-  if (!collaborator) throw new AppError(`No collaborator found with ID: ${CollaboratorID}`, 404);
-
   let document = new Loan({ Book: BookID, Collaborator: CollaboratorID });
-  if (ReturnDays) document.EndDate = new Date(Date.now() + ReturnDays * 24 * 60 * 60 * 1000);
+  if (EndDate) document.EndDate = new Date(EndDate);
 
   const newLoan = await document.save();
-
-  // Update book and collaborator records
-  book.ActiveLoan.push(newLoan._id);
-  await book.save();
-
-  collaborator.Loans.push(newLoan._id);
-  await collaborator.save();
 
   return res.status(201).json({
     status: "success",

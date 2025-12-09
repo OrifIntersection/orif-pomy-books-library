@@ -5,31 +5,16 @@ const collaboratorSchema = new mongoose.Schema({
     type: String,
     required: [true, "A collaborator must have a name"],
   },
-
   Email: {
     type: String,
     required: [true, "A collaborator must have an email"],
     unique: true,
   },
-
   // Password: {},
-  OwnedBooks: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "Book",
-    default: [],
-  },
-
-  Loans: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "Loan",
-    default: [],
-  },
-
   CreatedOn: {
     type: Date,
     default: Date.now(),
   },
-
 });
 
 export const Collaborator = mongoose.model(
