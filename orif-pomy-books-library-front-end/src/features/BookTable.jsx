@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useSearchParams, Link } from "react-router";
 import APIHandler from "../utils/APIHandler.jsx";
+import GetForm from "./BookRoutes/GetForm.jsx";
+
 const booksAPIHandler = new APIHandler("books");
 
 function BookTableBody({ book }) {
@@ -138,52 +140,6 @@ function BookTableContent({ books, searchParams, setSearchParams }) {
   );
 }
 
-function SearchBookTable({ setSearchParams }) {
-
-  //
-  // function to set search queries to the URL whenever the SearchBookTable form is submitted
-  // this will automatically query the API via useEffect
-  //
-
-  function submitSearch(e) {
-    e.preventDefault();
-
-    const formData = new FormData(e.target);
-
-    const search = formData.get("search");
-    const searchType = formData.get("search-type");
-
-    setSearchParams({ search: search, searchType: searchType });
-  }
-
-  //
-  // This search form will only show when multiple books are available
-  // if a single book is found, it will no longer show (see BookTable conditional return)
-  //
-
-  return (
-    <form onSubmit={submitSearch} className="searchForm">
-      <div>
-        <label htmlFor="search-books">Recherche de livres : </label>
-        <input type="search" id="search-books" name="search" />
-      </div>
-      <div>
-        <label htmlFor="search-type">
-          Selectionnez le type de recherche :{" "}
-        </label>
-        <select id="search-type" name="search-type">
-          <option value="Title">Titre</option>
-          <option value="Author">Auteur</option>
-          <option value="Genre">Genre</option>
-          <option value="Subject">Sujet</option>
-          <option value="Location">Emplacement</option>
-        </select>
-      </div>
-      <input type="submit" value="Recherche" />
-    </form>
-  );
-}
-
 function BookTable() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [books, setBooks] = useState();
@@ -219,7 +175,7 @@ function BookTable() {
       {books.length === 1 ? (
         <SingleBook book={books[0]} />
       ) : (
-        <SearchBookTable setSearchParams={setSearchParams} />
+        <GetForm setSearchParams={setSearchParams} />
       )}
       <BookTableContent books={books} searchParams={searchParams} setSearchParams={setSearchParams} />
     </>

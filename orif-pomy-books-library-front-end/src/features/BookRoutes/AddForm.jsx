@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 
 const booksAPIHandler = new APIHandler("books");
 
-export default function NewBook() {
+export default function AddForm() {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 

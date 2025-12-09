@@ -5,7 +5,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 
 const booksAPIHandler = new APIHandler("books");
 
-export default function ModifyBook() {
+export default function DeleteForm() {
   const [book, setBook] = useState({});
   const { user } = useContext(AuthContext);
   const { id } = useParams();

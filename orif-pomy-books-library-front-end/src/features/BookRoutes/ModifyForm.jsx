@@ -5,7 +5,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 
 const booksAPIHandler = new APIHandler("books");
 
-export default function ModifyBook() {
+export default function ModifyForm() {
   const [book, setBook] = useState({});
   const { user } = useContext(AuthContext);
   const { id } = useParams();
@@ -49,7 +49,6 @@ export default function ModifyBook() {
         Genre: formData.get("genre").split(", "),
         Subject: formData.get("subject").split(", "),
         Location: formData.get("location"),
-        ISBN: formData.get("isbn"),
       }, id);
 
       alert("le livre à été modifié !")
@@ -103,13 +102,6 @@ export default function ModifyBook() {
         name="location"
         defaultValue={book.Location}
         required
-      />
-      <label htmlFor="isbn">ISBN: </label>
-      <input
-        type="text"
-        id="isbn"
-        name="isbn"
-        defaultValue={book.ISBN}
       />
       <input type="submit" value="Envoyer" />
     </form>

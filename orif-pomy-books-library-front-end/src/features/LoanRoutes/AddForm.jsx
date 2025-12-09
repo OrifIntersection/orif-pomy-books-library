@@ -6,7 +6,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 const booksAPIHandler = new APIHandler("books");
 const loansAPIHandler = new APIHandler("loans");
 
-export default function BorrowForm() {
+export default function AddForm() {
   const [book, setBook] = useState();
   const { user } = useContext(AuthContext);
   const { id } = useParams();
