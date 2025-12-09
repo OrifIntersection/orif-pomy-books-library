@@ -43,7 +43,7 @@ export async function getBook(req, res, next) {
 
   const book = await Book.findById(bookId)
     .populate({ path: "ActiveLoan", select: "StartDate EndDate" })
-    .populate({ path: "CreatedBy", select: "Name" })
+    .populate({ path: "ModifiedBy", select: "Name" })
 
   if (!book) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
@@ -58,7 +58,7 @@ export async function postBook(req, res, next) {
   //
   // Create a new book, add to database
   // Collaborator must be logged in
-  // The collaborator creating the book will be added to Book.CreatedBy
+  // The collaborator creating the book will be added to Book.ModifiedBy
   //
 
   const newBookData = req.body;
@@ -67,7 +67,7 @@ export async function postBook(req, res, next) {
   if (!newBookData) throw new AppError("No book data provided", 400);
   if (!collaboratorId) throw new AppError("You are not logged in", 401);
 
-  newBookData.CreatedBy = collaboratorId;
+  newBookData.ModifiedBy = collaboratorId;
   const createdBook = await Book.create(newBookData);
 
   res.status(201).json({
@@ -77,6 +77,7 @@ export async function postBook(req, res, next) {
 }
 
 export async function patchBook(req, res, next) {
+
   //
   // Find book by ID, then update
   // Only Title, Author, Genre, Subject, Location can be modified
@@ -86,14 +87,18 @@ export async function patchBook(req, res, next) {
   //
 
   const bookId = req.params.id;
+  const collaboratorId = req.collaboratorId;
   const { Title, Author, Genre, Subject, Location } = req.body;
 
   const updatedBookData = { Title, Author, Genre, Subject, Location };
 
   if (!updatedBookData)
     throw new AppError("No book data provided for update.", 400);
-
   if (!bookId) throw new AppError("No book ID provided.", 400);
+  if (!collaboratorId) throw new AppError("You are not logged in", 401);
+
+  updatedBookData.ModifiedBy = req.collaboratorId;
+  updatedBookData.ModifiedOn = Date.now();
 
   const updatedBook = await Book.findByIdAndUpdate(bookId, updatedBookData, {
     new: true,

@@ -12,7 +12,8 @@
 
 .loginForm, 
 .bookForm,
-.modifyForm {
+.modifyForm,
+.borrowForm {
   width: 300px;
   margin: 80px auto;
   padding: 25px;
@@ -28,7 +29,8 @@
 
 .loginForm label,
 .bookForm label,
-.modifyForm label {
+.modifyForm label,
+.borrowForm label {
   font-size: 15px;
   font-weight: 600;
   margin-bottom: -8px;
@@ -37,7 +39,8 @@
 .loginForm input[type="text"],
 .loginForm input[type="password"],
 .bookForm input[type="text"],
-.modifyForm input[type="text"] {
+.modifyForm input[type="text"],
+.borrowForm input[type="date"] {
   padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -58,7 +61,8 @@
 .bookForm input[type="submit"],
 .searchForm input[type="submit"],
 .modifyForm input[type="submit"],
-.deleteForm input[type="submit"] {
+.deleteForm input[type="submit"],
+.borrowForm input[type="submit"] {
   margin-top: 10px;
   padding: 10px;
   background: rgb(150, 180, 180);

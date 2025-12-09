@@ -21,12 +21,12 @@ const booksSchema = new mongoose.Schema({
         type: String,
         required: [true, "A book must have a location"],
     },
-    CreatedBy: {
+    ModifiedBy: {
         type: mongoose.Schema.Types.ObjectId,
-        required: [true, "A user must be logged in to create a book"],
+        required: [true, "A user must be logged in to create or modify a book"],
         ref: "Collaborator",
     },
-    CreatedOn: {
+    ModifiedOn: {
         type: Date,
         default: Date.now(),
     },

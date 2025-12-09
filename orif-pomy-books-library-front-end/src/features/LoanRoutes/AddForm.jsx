@@ -12,6 +12,7 @@ export default function AddForm() {
   const { id } = useParams();
   const navigate = useNavigate();
 
+
   useEffect(() => {
     async function getAPI() {
       try {
@@ -23,6 +24,8 @@ export default function AddForm() {
     }
     getAPI();
   }, []);
+
+    console.log(book);
 
   if (user) loansAPIHandler.setAuth(user.id);
 
@@ -43,14 +46,14 @@ export default function AddForm() {
     <>
       <p>
         Vous souhaitez emprunter: {book.Title} - {book.Author.join(", ")}
-      </p>
+      </p >
       <p>
         Ce livre est actuellement {book.ActiveLoan ? "emprunté" : "disponible"}.
       </p>
       {book.ActiveLoan ? (
         <p>
-          `Ce livre devra être rendu pour: $
-          {new Date(book.ActiveLoan.EndDate).toDateString()}`
+          Ce livre devra être rendu pour:{" "}
+          {new Date(book.ActiveLoan.EndDate).toDateString()}
         </p>
       ) : (
         <form className="borrowForm" onSubmit={handleSubmit}>
