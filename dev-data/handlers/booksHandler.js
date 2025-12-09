@@ -3,7 +3,6 @@ import { Collaborator } from "../models/collaboratorModel.js";
 import AppError from "../utils/AppError.js";
 
 export async function getAllBooks(req, res, next) {
-
   //
   //  Search functionality, if no query params, return all books
   //
@@ -11,9 +10,13 @@ export async function getAllBooks(req, res, next) {
   const { search, searchType, sort } = req.query;
 
   let booksQuery = Book.find();
+
   if (searchType && search)
     booksQuery = booksQuery.where(searchType).equals(new RegExp(search, "i"));
+
   if (sort) booksQuery = booksQuery.sort(sort);
+
+  const booksQuery = booksQuery.populate({ path: "ActiveLoan" });
   const books = await booksQuery;
 
   if (books.length === 0)
@@ -28,7 +31,6 @@ export async function getAllBooks(req, res, next) {
 }
 
 export async function getBook(req, res, next) {
-
   //
   //  Get a single book by ID
   //  This will populate the chosen books ActiveLoan, ModifiedBy fields
@@ -76,7 +78,6 @@ export async function postBook(req, res, next) {
 }
 
 export async function patchBook(req, res, next) {
-
   //
   // Find book by ID, then update
   // Only Title, Author, Genre, Subject, Location can be modified
