@@ -46,15 +46,11 @@ export async function postLoan(req, res, next) {
   let loan = new Loan({ Book: BookID, Collaborator: CollaboratorID });
   if (EndDate) loan.EndDate = new Date(EndDate);
 
-  const book = await Book.findById(BookID);
+  // find the book to be loaned, check if it is already on loan
+  const book = await Book.findById(BookID).populate({ path: "ActiveLoan" });
   if (!book) throw new AppError(`No book found with ID: ${BookID}`, 404);
-
-  // ActiveLoan is deleted when loan is returned in deleteLoan
-  // => Simply check if ActiveLoan exists
+  // => Check if ActiveLoan exists
   if (book.ActiveLoan) throw new AppError("This book is already on loan and cannot be borrowed.", 400);
-
-  book.ActiveLoan = loan._id;
-  await book.save();
 
   const newLoan = await loan.save();
 

@@ -23,8 +23,7 @@ function BookTableBody({ book }) {
       <td>{book.Genre.join(", ")}</td>
       <td>{book.Subject.join(", ")}</td>
       <td>{book.Location}</td>
-      {book.ActiveLoan ? <td>Emprunté</td> : <td>Disponible</td>}
-
+      {book.ActiveLoan ? <td style={{ color: "red" }}>Emprunté</td> : <td>Disponible</td>}
     </tr>
   );
 }
