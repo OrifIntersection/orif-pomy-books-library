@@ -44,7 +44,6 @@ export async function getBook(req, res, next) {
   const book = await Book.findById(bookId)
     .populate({ path: "ActiveLoan", select: "StartDate EndDate" })
     .populate({ path: "CreatedBy", select: "Name" })
-    .populate({ path: "OwnedBy", select: "Name" });
 
   if (!book) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
