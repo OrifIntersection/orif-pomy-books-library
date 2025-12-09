@@ -3,6 +3,7 @@ import { Collaborator } from "../models/collaboratorModel.js";
 import AppError from "../utils/AppError.js";
 
 export async function getAllBooks(req, res, next) {
+  
   //
   //  Search functionality, if no query params, return all books
   //
@@ -21,6 +22,26 @@ export async function getAllBooks(req, res, next) {
 
   if (books.length === 0)
     throw new AppError("No books found matching the criteria.", 404);
+
+  //
+  // Additional sorting for ActiveLoan since it is virtual and cannot be sorted in the query
+  //
+
+  if (sort === "ActiveLoan")
+    books.sort((a, b) => {
+      if (a.ActiveLoan && !b.ActiveLoan) return -1;
+      else if (!a.ActiveLoan && b.ActiveLoan) return 1;
+      else return 0;
+    });
+
+  if (sort === "-ActiveLoan")
+    books.sort((a, b) => {
+      if (a.ActiveLoan && !b.ActiveLoan) return 1;
+      else if (!a.ActiveLoan && b.ActiveLoan) return -1;
+      else return 0;
+    });
+
+  // --------------------------------------------------------------------------------------- //
 
   return res.status(200).json({
     status: "success",
