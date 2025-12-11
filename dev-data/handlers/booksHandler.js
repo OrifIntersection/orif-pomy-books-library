@@ -29,15 +29,21 @@ export async function getAllBooks(req, res, next) {
 
   if (sortQuery === "ActiveLoan")
     books.sort((a, b) => {
-      if (a.ActiveLoan && !b.ActiveLoan) return -1;
-      else if (!a.ActiveLoan && b.ActiveLoan) return 1;
+      if (a.ActiveLoan && !b.ActiveLoan) return -1;             // if a has loan and b doesn't, a comes first
+      else if (!a.ActiveLoan && b.ActiveLoan) return 1;         // if a has no loan and a does, b comes first
+      else if (a.ActiveLoan && b.ActiveLoan) {                  // if both have loans, sort by EndDate
+        return new Date(a.ActiveLoan.EndDate) - new Date(b.ActiveLoan.EndDate);
+      }
       else return 0;
     });
 
   if (sortQuery === "-ActiveLoan")
     books.sort((a, b) => {
-      if (a.ActiveLoan && !b.ActiveLoan) return 1;
-      else if (!a.ActiveLoan && b.ActiveLoan) return -1;
+      if (a.ActiveLoan && !b.ActiveLoan) return 1;              // if a has loan and b doesn't, b comes first
+      else if (!a.ActiveLoan && b.ActiveLoan) return -1;        // if a has no loan and a does, a comes first
+      else if (a.ActiveLoan && b.ActiveLoan) {                  // if both have loans, sort by EndDate
+        return new Date(a.ActiveLoan.EndDate) - new Date(b.ActiveLoan.EndDate);
+      }
       else return 0;
     });
 

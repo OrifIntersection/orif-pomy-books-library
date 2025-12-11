@@ -13,6 +13,8 @@ function BookTableBody({ book }) {
 
   const navigate = useNavigate();
 
+  console.log(book.ActiveLoan);
+
   return (
     <tr
       onClick={() => navigate(`/livres/${book._id}`)}
@@ -23,7 +25,14 @@ function BookTableBody({ book }) {
       <td>{book.Genre.join(", ")}</td>
       <td>{book.Subject.join(", ")}</td>
       <td>{book.Location}</td>
-      {book.ActiveLoan ? <td style={{ color: "red" }}>Emprunté</td> : <td>Disponible</td>}
+      {book.ActiveLoan ? (
+        <td style={{ color: "red" }}>
+          Emprunté (Retour:{" "}
+          {new Date(book.ActiveLoan.EndDate).toLocaleDateString()}){" "}
+        </td>
+      ) : (
+        <td style={{ color: "green "}}>Disponible</td>
+      )}
     </tr>
   );
 }
