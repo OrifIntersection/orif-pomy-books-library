@@ -17,6 +17,9 @@ export default function Login() {
       });
       setUser(body.data);
 
+      window.sessionStorage.setItem("user", `${body.data.id}`);
+      window.sessionStorage.setItem("name", `${body.data.name}`);
+
       alert("succès!")
 
       navigate("/livres")

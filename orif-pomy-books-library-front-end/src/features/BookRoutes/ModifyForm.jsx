@@ -1,17 +1,14 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import APIHandler from "../../utils/APIHandler.jsx";
-import { AuthContext } from "../../contexts/AuthContext";
 
 const booksAPIHandler = new APIHandler("books");
 
 export default function ModifyForm() {
   const [book, setBook] = useState({});
-  const { user } = useContext(AuthContext);
   const { id } = useParams();
   const navigate = useNavigate();
 
-  if (user) booksAPIHandler.setAuth(user.id);
 
   //
   // useEffect to getBookById from the API and render it

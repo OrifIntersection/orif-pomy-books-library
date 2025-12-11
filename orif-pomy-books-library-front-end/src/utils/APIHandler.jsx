@@ -25,6 +25,7 @@ export default class APIHandler {
       "https://orif-pomy-books-library.vercel.app/api/v1/"
     );
     this.url = this.staticUrl;
+    this.authId = window.sessionStorage.getItem("user") || null;
   }
 
   async fetchAPI(options = {}) {
@@ -45,10 +46,6 @@ export default class APIHandler {
     } catch (error) {
       throw error;
     }
-  }
-
-  setAuth(id) {
-    this.authId = id;
   }
 
   resetUrl() {

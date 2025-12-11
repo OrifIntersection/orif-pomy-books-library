@@ -3,7 +3,9 @@ import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 
 function Navbar() {
-  const { user } = useContext(AuthContext);
+  const user = window.sessionStorage.getItem("name");
+
+  console.log("Navbar user:", user);
 
   return (
     <>
@@ -18,7 +20,7 @@ function Navbar() {
           </Link>
           {user ? (
             <Link to="/collaborateurs/moi" className="login">
-              {user.name}
+              {user}
             </Link>
           ) : (
             <Link to="/login" className="login">

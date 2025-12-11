@@ -1,15 +1,10 @@
 import APIHandler from "../../utils/APIHandler";
-import { AuthContext } from "../../contexts/AuthContext";
-import { useContext } from "react";
 import { useNavigate } from "react-router";
 
 const booksAPIHandler = new APIHandler("books");
 
 export default function AddForm() {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
-
-  if (user) booksAPIHandler.setAuth(user.id);
 
   async function submitBook(e) {
     e.preventDefault();

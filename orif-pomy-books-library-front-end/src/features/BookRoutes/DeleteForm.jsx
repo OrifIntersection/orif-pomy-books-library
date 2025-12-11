@@ -1,17 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router";
 import APIHandler from "../../utils/APIHandler";
-import { AuthContext } from "../../contexts/AuthContext";
 
 const booksAPIHandler = new APIHandler("books");
 
 export default function DeleteForm() {
   const [book, setBook] = useState({});
-  const { user } = useContext(AuthContext);
   const { id } = useParams();
   const navigate = useNavigate();
-
-  if (user) booksAPIHandler.setAuth(user.id)
 
   //
   // useEffect to getBookById from the API
