@@ -1,6 +1,7 @@
 import { Outlet, Link } from "react-router";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext.jsx";
+import NavButton from "./NavButton.jsx";
 
 function Navbar() {
   const user = window.sessionStorage.getItem("name");
@@ -12,20 +13,12 @@ function Navbar() {
       <header className="navbar">
         <p>
           Orif Pomy Bibliothèque
-          <Link to="/livres" className="link">
-            Livres
-          </Link>
-          <Link to="/nouvelle-livre" className="link">
-            + Ajouter un livre
-          </Link>
+          <NavButton Route="/livres" Content="Accueil" ClassName="navBarButton" />
+          <NavButton Route="/nouvelle-livre" Content="+ Ajouter un livre" ClassName="navBarButton" />
           {user ? (
-            <Link to="/collaborateurs/moi" className="login">
-              {user}
-            </Link>
+            <NavButton Route="/collaborateurs/moi" Content={user} ClassName="loginButton"/>
           ) : (
-            <Link to="/login" className="login">
-              Login
-            </Link>
+            <NavButton Route="/login" Content="Login" ClassName="loginButton" />
           )}
         </p>
       </header>

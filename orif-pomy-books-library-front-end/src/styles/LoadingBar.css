@@ -1,0 +1,11 @@
+.loadingBar {
+  width: 200px;
+  height: 40px;
+  margin-left: 20px;
+  background: rgb(150, 180, 180);
+  color: white;
+  border-radius: 4px;
+  overflow: hidden;
+  text-align: center;
+  align-content: center;
+}

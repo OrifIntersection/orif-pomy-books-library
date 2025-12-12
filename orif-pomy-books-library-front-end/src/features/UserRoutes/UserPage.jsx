@@ -24,11 +24,22 @@ export default function UserPage() {
     getAPI();
   }, []);
 
-  const loanedBooks = userInfo ? userInfo.activeLoans.map(loan => loan.Book) : [];
+  //
+  // BookTableContent expects an array of books
+  // Each book can have an ActiveLoan property, which is not populated by the API in this context
+  // So we manually add them here
+  //
+
+  const loanedBooks = userInfo
+    ? userInfo.activeLoans.map((loan) => {
+        loan.Book.ActiveLoan = loan;
+        return loan.Book;
+      })
+    : [];
 
   return userInfo ? (
   <div>
-    Vos livres empruntés :
+    Vos livres empruntés (cliquez sur un livre pour plus de détails):
     <BookTableContent books={loanedBooks} />
   </div>
   ) : (

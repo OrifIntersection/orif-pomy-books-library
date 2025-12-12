@@ -101,8 +101,8 @@ function BookTableBody({ book }) {
       <td>{book.Location}</td>
       {book.ActiveLoan ? (
         <td style={{ color: "red" }}>
-          Emprunté (Retour:{" "}
-          {new Date(book.ActiveLoan.EndDate).toLocaleDateString()}){" "}
+          Emprunté - Retour le {" "}
+          {new Date(book.ActiveLoan.EndDate).toLocaleDateString("fr-FR")}{" "}
         </td>
       ) : (
         <td></td>

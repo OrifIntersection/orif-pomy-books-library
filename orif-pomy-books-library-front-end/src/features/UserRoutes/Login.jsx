@@ -6,6 +6,13 @@ import { AuthContext } from "../../contexts/AuthContext";
 const collaboratorsAPIHandler = new APIHandler("collaborators/login");
 
 export default function Login() {
+
+  //
+  //  On successful login, we store the user ID, name, and JWT token in sessionStorage
+  //  User name is used for display purposes
+  //  User ID is used to check active loans and modifications
+  //
+
   const navigate = useNavigate();
 
   const { setUser } = useContext(AuthContext);
@@ -21,8 +28,8 @@ export default function Login() {
       window.sessionStorage.setItem("name", `${body.data.name}`);
 
       alert("succès!")
-
-      navigate("/livres")
+      navigate("/livres");
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }

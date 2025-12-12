@@ -1,41 +1,85 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams, useSearchParams, Link } from "react-router";
+import { useParams, useSearchParams } from "react-router";
 import BookTableContent from "./BookTableContent.jsx";
 import APIHandler from "../utils/APIHandler.jsx";
 import GetForm from "./BookRoutes/GetForm.jsx";
+
+import NavButton from "./NavButton.jsx";
 
 const booksAPIHandler = new APIHandler("books");
 
 function SingleBook({ book }) {
   //
-  // SingleBook only show when a single book is available
+  // SingleBook only shows when a single book is available
   // we can then use this book ID to update & PATCH the API, or POST the API to borrow the book
   //
 
+  function checkActiveLoan() {
+    const user = window.sessionStorage.getItem("user");
+    let returnDate;
+
+    if (book.ActiveLoan)
+      returnDate = new Date(book.ActiveLoan.EndDate).toLocaleDateString(
+        "fr-FR"
+      );
+
+    if (book.ActiveLoan?.Collaborator === user) {
+      return (
+        <div>
+          <p style={{ color: "red" }}>
+            Vous avez emprunté ce livre, le retour est plannifié pour{" "}
+            {returnDate}
+            <NavButton
+              Route={`/emprunts/${book.ActiveLoan._id}/modifier`}
+              Content={"Modifier Emprunt"}
+            />
+            <NavButton
+              Route={`/emprunts/${book.ActiveLoan._id}/supprimer`}
+              Content={"Rendre Livre"}
+            />
+          </p>
+        </div>
+      );
+    } else if (book.ActiveLoan) {
+      return (
+        <p style={{ color: "red" }}>
+          Ce livre est emprunté jusqu'au {returnDate}
+          <NavButton
+            Route={`/collaborateurs/${book.ActiveLoan.Collaborator}`}
+            Content={"Plus d'infos"}
+          />
+        </p>
+      );
+    }
+
+    return (
+      <p>
+        Ce livre peut être emprunté
+        <NavButton
+          Route={`/livres/${book._id}/emprunter`}
+          Content={"Emprunter Livre"}
+        />
+      </p>
+    );
+  }
+
   return (
     <div className="singleBookDetails">
-      <Link className="bookButtons" to={`/livres/${book._id}/modifier`}>
-        Modifier Livre
-      </Link>
-      <Link className="bookButtons" to={`/livres/${book._id}/emprunter`}>
-        Emprunter Livre
-      </Link>
-      <Link className="bookButtons" to={`/livres/${book._id}/supprimer`}>
-        Supprimer Livre
-      </Link>
       <p>
         Ce livre a été dernièrement modifié par:{" "}
         {book.ModifiedBy?.Name || "inconnu"} le{" "}
         {new Date(book.ModifiedOn).toLocaleDateString("fr-FR")}
+        <NavButton
+          Route={`/livres/${book._id}/modifier`}
+          Content={"Modifier Livre"}
+        />
+        <NavButton
+          Route={`/livres/${book._id}/supprimer`}
+          Content={"Supprimer Livre"}
+        />
       </p>
-      {book.ActiveLoan ? (
-        <p>
-          Ce livre est emprunté jusqu'au{" "}
-          {new Date(book.ActiveLoan.EndDate).toLocaleDateString("fr-FR")}
-        </p>
-      ) : (
-        <p>Ce livre peut être emprunté</p>
-      )}
+
+      {checkActiveLoan()}
     </div>
   );
 }
