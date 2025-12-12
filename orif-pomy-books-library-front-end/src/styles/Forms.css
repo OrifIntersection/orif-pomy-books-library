@@ -10,9 +10,17 @@ form {
 
   background: rgb(210, 225, 225);
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   font-family: sans-serif;
 }
+
+.searchForm {
+  width: 50%;
+  padding: 15px;
+  margin: 20px;
+  flex-direction: row;
+}
+
 
 form label {
   font-size: 15px;
@@ -42,7 +50,6 @@ form select:focus {
 }
 
 form input[type="submit"] {
-  margin-top: 5px;
   padding: 10px;
   background: rgb(150, 180, 180);
   color: white;
@@ -56,5 +63,3 @@ form input[type="submit"] {
 form input[type="submit"]:hover {
   background: rgb(120, 150, 150);
 }
-
-
