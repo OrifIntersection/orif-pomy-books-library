@@ -19,8 +19,7 @@ export default function Login() {
       await collaboratorsAPIHandler.post({ email: formData.get("email") });
 
       alert("succès!")
-      navigate("/livres");
-      window.location.reload();
+      window.location.assign("/livres");  // reload to update navbar
     } catch (error) {
       console.error(error);
     }

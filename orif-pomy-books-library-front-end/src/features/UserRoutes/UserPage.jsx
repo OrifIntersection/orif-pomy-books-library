@@ -1,13 +1,26 @@
 import APIHandler from "../../utils/APIHandler";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import BookTableContent from "../BookTableContent.jsx";
+
 
 
 // Get specifically the current logged in user's info
 const collaboratorsAPIHandler = new APIHandler("collaborators/me");
 
+function LogoutButton() {
+
+  function handleLogout() {
+    window.sessionStorage.removeItem("auth_token");
+    window.sessionStorage.removeItem("name");
+    alert("Vous êtes déconnecté.");
+    window.location.assign("/livres");
+  }
+
+  return <button onClick={handleLogout} className="navButton">Se déconnecter</button>
+}
+
 export default function UserPage() {
-  const [ userInfo, setUserInfo ] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     async function getAPI() {
@@ -34,12 +47,17 @@ export default function UserPage() {
       })
     : [];
 
-  return userInfo ? (
-  <div>
-    Vos livres empruntés (cliquez sur un livre pour plus de détails):
-    <BookTableContent books={loanedBooks} />
-  </div>
-  ) : (
-    <p>Loading...</p>
+  return (
+    <>
+      <LogoutButton />
+      {userInfo ? (
+        <div>
+          Vos livres empruntés (cliquez sur un livre pour plus de détails):
+          <BookTableContent books={loanedBooks} />
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
+    </>
   );
 }
