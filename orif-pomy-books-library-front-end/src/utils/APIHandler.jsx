@@ -40,12 +40,12 @@ export default class APIHandler {
 
       const body = await res.json();
 
-      console.log(body);
-
       if (body.status === "fail") throw new Error(body.message);
+
+      // session storage management only runs when body contains an auth field
       if (body.auth) { 
-        window.sessionStorage.setItem("auth_token", body.data.authToken) 
-        window.sessionStorage.setItem("name", body.data.name)
+        window.sessionStorage.setItem("auth_token", body.auth.authToken) 
+        window.sessionStorage.setItem("name", body.auth.name)
       }
 
       console.log(`@${options.method}@ from ${this.url}: ${body.status}`);

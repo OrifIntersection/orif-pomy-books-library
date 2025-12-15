@@ -4,23 +4,29 @@ import { Collaborator } from "../models/collaboratorModel.js";
 
 export async function protect(req, res, next) {
 
-  console.log(req.headers);
+  if (!req.headers.auth_token)
+    throw new AppError("you must be logged in to access this route. No auth token found in headers.", 401);
 
-  if (!req.body?.id)
-    throw new AppError("you must be logged in to access this route. Furthermore, GET routes cannot have a body.", 401);
+  const authToken = req.headers.auth_token;
 
-  const { id } = req.body;
+  const decoded = jwt.verify(authToken, process.env.JWTSECRET);
+  if (!decoded)
+    throw new AppError("invalid authentication token. Please log in again.", 401);
+
+  const { id } = decoded;
 
   const currentCollaborator = await Collaborator.findById(id);
-
   req.collaboratorId = currentCollaborator._id;
 
   next();
 }
 
 export async function signup(req, res, next) {
+
   //
   //    Create a new collaborator
+  //    For now, no password is required
+  //    A jwt token is sent back in the response body
   //
 
   const { name, email } = req.body;
@@ -33,13 +39,25 @@ export async function signup(req, res, next) {
     Email: email,
   });
 
+  const authToken = jwt.sign({ id: createdCollaborator._id }, process.env.JWTSECRET, { expiresIn: "1d" })
+
   res.status(201).json({
     status: "success",
-    data: createdCollaborator,
+    auth: { name: createdCollaborator.Name, authToken },
   });
 }
 
 export async function login(req, res, next) {
+
+  //
+  //    Log in a collaborator
+  //    For now, login is done only via email
+  //    In addition, the auth token is sent back in the response body
+  //    This is to get around CORS issues with headers
+  //    The front end stores this token in sessionStorage, and sends it back in a headers
+  //
+
+
   const { email } = req.body;
 
   if (!email) throw new AppError("an email must be provided", 400);

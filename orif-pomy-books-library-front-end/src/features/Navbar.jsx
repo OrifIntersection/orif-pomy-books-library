@@ -6,8 +6,6 @@ import NavButton from "./NavButton.jsx";
 function Navbar() {
   const user = window.sessionStorage.getItem("name");
 
-  console.log("Navbar user:", user);
-
   return (
     <>
       <header className="navbar">
