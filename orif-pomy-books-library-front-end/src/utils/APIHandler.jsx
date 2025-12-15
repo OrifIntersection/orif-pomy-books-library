@@ -35,6 +35,8 @@ export default class APIHandler {
       if (res.status === 500)
         throw new Error("There was an unexpected error on the server");
 
+      console.log(res);
+
       const body = await res.json();
 
       if (body.status === "fail") throw new Error(body.message);
