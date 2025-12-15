@@ -13,8 +13,6 @@ export default function UserPage() {
   useEffect(() => {
     async function getAPI() {
       try {
-        if (!user) throw new Error("No user logged in");
-
         const body = await collaboratorsAPIHandler.get("", user);
         setUserInfo(body.data);
       } catch (error) {

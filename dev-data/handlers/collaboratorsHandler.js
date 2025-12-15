@@ -20,13 +20,16 @@ export async function getCollaborator(req, res, next) {
   //  Render other user profile page or own profile page accordingly on front end...
   //
 
-  const collaboratorId = req.params.id;
+  //  If there is no :id param, we assume the user wants their own data
+  //  (the collaborators route "/me" expects no params)
+  
+  let collaboratorId = req.params.id || req.collaboratorId;
 
   const currentUser = await Collaborator.findById(collaboratorId);
 
   if (!currentUser)
     throw new AppError(
-      "You are not logged in, or your account no longer exists.",
+      "This account doesn't exist!",
       401
     );
 

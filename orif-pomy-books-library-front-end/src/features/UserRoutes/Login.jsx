@@ -1,7 +1,5 @@
 import APIHandler from "../../utils/APIHandler";
 import { useNavigate } from "react-router";
-import { useContext } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
 
 const collaboratorsAPIHandler = new APIHandler("collaborators/login");
 
