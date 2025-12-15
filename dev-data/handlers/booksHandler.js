@@ -81,7 +81,7 @@ export async function getBook(req, res, next) {
   return res.status(200).json({
     status: "success",
     message: `Book with ID: ${bookId} retrieved successfully.`,
-    data: book,
+    data: book.toObject({ virtuals: true, getters: true })
   });
 }
 
