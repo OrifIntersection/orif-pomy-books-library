@@ -74,6 +74,7 @@ export async function getBook(req, res, next) {
 
   if (!bookDoc) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
+  // Convert to object to add HasUserLoan virtual
   let book = bookDoc.toObject({ virtuals: true, getters: true })
   // Mark if the active loan belongs to the logged in user
   if (userId && bookDoc.ActiveLoan?.Collaborator.toString() === userId.toString())
