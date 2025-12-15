@@ -30,16 +30,17 @@ export default class APIHandler {
 
   async fetchAPI(options = {}) {
     try {
+
+      options.headers = { "Content-Type": "application/json", "authToken": this.authId || "" };
       const res = await fetch(this.url, options);
 
       if (res.status === 500)
         throw new Error("There was an unexpected error on the server");
 
-      console.log(res.headers.get("authToken"));
-
       const body = await res.json();
 
       if (body.status === "fail") throw new Error(body.message);
+      if (body.authToken) window.sessionStorage.setItem("authToken", body.authToken);
 
       console.log(`@${options.method}@ from ${this.url}: ${body.status}`);
       if (body.message) console.log(body.message);
@@ -60,56 +61,41 @@ export default class APIHandler {
     if (id) this.url = new URL(id, `${this.url}/`);
     if (params.size > 0) this.url = new URL(`${this.url}?${params.toString()}`);
 
-    return this.fetchAPI({
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+    return this.fetchAPI({ method: "GET" });
   }
 
   post(body) {
     this.resetUrl();
-    const reqBody = body;
 
     if (!body) throw new Error("API post requires a body");
-    if (this.authId) reqBody.id = this.authId;
 
     return this.fetchAPI({
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(reqBody),
+      body: JSON.stringify(body),
     });
   }
 
   patch(body, id) {
     this.resetUrl();
-    const reqBody = body;
 
     if (!id) throw new Error("API patch requires an id");
     if (!body) throw new Error("API patch requires a body");
-    if (this.authId) reqBody.id = this.authId;
 
     this.url = new URL(id, `${this.url}/`);
 
     return this.fetchAPI({
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(reqBody),
+      body: JSON.stringify(body),
     });
   }
 
   delete(id) {
     this.resetUrl();
-    const reqBody = {};
 
     if (!id) throw new Error("API delete requires an id");
-    if (this.authId) reqBody.id = this.authId;
 
     this.url = new URL(id, `${this.url}/`);
 
-    return this.fetchAPI({
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(reqBody),
-    });
+    return this.fetchAPI({ method: "DELETE" });
   }
 }

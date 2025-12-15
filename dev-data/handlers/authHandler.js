@@ -4,6 +4,8 @@ import { Collaborator } from "../models/collaboratorModel.js";
 
 export async function protect(req, res, next) {
 
+  console.log(req.headers);
+
   if (!req.body?.id)
     throw new AppError("you must be logged in to access this route. Furthermore, GET routes cannot have a body.", 401);
 
