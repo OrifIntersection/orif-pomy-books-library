@@ -9,13 +9,10 @@ const collaboratorsAPIHandler = new APIHandler("collaborators/me");
 export default function UserPage() {
   const [ userInfo, setUserInfo ] = useState(null);
 
-  const user = window.sessionStorage.getItem("user");
-
-
   useEffect(() => {
     async function getAPI() {
       try {
-        const body = await collaboratorsAPIHandler.get("", user);
+        const body = await collaboratorsAPIHandler.get("", "");
         setUserInfo(body.data);
       } catch (error) {
         console.error(error);

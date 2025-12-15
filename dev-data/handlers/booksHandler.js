@@ -65,6 +65,7 @@ export async function getBook(req, res, next) {
   //
 
   const bookId = req.params.id;
+  const userId = req.collaboratorId || null;
 
   if (!bookId) throw new AppError("No book ID provided.", 400);
 
@@ -73,6 +74,11 @@ export async function getBook(req, res, next) {
     .populate({ path: "ModifiedBy" });
 
   if (!book) throw new AppError(`No book found with ID: ${bookId}`, 404);
+
+  // Mark if the active loan belongs to the logged in user
+  if (userId && book.ActiveLoan?.Collaborator.toString() === userId) 
+    book.ActiveLoan.isUserLoan = true;
+
 
   return res.status(200).json({
     status: "success",
