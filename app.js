@@ -13,7 +13,10 @@ const app = express();
 app.use(cors({ origin: "https://ideal-trout-5g7x9xxvxg462p-5173.app.github.dev" }));
 app.use(express.json());
 
-console.log(req.headers);
+app.use((req, res, next) => {
+  console.log(req.headers);
+  next();
+});
 
 // routers
 app.use("/api/v1/books", booksRouter);
