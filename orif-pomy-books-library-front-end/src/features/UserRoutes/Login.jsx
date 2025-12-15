@@ -1,17 +1,14 @@
 import APIHandler from "../../utils/APIHandler";
-import { useNavigate } from "react-router";
 
 const collaboratorsAPIHandler = new APIHandler("collaborators/login");
 
 export default function Login() {
 
   //
-  //  On successful login, we store the user ID, name, and JWT token in sessionStorage
+  //  On successful login, we store the user's name and JWT token in sessionStorage
   //  User name is used for display purposes
-  //  User ID is used to check active loans and modifications
+  //  JWT token is used handled in APIHandler for authorization via headers
   //
-
-  const navigate = useNavigate();
 
   async function submitLogin(formData) {
 

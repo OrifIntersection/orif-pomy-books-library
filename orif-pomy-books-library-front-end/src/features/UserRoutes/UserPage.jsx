@@ -51,7 +51,7 @@ export default function UserPage() {
     <>
       <LogoutButton />
       {userInfo ? (
-        <div>
+        <div className="structuredInfo">
           Vos livres empruntés (cliquez sur un livre pour plus de détails):
           <BookTableContent books={loanedBooks} />
         </div>

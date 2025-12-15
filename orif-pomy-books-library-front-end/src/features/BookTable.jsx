@@ -38,7 +38,7 @@ export default function BookTable() {
   //
 
   return books ? (
-    <>
+    <div className="structuredInfo">
       {books.length === 1 ? (
         <SingleBookOptions book={books[0]} />
       ) : (
@@ -49,7 +49,7 @@ export default function BookTable() {
         searchParams={searchParams}
         setSearchParams={setSearchParams}
       />
-    </>
+    </div>
   ) : (
     <p className="loadingBar">Loading...</p>
   );

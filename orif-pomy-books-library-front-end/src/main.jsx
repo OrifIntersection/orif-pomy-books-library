@@ -7,6 +7,7 @@ import "./styles/BookTable.css";
 import "./styles/Navbar.css";
 import "./styles/Buttons.css";
 import "./styles/LoadingBar.css";
+import "./styles/StructuredInfo.css";
 import BookTable from "./features/BookTable.jsx";
 
 import BookModifyForm from "./features/BookRoutes/ModifyForm.jsx";

@@ -18,24 +18,21 @@ export default function SingleBookOptions({ book }) {
 
     if (book.HasUserLoan) {
       return (
-        <div>
-          <p style={{ color: "red" }}>
-            Vous avez emprunté ce livre, le retour est plannifié pour{" "}
-            {returnDate}
-            <NavButton
-              Route={`/emprunts/${book.ActiveLoan._id}/modifier`}
-              Content={"Modifier Emprunt"}
-            />
-            <NavButton
-              Route={`/emprunts/${book.ActiveLoan._id}/supprimer`}
-              Content={"Rendre Livre"}
-            />
-          </p>
-        </div>
+        <p style={{ color: "red" }} className="structuredInfo">
+          Vous avez emprunté ce livre, le retour est plannifié pour {returnDate}
+          <NavButton
+            Route={`/emprunts/${book.ActiveLoan._id}/modifier`}
+            Content={"Modifier Emprunt"}
+          />
+          <NavButton
+            Route={`/emprunts/${book.ActiveLoan._id}/supprimer`}
+            Content={"Rendre Livre"}
+          />
+        </p>
       );
     } else if (book.ActiveLoan) {
       return (
-        <p style={{ color: "red" }}>
+        <p style={{ color: "red" }} className="structuredInfo">
           Ce livre est emprunté jusqu'au {returnDate}
           <NavButton
             Route={`/collaborateurs/${book.ActiveLoan.Collaborator}`}
@@ -46,7 +43,7 @@ export default function SingleBookOptions({ book }) {
     }
 
     return (
-      <p>
+      <p className="structuredInfo">
         Ce livre peut être emprunté
         <NavButton
           Route={`/livres/${book._id}/emprunter`}
@@ -58,7 +55,7 @@ export default function SingleBookOptions({ book }) {
 
   return (
     <div className="singleBookDetails">
-      <p>
+      <p className="structuredInfo">
         Ce livre a été dernièrement modifié par:{" "}
         {book.ModifiedBy?.Name || "inconnu"} le{" "}
         {new Date(book.ModifiedOn).toLocaleDateString("fr-FR")}

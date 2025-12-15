@@ -16,8 +16,10 @@ form {
 
 .searchForm {
   width: 50%;
-  padding: 15px;
-  margin: 20px;
+  background: none;
+  box-shadow: none;
+  padding: 0px;
+  margin: 0px;
   flex-direction: row;
 }
 

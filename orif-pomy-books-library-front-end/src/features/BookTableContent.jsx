@@ -123,7 +123,7 @@ export default function BookTableContent({
   //
 
   return (
-    <>
+
       <table className="bookTable">
         <thead>
           <tr>
@@ -140,6 +140,6 @@ export default function BookTableContent({
           ))}
         </tbody>
       </table>
-    </>
+
   );
 }
