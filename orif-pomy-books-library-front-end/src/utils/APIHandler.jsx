@@ -25,13 +25,14 @@ export default class APIHandler {
       "https://orif-pomy-books-library.vercel.app/api/v1/"
     );
     this.url = this.staticUrl;
-    this.authId = window.sessionStorage.getItem("user") || null;
+    this.authId = null;
   }
 
   async fetchAPI(options = {}) {
     try {
+      if (window.sessionStorage.getItem("auth_token")) this.authId = window.sessionStorage.getItem("auth_token");
 
-      options.headers = { "Content-Type": "application/json", "authToken": this.authId || "" };
+      options.headers = { "Content-Type": "application/json", "auth_token": this.authId || "" };
       const res = await fetch(this.url, options);
 
       if (res.status === 500)
@@ -39,8 +40,13 @@ export default class APIHandler {
 
       const body = await res.json();
 
+      console.log(body);
+
       if (body.status === "fail") throw new Error(body.message);
-      if (body.authToken) window.sessionStorage.setItem("authToken", body.authToken);
+      if (body.auth) { 
+        window.sessionStorage.setItem("auth_token", body.data.authToken) 
+        window.sessionStorage.setItem("name", body.data.name)
+      }
 
       console.log(`@${options.method}@ from ${this.url}: ${body.status}`);
       if (body.message) console.log(body.message);

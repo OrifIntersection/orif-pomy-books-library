@@ -15,17 +15,10 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  const { setUser } = useContext(AuthContext);
   async function submitLogin(formData) {
 
     try {
-      const body = await collaboratorsAPIHandler.post({
-        email: formData.get("email"),
-      });
-      setUser(body.data);
-
-      window.sessionStorage.setItem("user", `${body.data.id}`);
-      window.sessionStorage.setItem("name", `${body.data.name}`);
+      await collaboratorsAPIHandler.post({ email: formData.get("email") });
 
       alert("succès!")
       navigate("/livres");

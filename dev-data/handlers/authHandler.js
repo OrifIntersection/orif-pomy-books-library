@@ -56,6 +56,6 @@ export async function login(req, res, next) {
   res.status(200).json({
     status: "success",
     message: `collaborator with email: ${email} has logged in successfully`,
-    data: { name: collaborator.Name, authToken }
+    auth: { name: collaborator.Name, authToken }
   });
 }
