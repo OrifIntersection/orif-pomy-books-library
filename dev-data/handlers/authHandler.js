@@ -1,4 +1,5 @@
 import AppError from "../utils/AppError.js";
+import jwt from "jsonwebtoken";
 import { Collaborator } from "../models/collaboratorModel.js";
 
 export async function protect(req, res, next) {
@@ -47,9 +48,21 @@ export async function login(req, res, next) {
 
   if (!collaborator) throw new AppError(`no collaborator found with email: ${email}`, 404);
 
+
+  const jwt = await jwt.sign({ id: collaborator._id }, process.env.JWTSECRET, { expiresIn: "1d" })
+  if (!jwt) throw new AppError("error generating authentication token", 500);
+
+  res.cookie("authToken", jwt, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "None",
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
+  });
+
+
   res.status(200).json({
     status: "success",
     message: `collaborator with email: ${email} has logged in successfully`,
-    data: { id: collaborator._id, name: collaborator.Name },
+    data: { name: collaborator.Name }
   });
 }
