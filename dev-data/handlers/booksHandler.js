@@ -76,8 +76,8 @@ export async function getBook(req, res, next) {
   if (!book) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
   // Mark if the active loan belongs to the logged in user
-  if (userId && book.ActiveLoan?.Collaborator.toString() === userId) 
-    book.ActiveLoan.isUserLoan = true;
+  console.log(book.ActiveLoan);
+  if (userId && book.ActiveLoan?.Collaborator === userId) book.ActiveLoan.IsUserLoan = true;
 
 
   return res.status(200).json({

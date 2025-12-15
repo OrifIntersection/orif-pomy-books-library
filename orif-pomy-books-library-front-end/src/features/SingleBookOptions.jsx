@@ -7,6 +7,7 @@ export default function SingleBookOptions({ book }) {
   // we use this book Prop to PATCH, DELETE, POST, get info for loans, etc...
   //
 
+  console.log(book);
   function checkActiveLoan() {
 
     // we use the session storage to check if the user has an active loan on this book
