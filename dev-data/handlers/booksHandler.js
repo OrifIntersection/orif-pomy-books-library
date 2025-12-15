@@ -58,7 +58,6 @@ export async function getAllBooks(req, res, next) {
 }
 
 export async function getBook(req, res, next) {
-
   //
   //  Get a single book by ID
   //  This will populate the chosen books ActiveLoan, ModifiedBy fields
@@ -76,10 +75,8 @@ export async function getBook(req, res, next) {
   if (!book) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
   // Mark if the active loan belongs to the logged in user
-  console.log(book.ActiveLoan?.Collaborator.toString() === userId.toString())
-  console.log(book.ActiveLoan?.Collaborator.toString(), userId.toString())
-  if (userId && book.ActiveLoan?.Collaborator.toString() === userId.toString()) book.ActiveLoan.IsUserLoan = true;
-
+  if (userId && book.ActiveLoan?.Collaborator.toString() === userId.toString())
+    book.HasUserLoan = true;
 
   return res.status(200).json({
     status: "success",
