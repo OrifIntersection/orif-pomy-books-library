@@ -44,14 +44,14 @@ export default function AddForm() {
 
   return book ? (
     <>
-      <p>
+      <p className="structuredInfo">
         Vous souhaitez emprunter: {book.Title} - {book.Author.join(", ")}
       </p >
-      <p>
+      <p className="structuredInfo">
         Ce livre est actuellement {book.ActiveLoan ? "emprunté" : "disponible"}.
       </p>
       {book.ActiveLoan ? (
-        <p>
+        <p className="structuredInfo">
           Ce livre devra être rendu pour:{" "}
           {new Date(book.ActiveLoan.EndDate).toDateString()}
         </p>
