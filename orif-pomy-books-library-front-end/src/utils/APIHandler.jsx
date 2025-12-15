@@ -44,11 +44,10 @@ export default class APIHandler {
 
       // session storage management only runs when body contains an auth field
       // we need the name to display on Navbar
-      // id is needed for checking loans, modifications, etc.
+
       if (body.auth) { 
         window.sessionStorage.setItem("auth_token", body.auth.authToken) 
         window.sessionStorage.setItem("name", body.auth.name)
-        window.sessionStorage.setItem("user", body.auth.id)
       }
 
       console.log(`@${options.method}@ from ${this.url}: ${body.status}`);

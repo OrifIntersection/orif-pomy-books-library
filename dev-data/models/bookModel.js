@@ -49,8 +49,6 @@ booksSchema.virtual("ActiveLoan", {
     match: { Returned: false } // Only return the active loan
 });
 
-booksSchema.virtual("IsUserLoaned");
-
 booksSchema.set("toObject", { virtuals: true });
 booksSchema.set("toJSON", { virtuals: true });
 

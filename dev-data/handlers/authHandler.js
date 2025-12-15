@@ -56,7 +56,7 @@ export async function signup(req, res, next) {
 
   res.status(201).json({
     status: "success",
-    auth: { name: createdCollaborator.Name, id: createdCollaborator._id, authToken },
+    auth: { name: createdCollaborator.Name, authToken },
   });
 }
 
@@ -86,6 +86,7 @@ export async function login(req, res, next) {
   res.status(200).json({
     status: "success",
     message: `collaborator with email: ${email} has logged in successfully`,
-    auth: { name: collaborator.Name, id: collaborator._id, authToken},
+    auth: { name: collaborator.Name, authToken},
   });
 }
+
