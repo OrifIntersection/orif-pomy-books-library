@@ -72,7 +72,7 @@ export async function getBook(req, res, next) {
     .populate({ path: "ActiveLoan" })
     .populate({ path: "ModifiedBy" });
 
-  if (!book) throw new AppError(`No book found with ID: ${bookId}`, 404);
+  if (!bookDoc) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
   let book = bookDoc.toObject({ virtuals: true, getters: true })
   // Mark if the active loan belongs to the logged in user
