@@ -68,20 +68,21 @@ export async function getBook(req, res, next) {
 
   if (!bookId) throw new AppError("No book ID provided.", 400);
 
-  const book = await Book.findById(bookId)
+  let bookDoc = await Book.findById(bookId)
     .populate({ path: "ActiveLoan" })
     .populate({ path: "ModifiedBy" });
 
   if (!book) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
+  let book = bookDoc.toObject({ virtuals: true, getters: true })
   // Mark if the active loan belongs to the logged in user
-  if (userId && book.ActiveLoan?.Collaborator.toString() === userId.toString())
+  if (userId && bookDoc.ActiveLoan?.Collaborator.toString() === userId.toString())
     book.HasUserLoan = true;
 
   return res.status(200).json({
     status: "success",
     message: `Book with ID: ${bookId} retrieved successfully.`,
-    data: book.toObject({ virtuals: true, getters: true })
+    data: book,
   });
 }
 
