@@ -2,7 +2,9 @@ import APIHandler from "../../utils/APIHandler";
 import { useContext, useEffect, useState } from "react";
 import BookTableContent from "../BookTableContent.jsx";
 
-const collaboratorsAPIHandler = new APIHandler("collaborators");
+
+// Get specifically the current logged in user's info
+const collaboratorsAPIHandler = new APIHandler("collaborators/me");
 
 export default function UserPage() {
   const [ userInfo, setUserInfo ] = useState(null);
