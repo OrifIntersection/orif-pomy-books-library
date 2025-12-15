@@ -35,7 +35,7 @@ export default class APIHandler {
       if (res.status === 500)
         throw new Error("There was an unexpected error on the server");
 
-      console.log(res);
+      console.log(res.headers.get("authToken"));
 
       const body = await res.json();
 

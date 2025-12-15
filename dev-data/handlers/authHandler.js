@@ -48,21 +48,12 @@ export async function login(req, res, next) {
 
   if (!collaborator) throw new AppError(`no collaborator found with email: ${email}`, 404);
 
-
   const authToken = jwt.sign({ id: collaborator._id }, process.env.JWTSECRET, { expiresIn: "1d" })
   if (!authToken) throw new AppError("error generating authentication token", 500);
-
-  res.cookie("authToken", authToken, {
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
-  });
-
 
   res.status(200).json({
     status: "success",
     message: `collaborator with email: ${email} has logged in successfully`,
-    data: { name: collaborator.Name }
+    data: { name: collaborator.Name, authToken }
   });
 }
