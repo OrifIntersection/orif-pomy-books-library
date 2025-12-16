@@ -101,6 +101,11 @@ export async function deleteLoan(req, res, next) {
 
   if (!loan) throw new AppError(`No loan found with ID: ${id}`, 404);
   if (loan.Returned) throw new AppError(`Loan with ID: ${id} has already been returned.`, 400);
+
+  console.log(loan.Collaborator._id.toString(), req.collaboratorId);
+  console.log(typeof loan.Collaborator._id.toString(), typeof req.collaboratorId);
+  console.log(loan.Collaborator._id.toString() === req.collaboratorId);
+
   if (loan.Collaborator._id.toString() !== req.collaboratorId) throw new AppError("The requested loan is not yours.", 401);
 
   loan.Returned = true;
