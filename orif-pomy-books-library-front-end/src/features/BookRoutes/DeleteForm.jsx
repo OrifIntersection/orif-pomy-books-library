@@ -43,11 +43,9 @@ export default function DeleteForm() {
     }
   }
 
-  return (Object.keys(book).length === 0) ? (
-
-        <p className="structuredInfo">Ce livre n'existe pas ou plus !</p>
-
-    ) : (
+  return Object.keys(book).length === 0 ? (
+    <p className="structuredInfo">Ce livre n'existe pas ou plus !</p>
+  ) : (
     <form className="deleteForm" onSubmit={deleteBook}>
       <p className="structuredInfo">
         Êtes vous sûr de vouloir supprimer "{book.Title}" ?

@@ -2,11 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import APIHandler from "../../utils/APIHandler";
 
-const booksAPIHandler = new APIHandler("books");
 const loansAPIHandler = new APIHandler("loans");
 
 export default function DeleteForm() {
-  const [book, setBook] = useState();
+  const [loan, setLoan] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -14,7 +13,7 @@ export default function DeleteForm() {
     async function getAPI() {
       try {
         const body = await loansAPIHandler.get("", id);
-        setBook(body.data);
+        setLoan(body.data);
       } catch (error) {
         console.error(error);
       }
@@ -34,16 +33,16 @@ export default function DeleteForm() {
       console.error(error);
     }
   }
-
-  return book ? (
+  console.log(loan);
+  return loan ? (
     <>
       <p className="structuredInfo">
-        Vous souhaitez rendre le livre: {book.Title} - {book.Author.join(", ")}
+        Vous souhaitez rendre le livre: {loan.Book.Title} - {loan.Book.Author.join(", ")}
       </p>
       <p className="structuredInfo">
-        Ce livre est actuellement {book.ActiveLoan ? "emprunté" : "disponible"}.
+        Ce livre est actuellement {loan.Book.ActiveLoan ? "emprunté" : "disponible"}.
       </p>
-      {book.ActiveLoan ? (
+      {loan.Book.ActiveLoan ? (
         <form className="deleteForm" onSubmit={handleSubmit}>
           <input type="submit" value="Rendre" />
         </form>

@@ -32,16 +32,23 @@ export async function getLoan(req, res, next) {
 
   const { id } = req.params;
   
-  const loan = await Loan.findById(id).populate("Book");
-  
-  if (!loan) throw new AppError(`No loan found with ID: ${id}`, 404);
+  const loanDoc = await Loan.findById(id).populate("Book").populate("Collaborator");
+
+  if (!loanDoc) throw new AppError(`No loan found with ID: ${id}`, 404);
+
+  // Convert to object to add IsUserLoan property
+  let loan = loanDoc.toObject({ virtuals: true, getters: true })
+
+  // Mark if the loan belongs to the logged in user
+  if (req.collaboratorId && loanDoc.Collaborator._id.toString() === req.collaboratorId.toString())
+    loan.IsUserLoan = true;
 
   return res.status(200).json({
     status: "success",
     message: `Loan with ID: ${id} retrieved successfully.`,
     data: loan,
   });
-  
+
 }
 
 export async function patchLoan(req, res, next) {
