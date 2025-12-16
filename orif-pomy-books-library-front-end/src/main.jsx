@@ -15,6 +15,7 @@ import BookDeleteForm from "./features/BookRoutes/DeleteForm.jsx";
 import BookAddForm from "./features/BookRoutes/AddForm.jsx";
 
 import LoanAddForm from "./features/LoanRoutes/AddForm.jsx";
+import LoanDeleteForm from "./features/LoanRoutes/DeleteForm.jsx";
 
 import UserPage from "./features/UserRoutes/UserPage.jsx";
 import Login from "./features/UserRoutes/Login.jsx";
@@ -31,6 +32,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/livres/:id/modifier" element={<BookModifyForm />} />
           <Route path="/livres/:id/emprunter" element={<LoanAddForm />} />
           <Route path="/livres/:id/supprimer" element={<BookDeleteForm />} />
+          <Route path="/emprunts/:id/supprimer" element={<LoanDeleteForm />} />
           <Route path="/nouvelle-livre" element={<BookAddForm />} />
           <Route path="/login" element={<Login />} />
           <Route path="/collaborateurs/moi" element={<UserPage />} />

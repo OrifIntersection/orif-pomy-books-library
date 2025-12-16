@@ -1,14 +1,12 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import APIHandler from "../../utils/APIHandler";
-import { AuthContext } from "../../contexts/AuthContext";
 
 const booksAPIHandler = new APIHandler("books");
 const loansAPIHandler = new APIHandler("loans");
 
 export default function AddForm() {
   const [book, setBook] = useState();
-  const { user } = useContext(AuthContext);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -25,15 +23,11 @@ export default function AddForm() {
     getAPI();
   }, []);
 
-    console.log(book);
-
-  if (user) loansAPIHandler.setAuth(user.id);
-
   async function handleSubmit(e) {
     e.preventDefault();
     const EndDate = e.target.EndDate.value;
     try {
-      const body = await loansAPIHandler.post({ BookID: book._id, EndDate });
+      await loansAPIHandler.post({ BookID: book._id, EndDate });
       alert("Le livre a été emprunté avec succès !");
 
       navigate(`/livres/${book._id}`);

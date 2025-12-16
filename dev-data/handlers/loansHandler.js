@@ -27,9 +27,21 @@ export async function getAllLoans(req, res, next) {
 
 export async function getLoan(req, res, next) {
   //
-  //  Get a single loan by ID
-  //  Unsure when this would be used
+  //  Return a specific loan by ID
   //
+
+  const { id } = req.params;
+  
+  const loan = await Loan.findById(id).populate("Book");
+  
+  if (!loan) throw new AppError(`No loan found with ID: ${id}`, 404);
+
+  return res.status(200).json({
+    status: "success",
+    message: `Loan with ID: ${id} retrieved successfully.`,
+    data: loan,
+  });
+  
 }
 
 export async function patchLoan(req, res, next) {
