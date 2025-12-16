@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router";
 import "./styles/index.css";
@@ -20,10 +20,8 @@ import LoanDeleteForm from "./features/LoanRoutes/DeleteForm.jsx";
 import UserPage from "./features/UserRoutes/UserPage.jsx";
 import Login from "./features/UserRoutes/Login.jsx";
 import Navbar from "./features/Navbar.jsx";
-import AuthProvider from "./utils/AuthProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <AuthProvider>
     <BrowserRouter>
       <Routes>
         <Route element={<Navbar />}>
@@ -39,5 +37,4 @@ createRoot(document.getElementById("root")).render(
         </Route>
       </Routes>
     </BrowserRouter>
-  </AuthProvider>
 );

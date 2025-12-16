@@ -5,6 +5,7 @@
   border: none;
   border-radius: 8px;
   font-size: 16px;
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   cursor: pointer;
   transition: background 0.2s;
   margin: 8px;

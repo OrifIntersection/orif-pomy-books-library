@@ -1,6 +1,4 @@
-import { Outlet, Link } from "react-router";
-import { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext.jsx";
+import { Outlet } from "react-router";
 import NavButton from "./NavButton.jsx";
 
 function Navbar() {
