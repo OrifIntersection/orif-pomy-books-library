@@ -13,7 +13,7 @@ export default function DeleteForm() {
   useEffect(() => {
     async function getAPI() {
       try {
-        const body = await booksAPIHandler.get("", id);
+        const body = await loansAPIHandler.get("", id);
         setBook(body.data);
       } catch (error) {
         console.error(error);

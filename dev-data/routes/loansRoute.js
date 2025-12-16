@@ -1,6 +1,7 @@
 import express from "express";
 import {
     getAllLoans,
+    getLoan,
     postLoan,
     deleteLoan,
 } from "../handlers/loansHandler.js";
@@ -15,6 +16,7 @@ router
     .post(attachCollaborator, requireCollaborator, postLoan);
 
 router.route("/:id") //  -> '/api/v1/loans/:id'
+    .get(attachCollaborator, requireCollaborator, getLoan)
     .delete(attachCollaborator, requireCollaborator, deleteLoan);
 
 export default router;
