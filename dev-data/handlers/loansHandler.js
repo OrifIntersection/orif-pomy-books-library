@@ -9,15 +9,13 @@ export async function getAllLoans(req, res, next) {
   //  Accepts query for loans of the logged in collaborator   "mine=true"
   //
 
-  const { returned, mine } = req.query;
+  const { mine, returned } = req.query;
 
   let loansQuery = Loan.find().populate("Book").populate("Collaborator");
 
-  // if returned exists as string "true" or "false", finds the loans that are "true" returned, or "false" not returned.
-  if (returned) loansQuery = loansQuery.find({ Returned: returned === "true" })
-
-  // if collaborator exists, finds the loans that belong to the logged in collaborator
+  // if "mine" query exists, finds the loans that belong to the logged in collaborator
   if (mine) loansQuery = loansQuery.find({ Collaborator: req.collaboratorId });
+  if (returned !== undefined) loansQuery = loansQuery.find({ Returned: returned === "true" }); 
 
   const loans = await loansQuery;
 

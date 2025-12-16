@@ -1,10 +1,12 @@
 import APIHandler from "../../utils/APIHandler";
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
 import BookTableContent from "../BookTableContent.jsx";
 import NavButton from "../NavButton.jsx";
 
 // Get specifically the current logged in user's info
 const collaboratorsAPIHandler = new APIHandler("collaborators/me");
+const loansAPIHandler = new APIHandler("loans");
 
 function LogoutButton() {
   function handleLogout() {
@@ -23,12 +25,18 @@ function LogoutButton() {
 
 export default function UserPage() {
   const [userInfo, setUserInfo] = useState(null);
+  const [userLoans, setUserLoans] = useState(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     async function getAPI() {
       try {
-        const body = await collaboratorsAPIHandler.get("", "");
-        setUserInfo(body.data);
+        setSearchParams("?mine=true&returned=false")
+        
+        const loansBody = await loansAPIHandler.get(searchParams, "");
+        setUserLoans(loansBody.data);
+        const collaboratorBody = await collaboratorsAPIHandler.get("", "");
+        setUserInfo(collaboratorBody.data);
       } catch (error) {
         console.error(error);
       }
@@ -36,35 +44,21 @@ export default function UserPage() {
     getAPI();
   }, []);
 
-  //
-  // BookTableContent expects an array of books
-  // Each book can have an ActiveLoan property, which is not populated by the API in this context
-  // So we manually add them here
-  //
-
-  let loanedBooks = null;
-
-  if (userInfo) {
-    loanedBooks = userInfo.activeLoans.map((loan) => {
-      loan.Book.ActiveLoan = loan;
-      return loan.Book;
-    });
-  }
 
   return (
     <>
       <LogoutButton />
       <NavButton Route="/collaborateurs/moi/modifier" Content="Modifier mon profil" />
       <NavButton Route="/collaborateurs/moi/supprimer" Content="Supprimer mon profil" />
-      {loanedBooks ? (
+      {userLoans && userInfo ? (
         <>
           <p className="structuredInfo">
-            Bienvenue {userInfo.currentUser.Name} !
+            Bienvenue {userInfo.Name} !
 
           </p>
           <div className="structuredInfo">
             Vos livres empruntés (cliquez sur un livre pour plus de détails):
-            <BookTableContent books={loanedBooks} />
+            <BookTableContent books={userLoans.map(loan => loan.Book)} />
           </div>
         </>
       ) : (
