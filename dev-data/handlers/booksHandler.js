@@ -16,6 +16,16 @@ export async function getAllBooks(req, res, next) {
   if (searchType && search)
     booksQuery = booksQuery.where(searchType).equals(new RegExp(search, "i"));
 
+  if (!searchType && search) {
+    booksQuery = booksQuery.or([
+      { Title: new RegExp(search, "i") },
+      { Author: new RegExp(search, "i") },
+      { Genre: new RegExp(search, "i") },
+      { Subject: new RegExp(search, "i") },
+      { Location: new RegExp(search, "i") }
+    ]);
+  }
+
   if (sortQuery) booksQuery = booksQuery.sort(sortQuery);
 
   const books = await booksQuery;

@@ -105,7 +105,7 @@ function BookTableBody({ book }) {
           {new Date(book.ActiveLoan.EndDate).toLocaleDateString("fr-FR")}{" "}
         </td>
       ) : (
-        <td></td>
+        <td>Disponible</td>
       )}
     </tr>
   );

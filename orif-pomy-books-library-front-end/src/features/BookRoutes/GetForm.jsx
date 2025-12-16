@@ -32,6 +32,7 @@ export default function GetForm({ setSearchParams }) {
           Selectionnez le type de recherche :{" "}
         </label>
         <select id="search-type" name="search-type">
+          <option value="">-- Tous --</option>
           <option value="Title">Titre</option>
           <option value="Author">Auteur</option>
           <option value="Genre">Genre</option>
