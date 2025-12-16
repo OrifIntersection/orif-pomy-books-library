@@ -106,7 +106,7 @@ export async function deleteLoan(req, res, next) {
   console.log(typeof loan.Collaborator._id.toString(), typeof req.collaboratorId);
   console.log(loan.Collaborator._id.toString() === req.collaboratorId);
 
-  if (loan.Collaborator._id.toString() !== req.collaboratorId) throw new AppError("The requested loan is not yours.", 401);
+  if (loan.Collaborator._id.toString() !== req.collaboratorId.toString()) throw new AppError("The requested loan is not yours.", 401);
 
   loan.Returned = true;
   await loan.save();
