@@ -8,7 +8,7 @@ form {
   flex-direction: column;
   gap: 8px;
 
-  background: rgb(210, 225, 225);
+  background: rgb(0, 90, 170, 0.2);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   font-family: sans-serif;
@@ -47,13 +47,13 @@ form input[type="text"]:focus,
 form input[type="date"]:focus,
 form input[type="search"]:focus,
 form select:focus {
-  border-color: rgb(150, 180, 180);
+  border-color: rgb(0, 90, 170, 1);
   box-shadow: 0 0 4px rgb(150, 160, 160);
 }
 
 form input[type="submit"] {
   padding: 10px;
-  background: rgb(150, 180, 180);
+  background: rgb(0, 90, 170, 1);
   color: white;
   border: none;
   border-radius: 8px;
@@ -63,5 +63,5 @@ form input[type="submit"] {
 }
 
 form input[type="submit"]:hover {
-  background: rgb(120, 150, 150);
+  background: rgb(0, 90, 170, 0.8);
 }

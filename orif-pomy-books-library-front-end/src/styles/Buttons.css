@@ -1,6 +1,6 @@
 .navButton {
   padding: 12px;
-  background: rgb(150, 180, 180);
+  background: rgb(0, 90, 170, 1);
   color: white;
   border: none;
   border-radius: 8px;
@@ -12,13 +12,13 @@
 }
 
 .navButton:hover {
-  background: rgb(120, 150, 150);
+  background: rgb(0, 90, 170, 0.75);
   color: white;
 }
 
 .loginButton {
   color: white;
-  background: rgb(160, 190, 190);
+  background: rgb(0, 90, 170, 1);
   margin: 0px 0px;
   padding: 5px;
   border: 1px solid white;
@@ -28,15 +28,15 @@
 }
 
 .loginButton:hover { 
-  border-color: rgb(145, 175, 175);
-  color: rgb(130, 165, 175);
-  background: #ffffff;
+  border-color: rgb(0, 90, 170, 1);
+  color: rgb(0, 90, 170, 1);
+  background: white;
   transition: background 0.2s ease;
 }
 
 .navBarButton {
   color: white;
-  background: rgb(160, 190, 190);
+  background: rgb(0, 90, 170, 1);
   margin:  0px 0px 0px 30px;
   padding: 5px;
   border: 1px solid white;
@@ -45,14 +45,15 @@
 }
 
 .navBarButton:hover { 
-  border-color: rgb(145, 175, 175);
-  color: rgb(130, 165, 175);
+  border-color: rgb(0, 90, 170, 1);
+  color: rgb(0, 90, 170, 1);
   background: #ffffff;
   transition: background 0.2s ease;
 }
 
 .sortButton {
   padding: none;
+  color: white;
   background: none;
   border: none;
   cursor: pointer;

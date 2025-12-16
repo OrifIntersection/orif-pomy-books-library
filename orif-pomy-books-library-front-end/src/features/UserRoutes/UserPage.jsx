@@ -59,7 +59,7 @@ export default function UserPage() {
           <BookTableContent books={loanedBooks} />
         </div>
       ) : (
-        <p>Loading...</p>
+        <p className="loadingBar">Loading...</p>
       )}
     </>
   );

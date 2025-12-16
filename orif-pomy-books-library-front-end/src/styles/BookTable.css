@@ -2,17 +2,18 @@
   width: 100%;
   table-layout: fixed;
   margin-top: 20px;
-  border: 2px solid rgb(180, 190, 190);
+  border: 2px solid #00437e;
   border-collapse: collapse;
   font-size: 14px;
   background: #fff;
 }
 
 .bookTable thead th {
-  background: rgb(200, 215, 215);
+  background: #005ba9;
+  color: white;
   text-align: left;
   padding: 14px;
-  border-bottom: 2px solid rgb(180, 190, 190);
+  border-bottom: 2px solid #00437e;
   font-weight: bold;
 }
 

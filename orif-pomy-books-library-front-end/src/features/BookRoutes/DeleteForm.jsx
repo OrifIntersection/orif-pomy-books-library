@@ -49,10 +49,8 @@ export default function DeleteForm() {
     <form className="deleteForm" onSubmit={deleteBook}>
       <p className="structuredInfo">
         Êtes vous sûr de vouloir supprimer "{book.Title}" ?
-        <br />
-        Les données ne pourront pas être recupérées.
       </p>
-      <input type="submit" value="Supprimer Définitivement" />
+      <input type="submit" value="Supprimer Définitivement"  style={{ color: "red", fontWeight: "bold" }}/>
     </form>
   );
 }
