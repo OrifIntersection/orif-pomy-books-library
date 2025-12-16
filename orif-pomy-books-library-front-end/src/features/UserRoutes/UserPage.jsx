@@ -40,17 +40,20 @@ export default function UserPage() {
   // So we manually add them here
   //
 
-  const loanedBooks = userInfo
-    ? userInfo.activeLoans.map((loan) => {
-        loan.Book.ActiveLoan = loan;
-        return loan.Book;
+  let loanedBooks = null;
+
+  if (userInfo) {
+    loanedBooks = userInfo.activeLoans.map((loan) => {
+      loan.Book.ActiveLoan = loan
+      return loan.Book;
       })
-    : [];
+  }
+
 
   return (
     <>
       <LogoutButton />
-      {userInfo ? (
+      {loanedBooks ? (
         <div className="structuredInfo">
           Vos livres empruntés (cliquez sur un livre pour plus de détails):
           <BookTableContent books={loanedBooks} />

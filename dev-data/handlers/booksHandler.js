@@ -74,6 +74,9 @@ export async function getBook(req, res, next) {
 
   if (!bookDoc) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
+  // check if the book has been deleted
+  if (bookDoc.Deleted) throw new AppError(`You're trying to access a book that has been deleted: ${bookId}`, 404);
+
   // Convert to object to add HasUserLoan virtual
   let book = bookDoc.toObject({ virtuals: true, getters: true })
   // Mark if the active loan belongs to the logged in user
@@ -149,23 +152,20 @@ export async function patchBook(req, res, next) {
 export async function deleteBook(req, res, next) {
   
   //
-  //  Find book by ID, then delete
+  //  Find book by ID, then update Deleted field to true
   //  Collaborator must be logged in
-  //  Deletion could also be handled with a simple Deleted: T/F field
-  //  This would preserve the data
   //
 
   const bookId = req.params.id;
 
   if (!bookId) throw new AppError("No book ID provided.", 400);
 
-  const deletedBook = await Book.findByIdAndDelete(bookId);
+  const deletedBook = await Book.findByIdAndUpdate(bookId, { Deleted: true });
 
   if (!deletedBook) throw new AppError(`No book found with ID: ${bookId}`, 404);
 
   res.status(200).json({
     status: "success",
     message: `Book has been deleted`,
-    data: deletedBook,
   });
 }

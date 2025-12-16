@@ -30,6 +30,10 @@ const booksSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
+    Deleted: {
+        type: Boolean,
+        default: false,
+    },
 /*     OwnedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Collaborator",
