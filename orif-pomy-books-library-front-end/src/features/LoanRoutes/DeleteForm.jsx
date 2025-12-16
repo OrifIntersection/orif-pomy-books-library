@@ -28,7 +28,7 @@ export default function DeleteForm() {
       await loansAPIHandler.delete(id);
       alert("Votre livre à été rendu avec succès !");
 
-      navigate(`/livres/${book._id}`);
+      navigate(`/livres/${loan.Book._id}`);
     } catch (error) {
       console.error(error);
     }
@@ -36,24 +36,32 @@ export default function DeleteForm() {
 
   return loan ? (
     <>
+
       <p className="structuredInfo">
-        Vous souhaitez rendre le livre: {loan.Book.Title} -{" "}
+        Vous souhaitez rendre un emprunt sur le livre: {loan.Book.Title} -{" "}
         {loan.Book.Author.join(", ")}
       </p>
-      <p className="structuredInfo">
-        Ce livre devra être rendu pour:{" "}
-        {new Date(loan.EndDate).toLocaleDateString("fr-FR")}
-      </p>
-      {loan.IsUserLoan ? (
+
+      {loan.Returned ? (
+        <p className="structuredInfo">Cet emprunt a déjà été rendu.</p>
+      ) : (
+        <p className="structuredInfo">
+          Ce emprunt devra être rendu pour:{" "}
+          {new Date(loan.EndDate).toLocaleDateString("fr-FR")}
+        </p>
+      )}
+
+      {loan.IsUserLoan && !loan.Returned ? (
         <form onSubmit={handleSubmit}>
-          Je confirme que je souhaite rendre ce livre.{" "}
+          Je confirme que je souhaite rendre cet emprunt.{" "}
           <input type="submit" value="Rendre" />
         </form>
       ) : (
         <p className="structuredInfo">
-          Ce livre n'est pas emprunté par vous, vous ne pouvez pas le rendre.
+          Ceci n'est pas votre emprunt, vous ne pouvez pas le rendre.
         </p>
       )}
+
     </>
   ) : (
     <p className="loadingBar">Loading...</p>

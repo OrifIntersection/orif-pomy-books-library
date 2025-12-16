@@ -26,6 +26,7 @@ export async function getAllLoans(req, res, next) {
 }
 
 export async function getLoan(req, res, next) {
+  
   //
   //  Return a specific loan by ID
   //
@@ -33,7 +34,6 @@ export async function getLoan(req, res, next) {
   const { id } = req.params;
   
   const loanDoc = await Loan.findById(id).populate("Book").populate("Collaborator");
-
   if (!loanDoc) throw new AppError(`No loan found with ID: ${id}`, 404);
 
   // Convert to object to add IsUserLoan property
