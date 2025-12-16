@@ -78,13 +78,18 @@ export async function deleteLoan(req, res, next) {
 
   const { id } = req.params;
 
-  const loan = await Loan.findByIdAndUpdate(id, { Returned: true }, { new: true });
+  const loan = await Loan.findById(id);
+
   if (!loan) throw new AppError(`No loan found with ID: ${id}`, 404);
+  if (loan.Returned) throw new AppError(`Loan with ID: ${id} has already been returned.`, 400);
+  if (loan.Collaborator.toString() !== req.collaboratorId) throw new AppError("The requested loan is not yours.", 401);
+
+  loan.Returned = true;
+  await loan.save();
 
   return res.status(200).json({
     status: "success",
     message: `Loan with ID: ${id} marked as returned.`,
-    data: loan,
   });
 }
 
