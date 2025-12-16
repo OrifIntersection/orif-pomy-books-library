@@ -1,5 +1,4 @@
 import { Collaborator } from "../models/collaboratorModel.js";
-import { Loan } from "../models/loanModel.js";
 import AppError from "../utils/AppError.js";
 
 //
@@ -25,25 +24,18 @@ export async function getCollaborator(req, res, next) {
   
   let collaboratorId = req.params.id || req.collaboratorId;
 
-  const currentUser = await Collaborator.findById(collaboratorId);
+  const user = await Collaborator.findById(collaboratorId);
 
-  if (!currentUser)
+  if (!user)
     throw new AppError(
       "This account doesn't exist!",
       401
     );
 
-  const activeLoans = await Loan.find()
-    .where("Collaborator")
-    .equals(currentUser._id)
-    .where("Returned")
-    .equals(false)
-    .populate({ path: "Book" })
-  
   res.status(200).json({
     status: "success",
-    message: `Details for user with ID: ${currentUser._id} have been sent successfully`,
-    data: { currentUser, activeLoans },
+    message: `Details for user with ID: ${user._id} have been sent successfully`,
+    data: user,
   });
 }
 

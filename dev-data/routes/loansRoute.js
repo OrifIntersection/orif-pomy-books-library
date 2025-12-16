@@ -12,7 +12,7 @@ const router = express.Router();
 
 router
     .route("/") //  -> '/api/v1/loans/'
-    .get(getAllLoans)
+    .get(attachCollaborator, getAllLoans)
     .post(attachCollaborator, requireCollaborator, postLoan);
 
 router.route("/:id") //  -> '/api/v1/loans/:id'

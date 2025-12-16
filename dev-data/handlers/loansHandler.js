@@ -2,16 +2,22 @@ import { Loan } from "../models/loanModel.js";
 import AppError from "../utils/AppError.js";
 
 export async function getAllLoans(req, res, next) {
+
   //
   //  Return all loans
-  //  Accepts query for Returned true/false
+  //  Accepts query for Returned true                         "returned=true"
+  //  Accepts query for loans of the logged in collaborator   "mine=true"
   //
-  const { returned } = req.query;
 
-  let loansQuery = Loan.find();
+  const { returned, mine } = req.query;
+
+  let loansQuery = Loan.find().populate("Book").populate("Collaborator");
 
   // if returned exists as string "true" or "false", finds the loans that are "true" returned, or "false" not returned.
   if (returned) loansQuery = loansQuery.find({ Returned: returned === "true" })
+
+  // if collaborator exists, finds the loans that belong to the logged in collaborator
+  if (mine) loansQuery = loansQuery.find({ Collaborator: req.collaboratorId });
 
   const loans = await loansQuery;
 
