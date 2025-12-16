@@ -1,5 +1,4 @@
 import { Book } from "../models/bookModel.js";
-import { Collaborator } from "../models/collaboratorModel.js";
 import AppError from "../utils/AppError.js";
 
 export async function getAllBooks(req, res, next) {
@@ -10,7 +9,8 @@ export async function getAllBooks(req, res, next) {
 
   const { search, searchType, sortQuery } = req.query;
 
-  let booksQuery = Book.find();
+  // only return books that are not deleted
+  let booksQuery = Book.find().where("Deleted").equals(false);
   booksQuery = booksQuery.populate({ path: "ActiveLoan" });
 
   if (searchType && search)
@@ -79,6 +79,7 @@ export async function getBook(req, res, next) {
 
   // Convert to object to add HasUserLoan virtual
   let book = bookDoc.toObject({ virtuals: true, getters: true })
+
   // Mark if the active loan belongs to the logged in user
   if (userId && bookDoc.ActiveLoan?.Collaborator.toString() === userId.toString())
     book.HasUserLoan = true;
@@ -115,6 +116,7 @@ export async function postBook(req, res, next) {
 }
 
 export async function patchBook(req, res, next) {
+
   //
   // Find book by ID, then update
   // Only Title, Author, Genre, Subject, Location can be modified
@@ -129,19 +131,19 @@ export async function patchBook(req, res, next) {
 
   const updatedBookData = { Title, Author, Genre, Subject, Location };
 
-  if (!updatedBookData)
-    throw new AppError("No book data provided for update.", 400);
+  if (!updatedBookData) throw new AppError("No book data provided for update.", 400);
   if (!bookId) throw new AppError("No book ID provided.", 400);
   if (!collaboratorId) throw new AppError("You are not logged in", 401);
 
   updatedBookData.ModifiedBy = req.collaboratorId;
   updatedBookData.ModifiedOn = Date.now();
 
-  const updatedBook = await Book.findByIdAndUpdate(bookId, updatedBookData, {
-    new: true,
-  });
+  const updatedBook = await Book.findById(bookId).where("Deleted").equals(false);
 
   if (!updatedBook) throw new AppError(`No book found with ID: ${bookId}`, 404);
+
+  Object.assign(updatedBook, updatedBookData);
+  await updatedBook.save();
 
   res.status(200).json({
     status: "success",
@@ -160,9 +162,14 @@ export async function deleteBook(req, res, next) {
 
   if (!bookId) throw new AppError("No book ID provided.", 400);
 
-  const deletedBook = await Book.findByIdAndUpdate(bookId, { Deleted: true });
+  const deletedBook = await Book.findById(bookId).populate("ActiveLoan");
 
   if (!deletedBook) throw new AppError(`No book found with ID: ${bookId}`, 404);
+  if (deletedBook.ActiveLoan)
+    throw new AppError("You cannot delete a book that is currently on loan.", 400);
+
+  deletedBook.Deleted = true;
+  await deletedBook.save();
 
   res.status(200).json({
     status: "success",
