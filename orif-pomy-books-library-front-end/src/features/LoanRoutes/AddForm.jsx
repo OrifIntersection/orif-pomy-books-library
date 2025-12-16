@@ -10,7 +10,6 @@ export default function AddForm() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-
   useEffect(() => {
     async function getAPI() {
       try {
@@ -40,19 +39,19 @@ export default function AddForm() {
     <>
       <p className="structuredInfo">
         Vous souhaitez emprunter: {book.Title} - {book.Author.join(", ")}
-      </p >
+      </p>
       <p className="structuredInfo">
         Ce livre est actuellement {book.ActiveLoan ? "emprunté" : "disponible"}.
       </p>
       {book.ActiveLoan ? (
         <p className="structuredInfo">
           Ce livre devra être rendu pour:{" "}
-          {new Date(book.ActiveLoan.EndDate).toDateString()}
+          {new Date(book.ActiveLoan.EndDate).toLocaleDateString("fr-FR")}
         </p>
       ) : (
         <form className="borrowForm" onSubmit={handleSubmit}>
           <label htmlFor="EndDate">
-            Veuillez selectionner quand vous souhaitez rendre le livre: {" "}
+            Veuillez selectionner quand vous souhaitez rendre le livre:{" "}
           </label>
           <input type="date" id="EndDate" name="EndDate" required />
           <input type="submit" value="Emprunter" />

@@ -33,22 +33,25 @@ export default function DeleteForm() {
       console.error(error);
     }
   }
-  console.log(loan);
+
   return loan ? (
     <>
       <p className="structuredInfo">
-        Vous souhaitez rendre le livre: {loan.Book.Title} - {loan.Book.Author.join(", ")}
+        Vous souhaitez rendre le livre: {loan.Book.Title} -{" "}
+        {loan.Book.Author.join(", ")}
       </p>
       <p className="structuredInfo">
-        Ce livre est actuellement {loan.Book.ActiveLoan ? "emprunté" : "disponible"}.
+        Ce livre devra être rendu pour:{" "}
+        {new Date(loan.EndDate).toLocaleDateString("fr-FR")}
       </p>
-      {loan.Book.ActiveLoan ? (
-        <form className="deleteForm" onSubmit={handleSubmit}>
+      {loan.IsUserLoan ? (
+        <form onSubmit={handleSubmit}>
+          Je confirme que je souhaite rendre ce livre.{" "}
           <input type="submit" value="Rendre" />
         </form>
       ) : (
         <p className="structuredInfo">
-          Ce livre n'est pas emprunté, vous ne pouvez pas le rendre.
+          Ce livre n'est pas emprunté par vous, vous ne pouvez pas le rendre.
         </p>
       )}
     </>
