@@ -66,6 +66,8 @@ export default class APIHandler {
   get(params, id) {
     this.resetUrl();  
 
+    if (typeof params === "string") params = new URLSearchParams(params);
+
     if (id) this.url = new URL(id, `${this.url}/`);
     if (params.size > 0) this.url = new URL(`${this.url}?${params.toString()}`);
 

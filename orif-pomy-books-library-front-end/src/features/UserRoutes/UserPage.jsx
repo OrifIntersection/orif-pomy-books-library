@@ -26,14 +26,14 @@ function LogoutButton() {
 export default function UserPage() {
   const [userInfo, setUserInfo] = useState(null);
   const [userLoans, setUserLoans] = useState(null);
-  const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
     async function getAPI() {
       try {
-        setSearchParams("?mine=true&returned=false")
+
+        // we query the API for loans that belong to the current user & are not returned yet
+        const loansBody = await loansAPIHandler.get("?mine=true&returned=false", "");
         
-        const loansBody = await loansAPIHandler.get(searchParams, "");
         setUserLoans(loansBody.data);
         const collaboratorBody = await collaboratorsAPIHandler.get("", "");
         setUserInfo(collaboratorBody.data);
@@ -45,12 +45,19 @@ export default function UserPage() {
   }, []);
 
 
+  const fixedBooks = userLoans
+    ? userLoans.map((loan) => {
+        loan.Book.ActiveLoan = loan;
+        return loan.Book;
+      })
+    : null;
+
   return (
     <>
       <LogoutButton />
       <NavButton Route="/collaborateurs/moi/modifier" Content="Modifier mon profil" />
       <NavButton Route="/collaborateurs/moi/supprimer" Content="Supprimer mon profil" />
-      {userLoans && userInfo ? (
+      {fixedBooks && userInfo ? (
         <>
           <p className="structuredInfo">
             Bienvenue {userInfo.Name} !
@@ -58,7 +65,7 @@ export default function UserPage() {
           </p>
           <div className="structuredInfo">
             Vos livres empruntés (cliquez sur un livre pour plus de détails):
-            <BookTableContent books={userLoans.map(loan => loan.Book)} />
+            <BookTableContent books={fixedBooks} />
           </div>
         </>
       ) : (
