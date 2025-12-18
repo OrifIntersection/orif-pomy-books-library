@@ -39,7 +39,6 @@ export default function DeleteForm() {
       navigate("/livres");
     } catch (error) {
       console.error(error);
-      alert("Une erreur est survenue lors de la suppression du livre");
     }
   }
 

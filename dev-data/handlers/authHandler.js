@@ -29,7 +29,7 @@ export async function requireCollaborator(req, res, next) {
   // Require that a valid collaborator is logged in for a given route
   //
 
-  if (!req.collaboratorId) throw new AppError("There was an error while handling your authorization id, please try logging in again.", 401);
+  if (!req.collaboratorId) throw new AppError("UNAUTHORIZED");
 
   next();
 }
@@ -44,8 +44,8 @@ export async function signup(req, res, next) {
 
   const { name, email } = req.body;
 
-  if (!name || !email)
-    throw new AppError("an email and a name must be provided.", 400);
+  if (!name) throw new AppError("NO_EMAIL");
+  if (!email) throw new AppError("NO_NAME");
 
   const createdCollaborator = await Collaborator.create({
     Name: name,
@@ -72,16 +72,15 @@ export async function login(req, res, next) {
 
   const { email } = req.body;
 
-  if (!email) throw new AppError("an email must be provided", 400);
+  if (!email) throw new AppError("NO_EMAIL");
 
   const collaborator = await Collaborator.findOne()
     .where("Email")
     .equals(email.toLowerCase());
 
-  if (!collaborator) throw new AppError(`no collaborator found with email: ${email}`, 404);
+  if (!collaborator) throw new AppError("UNFOUND_EMAIL");
 
   const authToken = jwt.sign({ id: collaborator._id }, process.env.JWTSECRET, { expiresIn: "1d" })
-  if (!authToken) throw new AppError("error generating authentication token", 500);
 
   res.status(200).json({
     status: "success",

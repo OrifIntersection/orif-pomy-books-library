@@ -26,11 +26,7 @@ export async function getCollaborator(req, res, next) {
 
   const user = await Collaborator.findById(collaboratorId);
 
-  if (!user)
-    throw new AppError(
-      "This account doesn't exist!",
-      401
-    );
+  if (!user) throw new AppError("UNFOUND_COLLAB_ID");
 
   res.status(200).json({
     status: "success",

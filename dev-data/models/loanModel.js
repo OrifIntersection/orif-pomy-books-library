@@ -17,7 +17,7 @@ const loansSchema = new mongoose.Schema({
     },
     EndDate: {
         type: Date,
-        default: Date.now() + 14 * 24 * 60 * 60 * 1000, // Default return date is 2 weeks from loan date
+        required: [true, "A loan bust have an end date."]
     },
     Returned: {
         type: Boolean,

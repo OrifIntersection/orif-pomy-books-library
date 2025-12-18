@@ -1,6 +1,5 @@
 import APIHandler from "../../utils/APIHandler";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router";
 import BookTableContent from "../BookTableContent.jsx";
 import NavButton from "../NavButton.jsx";
 
@@ -32,10 +31,10 @@ export default function UserPage() {
       try {
 
         // we query the API for loans that belong to the current user & are not returned yet
-        const loansBody = await loansAPIHandler.get("?mine=true&returned=false", "");
+        const loansBody = await loansAPIHandler.get({ mine: true, returned: false });
         
         setUserLoans(loansBody.data);
-        const collaboratorBody = await collaboratorsAPIHandler.get("", "");
+        const collaboratorBody = await collaboratorsAPIHandler.get();
         setUserInfo(collaboratorBody.data);
       } catch (error) {
         console.error(error);

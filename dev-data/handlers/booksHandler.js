@@ -30,8 +30,7 @@ export async function getAllBooks(req, res, next) {
 
   const books = await booksQuery;
 
-  if (books.length === 0)
-    throw new AppError("No books found matching the criteria.", 404);
+  if (books.length === 0) throw new AppError("UNFOUND_BOOK_SEARCH");
 
   //
   // Additional sorting for ActiveLoan since it is virtual and cannot be sorted in the query
@@ -76,16 +75,16 @@ export async function getBook(req, res, next) {
   const bookId = req.params.id;
   const userId = req.collaboratorId || null;
 
-  if (!bookId) throw new AppError("No book ID provided.", 400);
+  if (!bookId) throw new AppError("NO_BOOK_ID");
 
   let bookDoc = await Book.findById(bookId)
     .populate({ path: "ActiveLoan" })
     .populate({ path: "ModifiedBy" });
 
-  if (!bookDoc) throw new AppError(`No book found with ID: ${bookId}`, 404);
+  if (!bookDoc) throw new AppError("UNFOUND_BOOK_ID");
 
   // check if the book has been deleted
-  if (bookDoc.Deleted) throw new AppError(`You're trying to access a book that has been deleted: ${bookId}`, 404);
+  if (bookDoc.Deleted) throw new AppError("DELETED");
 
   // Convert to object to add HasUserLoan virtual
   let book = bookDoc.toObject({ virtuals: true, getters: true })
@@ -110,11 +109,16 @@ export async function postBook(req, res, next) {
 
   const { Title, Author, Genre, Subject, Location } = req.body;
 
+  if (!Title) throw new AppError("NO_TITLE");
+  if (!Author) throw new AppError("NO_AUTHOR");
+  if (!Genre) throw new AppError("NO_GENRE");
+  if (!Subject) throw new AppError("NO_SUBJECT");
+  if (!Location) throw new AppError("NO_LOCATION");
+
   const newBookData = { Title, Author, Genre, Subject, Location };
   const collaboratorId = req.collaboratorId;
 
-  if (!newBookData) throw new AppError("No book data provided", 400);
-  if (!collaboratorId) throw new AppError("You are not logged in", 401);
+  if (!collaboratorId) throw new AppError("UNAUTHORIZED");
 
   newBookData.ModifiedBy = collaboratorId;
   const createdBook = await Book.create(newBookData);
@@ -135,22 +139,29 @@ export async function patchBook(req, res, next) {
   // Collaborator must be logged in
   //
 
-  const bookId = req.params.id;
-  const collaboratorId = req.collaboratorId;
   const { Title, Author, Genre, Subject, Location } = req.body;
 
+  if (!Title) throw new AppError("NO_TITLE");
+  if (!Author) throw new AppError("NO_AUTHOR");
+  if (!Genre) throw new AppError("NO_GENRE");
+  if (!Subject) throw new AppError("NO_SUBJECT");
+  if (!Location) throw new AppError("NO_LOCATION");
+
+  const bookId = req.params.id;
+
+  if (!bookId) throw new AppError("NO_BOOK_ID");
+
+  const collaboratorId = req.collaboratorId;
+
+  if (!collaboratorId) throw new AppError("UNAUTHORIZED");
+
   const updatedBookData = { Title, Author, Genre, Subject, Location };
-
-  if (!updatedBookData) throw new AppError("No book data provided for update.", 400);
-  if (!bookId) throw new AppError("No book ID provided.", 400);
-  if (!collaboratorId) throw new AppError("You are not logged in", 401);
-
   updatedBookData.ModifiedBy = req.collaboratorId;
   updatedBookData.ModifiedOn = Date.now();
 
   const updatedBook = await Book.findById(bookId).where("Deleted").equals(false);
 
-  if (!updatedBook) throw new AppError(`No book found with ID: ${bookId}`, 404);
+  if (!updatedBook) throw new AppError("UNFOUND_BOOK_ID")
 
   Object.assign(updatedBook, updatedBookData);
   await updatedBook.save();
@@ -170,16 +181,15 @@ export async function deleteBook(req, res, next) {
 
   const bookId = req.params.id;
 
-  if (!bookId) throw new AppError("No book ID provided.", 400);
+  if (!bookId) throw new AppError("NO_BOOK_ID");
 
-  const deletedBook = await Book.findById(bookId).populate("ActiveLoan");
+  const bookDoc = await Book.findById(bookId).populate("ActiveLoan");
 
-  if (!deletedBook) throw new AppError(`No book found with ID: ${bookId}`, 404);
-  if (deletedBook.ActiveLoan)
-    throw new AppError("You cannot delete a book that is currently on loan.", 400);
+  if (!bookDoc) throw new AppError("UNFOUND_BOOK_ID");
+  if (bookDoc.ActiveLoan) throw new AppError("CANNOT_DELETE_WHILE_LOANED");
 
-  deletedBook.Deleted = true;
-  await deletedBook.save();
+  bookDoc.Deleted = true;
+  await bookDoc.save();
 
   res.status(200).json({
     status: "success",

@@ -12,6 +12,7 @@ const booksAPIHandler = new APIHandler("books");
 export default function BookTable() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [books, setBooks] = useState();
+  const [pageError, setPageError] = useState();
   const { id } = useParams();
 
   //
@@ -25,8 +26,10 @@ export default function BookTable() {
         const body = await booksAPIHandler.get(searchParams, id);
         if (Array.isArray(body.data)) setBooks(body.data);
         else setBooks([body.data]);
+        setPageError(null);
       } catch (error) {
         console.error(error);
+        setPageError(error.message);
       }
     }
     getAPI();
@@ -37,20 +40,33 @@ export default function BookTable() {
   // returns an emtpy object on setBooks => [{}]
   //
 
-  return books ? (
+  if (books && books.length === 1) return (
     <div className="structuredInfo">
-      {books.length === 1 ? (
-        <SingleBookOptions book={books[0]} />
-      ) : (
-        <GetForm setSearchParams={setSearchParams} />
-      )}
+      <SingleBookOptions book={books[0]} />
       <BookTableContent
-        books={books}
-        searchParams={searchParams}
-        setSearchParams={setSearchParams}
+          books={books}
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
       />
     </div>
-  ) : (
-    <p className="loadingBar">Loading...</p>
-  );
+  )
+
+  if (books)
+    return (
+      <div className="structuredInfo">
+        <GetForm setSearchParams={setSearchParams} />
+        {pageError ? (
+          <p className="structuredError">{pageError}</p>
+        ) : (
+          <BookTableContent
+            books={books}
+            searchParams={searchParams}
+            setSearchParams={setSearchParams}
+          />
+        )}
+      </div>
+    );
+
+  return <p className="loadingBar">Loading...</p>;
 }
+
