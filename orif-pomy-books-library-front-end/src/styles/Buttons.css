@@ -10,12 +10,31 @@
   transition: background 0.2s;
   margin: 8px;
   text-decoration: none;
+  text-align: center;
 }
 
-.navButton:hover {
+.signupButton {
+  padding: 10px;
+  background: rgb(0, 90, 170, 1);
+  margin-top: 12px;
+  text-decoration: none;
+  text-align: center;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+
+.navButton:hover,
+.signupButton:hover {
   background: rgb(0, 90, 170, 0.75);
   color: white;
 }
+
+
+
 
 .loginButton {
   color: white;

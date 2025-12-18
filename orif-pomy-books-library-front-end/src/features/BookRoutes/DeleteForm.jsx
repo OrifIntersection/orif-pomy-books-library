@@ -5,7 +5,9 @@ import APIHandler from "../../utils/APIHandler";
 const booksAPIHandler = new APIHandler("books");
 
 export default function DeleteForm() {
-  const [book, setBook] = useState({});
+  const [book, setBook] = useState();
+  const [getError, setGetError] = useState();
+  const [deleteError, setDeleteError] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -21,6 +23,7 @@ export default function DeleteForm() {
         setBook(body.data);
       } catch (error) {
         console.error(error);
+        setGetError(error.message);
       }
     }
     getAPI();
@@ -39,17 +42,25 @@ export default function DeleteForm() {
       navigate("/livres");
     } catch (error) {
       console.error(error);
+      setDeleteError(error.message);
     }
   }
 
-  return Object.keys(book).length === 0 ? (
-    <p className="structuredInfo">Ce livre n'existe pas ou plus !</p>
-  ) : (
+  if (getError) return <p className="structuredError">{getError}</p>
+
+  return book ? (
     <form className="deleteForm" onSubmit={deleteBook}>
+      {deleteError ? <p className="structuredError">{deleteError}</p> : null}
       <p className="structuredInfo">
         Êtes vous sûr de vouloir supprimer "{book.Title}" ?
       </p>
-      <input type="submit" value="Supprimer Définitivement"  style={{ color: "red", fontWeight: "bold" }}/>
+      <input
+        type="submit"
+        value="Supprimer Définitivement"
+        style={{ color: "red", fontWeight: "bold" }}
+      />
     </form>
+  ) : (
+    <p className="loadingBar">Loading...</p>
   );
 }

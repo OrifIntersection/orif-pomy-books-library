@@ -95,6 +95,10 @@ export const ERROR_CODES = {
     message: "Il est impossible de rendre un emprunt qui à déjà été rendu.",
     statusCode: 403,
   },
+  CANNOT_DELETE_DELETED_BOOK:{
+    message: "Il est impossible de supprimer un livre qui à déjà été supprimé.",
+    statusCode: 403,
+  }, 
   CANNOT_RETURN_OTHER_LOAN: {
     message: "Vous ne pouvez pas rendre un emprunt qui n'est pas a votre.",
     statusCode: 403,

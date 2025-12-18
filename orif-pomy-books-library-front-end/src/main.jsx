@@ -19,6 +19,7 @@ import LoanDeleteForm from "./features/LoanRoutes/DeleteForm.jsx";
 
 import UserPage from "./features/UserRoutes/UserPage.jsx";
 import Login from "./features/UserRoutes/Login.jsx";
+import Signup from "./features/UserRoutes/Signup.jsx";
 import Navbar from "./features/Navbar.jsx";
 
 createRoot(document.getElementById("root")).render(
@@ -33,6 +34,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/emprunts/:id/supprimer" element={<LoanDeleteForm />} />
           <Route path="/nouvelle-livre" element={<BookAddForm />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/collaborateurs/moi" element={<UserPage />} />
         </Route>
       </Routes>

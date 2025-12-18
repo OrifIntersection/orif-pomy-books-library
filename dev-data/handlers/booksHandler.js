@@ -187,6 +187,7 @@ export async function deleteBook(req, res, next) {
 
   if (!bookDoc) throw new AppError("UNFOUND_BOOK_ID");
   if (bookDoc.ActiveLoan) throw new AppError("CANNOT_DELETE_WHILE_LOANED");
+  if (bookDoc.Deleted === true) throw new AppError("CANNOT_DELETE_DELETED_BOOK")
 
   bookDoc.Deleted = true;
   await bookDoc.save();

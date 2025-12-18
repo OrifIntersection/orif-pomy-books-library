@@ -5,7 +5,9 @@ import APIHandler from "../../utils/APIHandler.jsx";
 const booksAPIHandler = new APIHandler("books");
 
 export default function ModifyForm() {
-  const [book, setBook] = useState({});
+  const [book, setBook] = useState();
+  const [getError, setGetError] = useState();
+  const [patchError, setPatchError] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -22,6 +24,7 @@ export default function ModifyForm() {
         setBook(body.data);
       } catch (error) {
         console.error(error);
+        setGetError(error.message);
       }
 
     }
@@ -53,13 +56,16 @@ export default function ModifyForm() {
       navigate("/livres/" + id);
     } catch (error) {
       console.error(error);
-      alert("Une erreur est survenue lors de la modification du livre");
+      setPatchError(error.message)
     }
 
   }
 
-  return Object.keys(book).length >= 1 ? (
+  if (getError) return <p className="structuredError">{getError}</p>
+
+  return book ? (
     <form onSubmit={handleFormSubmit} className="modifyForm">
+      {patchError ? <p className="structuredError">{patchError}</p> : null}
       <label htmlFor="title">Titre: </label>
       <input
         type="text"

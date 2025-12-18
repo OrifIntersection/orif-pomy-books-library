@@ -16,7 +16,7 @@ function LogoutButton() {
   }
 
   return (
-    <button onClick={handleLogout} className="navButton" >
+    <button onClick={handleLogout} className="navButton">
       Se déconnecter
     </button>
   );
@@ -25,24 +25,34 @@ function LogoutButton() {
 export default function UserPage() {
   const [userInfo, setUserInfo] = useState(null);
   const [userLoans, setUserLoans] = useState(null);
+  const [getError, setGetError] = useState();
 
   useEffect(() => {
     async function getAPI() {
       try {
-
         // we query the API for loans that belong to the current user & are not returned yet
-        const loansBody = await loansAPIHandler.get({ mine: true, returned: false });
-        
-        setUserLoans(loansBody.data);
         const collaboratorBody = await collaboratorsAPIHandler.get();
         setUserInfo(collaboratorBody.data);
+
+        const loansBody = await loansAPIHandler.get({
+          mine: true,
+          returned: false,
+        });
+        setUserLoans(loansBody.data);
       } catch (error) {
         console.error(error);
+        setGetError(error.message);
       }
     }
     getAPI();
   }, []);
 
+  //
+  // BookTableContext expects books that contain an ActiveLoan on Book.ActiveLoan
+  // ActiveLoan is not populated via the loansAPIHandler
+  // so we populate them manually via the Book inside each loan object
+  // => Returns an array of Books where Book.ActiveLoan is populated
+  //
 
   const fixedBooks = userLoans
     ? userLoans.map((loan) => {
@@ -53,20 +63,24 @@ export default function UserPage() {
 
   return (
     <>
+      <p className="structuredInfo">Bienvenue {userInfo?.Name} !</p>
       <LogoutButton />
-      <NavButton Route="/collaborateurs/moi/modifier" Content="Modifier mon profil" />
-      <NavButton Route="/collaborateurs/moi/supprimer" Content="Supprimer mon profil" />
+      <NavButton
+        Route="/collaborateurs/moi/modifier"
+        Content="Modifier mon profil"
+      />
+      <NavButton
+        Route="/collaborateurs/moi/supprimer"
+        Content="Supprimer mon profil"
+      />
       {fixedBooks && userInfo ? (
-        <>
-          <p className="structuredInfo">
-            Bienvenue {userInfo.Name} !
-
-          </p>
           <div className="structuredInfo">
             Vos livres empruntés (cliquez sur un livre pour plus de détails):
             <BookTableContent books={fixedBooks} />
           </div>
-        </>
+
+      ) : getError ? (
+        <p className="structuredError">{getError}</p>
       ) : (
         <p className="loadingBar">Loading...</p>
       )}

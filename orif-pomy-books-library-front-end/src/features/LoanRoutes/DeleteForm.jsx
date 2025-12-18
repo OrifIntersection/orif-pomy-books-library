@@ -6,6 +6,8 @@ const loansAPIHandler = new APIHandler("loans");
 
 export default function DeleteForm() {
   const [loan, setLoan] = useState();
+  const [getError, setGetError] = useState();
+  const [deleteError, setDeleteError] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -16,6 +18,7 @@ export default function DeleteForm() {
         setLoan(body.data);
       } catch (error) {
         console.error(error);
+        setGetError(error.message);
       }
     }
     getAPI();
@@ -31,37 +34,27 @@ export default function DeleteForm() {
       navigate(`/livres/${loan.Book._id}`);
     } catch (error) {
       console.error(error);
+      setDeleteError(error.message)
     }
   }
 
+  if (getError) return <p className="structuredError">{getError}</p>;
+
   return loan ? (
     <>
-
+      {deleteError ? <p className="structuredError">{deleteError}</p> : null}
       <p className="structuredInfo">
         Vous souhaitez rendre un emprunt sur le livre: {loan.Book.Title} -{" "}
         {loan.Book.Author.join(", ")}
       </p>
-
-      {loan.Returned ? (
-        <p className="structuredInfo">Cet emprunt a déjà été rendu.</p>
-      ) : (
-        <p className="structuredInfo">
-          Ce emprunt devra être rendu pour:{" "}
-          {new Date(loan.EndDate).toLocaleDateString("fr-FR")}
-        </p>
-      )}
-
-      {loan.IsUserLoan && !loan.Returned ? (
-        <form onSubmit={handleSubmit}>
-          Je confirme que je souhaite rendre cet emprunt.{" "}
-          <input type="submit" value="Rendre" />
-        </form>
-      ) : (
-        <p className="structuredInfo">
-          Ceci n'est pas votre emprunt, vous ne pouvez pas le rendre.
-        </p>
-      )}
-
+      <p className="structuredInfo">
+        Ce emprunt devra être rendu pour:{" "}
+        {new Date(loan.EndDate).toLocaleDateString("fr-FR")}
+      </p>
+      <form onSubmit={handleSubmit}>
+        Je confirme que je souhaite rendre cet emprunt.{" "}
+        <input type="submit" value="Rendre" />
+      </form>
     </>
   ) : (
     <p className="loadingBar">Loading...</p>

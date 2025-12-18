@@ -6,7 +6,7 @@ const booksAPIHandler = new APIHandler("books");
 
 export default function AddForm() {
   const navigate = useNavigate();
-  const [pageError, setPageError] = useState();
+  const [postError, setPostError] = useState();
 
   async function submitBook(e) {
     e.preventDefault();
@@ -22,18 +22,18 @@ export default function AddForm() {
         Location: formData.get("location"),
       });
 
-      alert("le livre à été crée");
+      alert(body.message);
 
       navigate("/livres/" + body.data._id);
     } catch (error) {
       console.error(error);
-      setPageError(error.message)
+      setPostError(error.message)
     }
   }
 
   return (
     <form onSubmit={submitBook} className="bookForm">
-      {pageError ? <p className="structuredError">{pageError}</p> : null}
+      {postError ? <p className="structuredError">{postError}</p> : null}
       <label htmlFor="title">
         Titre <span>*</span>:{" "}
       </label>

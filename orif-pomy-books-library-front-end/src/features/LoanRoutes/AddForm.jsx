@@ -7,6 +7,8 @@ const loansAPIHandler = new APIHandler("loans");
 
 export default function AddForm() {
   const [book, setBook] = useState();
+  const [getError, setGetError] = useState();
+  const [postError, setPostError] = useState();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -17,6 +19,7 @@ export default function AddForm() {
         setBook(body.data);
       } catch (error) {
         console.error(error);
+        setGetError(error.message);
       }
     }
     getAPI();
@@ -24,39 +27,33 @@ export default function AddForm() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const EndDate = e.target.EndDate.value;
+    const endDate = e.target.endDate.value;
     try {
-      await loansAPIHandler.post({ BookID: book._id, EndDate });
+      await loansAPIHandler.post({ bookId: book._id, endDate });
       alert("Le livre a été emprunté avec succès !");
 
       navigate(`/livres/${book._id}`);
     } catch (error) {
       console.error(error);
+      setPostError(error.message);
     }
   }
 
+  if (getError) return <p className="structuredError">{getError}</p>;
+
   return book ? (
     <>
+      {postError ? <p className="structuredError">{postError}</p> : null}
       <p className="structuredInfo">
         Vous souhaitez emprunter: {book.Title} - {book.Author.join(", ")}
       </p>
-      <p className="structuredInfo">
-        Ce livre est actuellement {book.ActiveLoan ? "emprunté" : "disponible"}.
-      </p>
-      {book.ActiveLoan ? (
-        <p className="structuredInfo">
-          Ce livre devra être rendu pour:{" "}
-          {new Date(book.ActiveLoan.EndDate).toLocaleDateString("fr-FR")}
-        </p>
-      ) : (
-        <form className="borrowForm" onSubmit={handleSubmit}>
-          <label htmlFor="EndDate">
-            Veuillez selectionner quand vous souhaitez rendre le livre:{" "}
-          </label>
-          <input type="date" id="EndDate" name="EndDate" required />
-          <input type="submit" value="Emprunter" />
-        </form>
-      )}
+      <form className="borrowForm" onSubmit={handleSubmit}>
+        <label htmlFor="endDate">
+          Veuillez selectionner quand vous souhaitez rendre le livre:{" "}
+        </label>
+        <input type="date" id="endDate" name="endDate" required />
+        <input type="submit" value="Emprunter" />
+      </form>
     </>
   ) : (
     <p className="loadingBar">Loading...</p>
