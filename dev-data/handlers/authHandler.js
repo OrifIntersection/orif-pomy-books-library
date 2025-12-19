@@ -89,3 +89,37 @@ export async function login(req, res, next) {
   });
 }
 
+export async function modify(req, res, next) {
+
+  const collaboratorId = req.collaboratorId;
+  const { name, email } = req.body;
+
+  if (!collaboratorId) throw new AppError("UNAUTHORIZED");
+  if (!name) throw new AppError("NO_EMAIL");
+  if (!email) throw new AppError("NO_NAME");
+
+  await Collaborator.findByIdAndUpdate(collaboratorId, { Name: name, Email: email });
+
+  res.status(200).json({
+    status: "success",
+    message: `collaborator with id: ${collaboratorId} has been modified successfully.`
+  })
+}
+
+export async function deleteAccount(req, res, next) {
+
+  // deletes the collaborator account
+  // will not handle if any books are loaned by the collaborator
+  // loan docs will point to empty IDs
+
+  const collaboratorId = req.collaboratorId;
+  if (!collaboratorId) throw new AppError("UNAUTHORIZED");
+
+  await Collaborator.findByIdAndDelete(collaboratorId);
+
+  res.status(200).json({
+    status: "success",
+    message: "This collaborator has been deleted"
+  })
+}
+
