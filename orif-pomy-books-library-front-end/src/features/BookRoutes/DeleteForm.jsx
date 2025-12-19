@@ -39,6 +39,9 @@ export default function DeleteForm() {
     try {
       await booksAPIHandler.delete(id);
       alert("le livre à été supprimé");
+
+      window.sessionStorage.removeItem("auth_token");
+
       navigate("/livres");
     } catch (error) {
       console.error(error);
@@ -56,7 +59,7 @@ export default function DeleteForm() {
       </p>
       <input
         type="submit"
-        value="Supprimer Définitivement"
+        value="Supprimer"
         style={{ color: "red", fontWeight: "bold" }}
       />
     </form>

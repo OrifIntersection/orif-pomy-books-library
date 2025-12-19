@@ -21,7 +21,8 @@ import LoanModifyForm from "./features/LoanRoutes/ModifyForm.jsx";
 import UserPage from "./features/UserRoutes/UserPage.jsx";
 import Login from "./features/UserRoutes/Login.jsx";
 import Signup from "./features/UserRoutes/Signup.jsx";
-import UserModifyForm  from "./features/UserRoutes/ModifyForm.jsx";
+import UserModifyForm from "./features/UserRoutes/ModifyForm.jsx";
+import UserDeleteForm from "./features/UserRoutes/DeleteForm.jsx";
 
 import Navbar from "./features/Navbar.jsx";
 
@@ -41,6 +42,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/signup" element={<Signup />} />
           <Route path="/collaborateurs/moi" element={<UserPage />} />
           <Route path="/collaborateurs/moi/modifier" element={<UserModifyForm />} />
+          <Route path="/collaborateurs/moi/supprimer" element={<UserDeleteForm />} />
         </Route>
       </Routes>
     </BrowserRouter>

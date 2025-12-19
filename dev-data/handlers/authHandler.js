@@ -106,7 +106,8 @@ export async function modify(req, res, next) {
     status: "success",
     message: `collaborator with id: ${collaboratorId} has been modified successfully.`,
     auth: { name: name, authToken },     // return new name & jwt on auth for frontend consistency
-  }) 
+  });
+
 }
 
 export async function deleteAccount(req, res, next) {
@@ -123,6 +124,7 @@ export async function deleteAccount(req, res, next) {
   res.status(200).json({
     status: "success",
     message: "This collaborator has been deleted"
-  })
+  });
+
 }
 

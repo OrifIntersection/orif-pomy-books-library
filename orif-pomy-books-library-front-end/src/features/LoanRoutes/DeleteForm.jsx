@@ -52,7 +52,7 @@ export default function DeleteForm() {
         {new Date(loan.EndDate).toLocaleDateString("fr-FR")}
       </p>
       <form onSubmit={handleSubmit}>
-        Je confirme que je souhaite rendre cet emprunt.{" "}
+        Je confirme que j'ai bien rendu cet emprunt.{" "}
         <input type="submit" value="Rendre" />
       </form>
     </>
