@@ -36,7 +36,7 @@ export default function ModifyForm() {
       );
       alert("Votre compte à été modifié avec succès !");
 
-      navigate(`/collaborateurs/moi`);
+      window.location.assign("/collaborateurs/moi"); // reload to update navbar
     } catch (error) {
       console.error(error);
       setPatchError(error.message);

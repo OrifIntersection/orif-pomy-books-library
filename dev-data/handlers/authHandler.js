@@ -100,10 +100,12 @@ export async function modify(req, res, next) {
 
   await Collaborator.findByIdAndUpdate(collaboratorId, { Name: name, Email: email });
 
+  const authToken = jwt.sign({ id: collaboratorId }, process.env.JWTSECRET, { expiresIn: "1d" })
+
   res.status(200).json({
     status: "success",
     message: `collaborator with id: ${collaboratorId} has been modified successfully.`,
-    auth: { name: name },     // return new name on auth for frontend consistency
+    auth: { name: name, authToken },     // return new name & jwt on auth for frontend consistency
   }) 
 }
 
