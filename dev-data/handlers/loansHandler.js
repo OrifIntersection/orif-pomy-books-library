@@ -70,7 +70,7 @@ export async function patchLoan(req, res, next) {
     .populate("Book")
     .populate("Collaborator");
   if (!loanDoc) throw new AppError("UNFOUND_LOAN_ID");
-  if (id !== loanDoc.Collaborator._id) throw new AppError("CANNOT_MODIFY_OTHER_LOAN")
+  if (collaboratorId !== loanDoc.Collaborator._id) throw new AppError("CANNOT_MODIFY_OTHER_LOAN")
   if (loanDoc.Returned === true) throw new AppError("CANNOT_RETURN_RETURNED_LOAN")
 
   loanDoc.EndDate = new Date(endDate);
