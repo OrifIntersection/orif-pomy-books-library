@@ -102,8 +102,9 @@ export async function modify(req, res, next) {
 
   res.status(200).json({
     status: "success",
-    message: `collaborator with id: ${collaboratorId} has been modified successfully.`
-  })
+    message: `collaborator with id: ${collaboratorId} has been modified successfully.`,
+    auth: { name: name },     // return new name on auth for frontend consistency
+  }) 
 }
 
 export async function deleteAccount(req, res, next) {

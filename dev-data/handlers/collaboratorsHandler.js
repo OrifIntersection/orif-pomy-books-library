@@ -16,22 +16,22 @@ export async function getCollaborator(req, res, next) {
 
   // 
   //  Logic should ideally check if the requester is the same as the requested collaborator
-  //  Render other user profile page or own profile page accordingly on front end...
+  //  Render other collaborator profile page or own profile page accordingly on front end...
   //
 
-  //  If there is no :id param, we assume the user wants their own data
+  //  If there is no :id param, we assume the collaborator wants their own data
   //  (the collaborators route "/me" expects no params)
   
   let collaboratorId = req.params.id || req.collaboratorId;
 
-  const user = await Collaborator.findById(collaboratorId);
+  const collaborator = await Collaborator.findById(collaboratorId);
 
-  if (!user) throw new AppError("UNFOUND_COLLAB_ID");
+  if (!collaborator) throw new AppError("UNFOUND_COLLAB_ID");
 
   res.status(200).json({
     status: "success",
-    message: `Details for user with ID: ${user._id} have been sent successfully`,
-    data: user,
+    message: `Details for collaborator with ID: ${collaborator._id} have been sent successfully`,
+    data: collaborator,
   });
 }
 

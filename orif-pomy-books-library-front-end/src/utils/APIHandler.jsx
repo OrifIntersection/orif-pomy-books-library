@@ -30,9 +30,13 @@ export default class APIHandler {
 
   async fetchAPI(options = {}) {
     try {
-      if (window.sessionStorage.getItem("auth_token")) this.authId = window.sessionStorage.getItem("auth_token");
+      if (window.sessionStorage.getItem("auth_token"))
+        this.authId = window.sessionStorage.getItem("auth_token");
 
-      options.headers = { "Content-Type": "application/json", "auth_token": this.authId || "" };
+      options.headers = {
+        "Content-Type": "application/json",
+        auth_token: this.authId || "",
+      };
       const res = await fetch(this.url, options);
 
       if (res.status === 500)
@@ -45,9 +49,9 @@ export default class APIHandler {
       // session storage management only runs when body contains an auth field
       // we need the name to display on Navbar
 
-      if (body.auth) { 
-        window.sessionStorage.setItem("auth_token", body.auth.authToken) 
-        window.sessionStorage.setItem("name", body.auth.name)
+      if (body.auth) {
+        window.sessionStorage.setItem("auth_token", body.auth.authToken);
+        window.sessionStorage.setItem("name", body.auth.name);
       }
 
       console.log(`@${options.method}@ from ${this.url}: ${body.status}`);
@@ -64,9 +68,10 @@ export default class APIHandler {
   }
 
   get(params, id) {
-    this.resetUrl();  
+    this.resetUrl();
 
-    if (!(params instanceof URLSearchParams)) params = new URLSearchParams(params);
+    if (!(params instanceof URLSearchParams))
+      params = new URLSearchParams(params);
 
     if (id) this.url = new URL(id, `${this.url}/`);
     if (params.size > 0) this.url = new URL(`${this.url}?${params.toString()}`);
@@ -77,8 +82,6 @@ export default class APIHandler {
   post(body) {
     this.resetUrl();
 
-    if (!body) throw new Error("API post requires a body");
-
     return this.fetchAPI({
       method: "POST",
       body: JSON.stringify(body),
@@ -88,10 +91,7 @@ export default class APIHandler {
   patch(body, id) {
     this.resetUrl();
 
-    if (!id) throw new Error("API patch requires an id");
-    if (!body) throw new Error("API patch requires a body");
-
-    this.url = new URL(id, `${this.url}/`);
+    if (id) this.url = new URL(id, `${this.url}/`);
 
     return this.fetchAPI({
       method: "PATCH",
@@ -102,9 +102,7 @@ export default class APIHandler {
   delete(id) {
     this.resetUrl();
 
-    if (!id) throw new Error("API delete requires an id");
-
-    this.url = new URL(id, `${this.url}/`);
+    if (id) this.url = new URL(id, `${this.url}/`);
 
     return this.fetchAPI({ method: "DELETE" });
   }
