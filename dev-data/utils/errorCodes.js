@@ -34,6 +34,10 @@ export const ERROR_CODES = {
     message: "Aucun identificateur de livre à été fourni.",
     statusCode: 400,
   },
+  NO_LOAN_ID: {
+    message: "Aucun identificateur d'emprunt à été fourni.",
+    statusCode: 400,
+  },
   NO_TITLE: {
     message:
       "Des données incomplètes ont été fournies, il faut obligatoirement un titre.",
@@ -96,15 +100,23 @@ export const ERROR_CODES = {
     statusCode: 403,
   },
   CANNOT_DELETE_DELETED_LOAN: {
-    message: "Il est impossible de rendre un emprunt qui à déjà été rendu.",
+    message: "Il est impossible de rendre un emprunt qui a déjà été rendu.",
     statusCode: 403,
   },
   CANNOT_DELETE_DELETED_BOOK:{
-    message: "Il est impossible de supprimer un livre qui à déjà été supprimé.",
+    message: "Il est impossible de supprimer un livre qui a déjà été supprimé.",
     statusCode: 403,
   }, 
   CANNOT_RETURN_OTHER_LOAN: {
-    message: "Vous ne pouvez pas rendre un emprunt qui n'est pas a votre.",
+    message: "Vous ne pouvez pas rendre un emprunt qui n'est pas la votre.",
+    statusCode: 403,
+  },
+  CANNOT_MODIFY_OTHER_LOAN: {
+    message: "Vous ne pouvez pas modifier un emprunt qui n'est pas la votre.",
+    statusCode: 403,
+  },
+  CANNOT_MODIFY_RETURNED_LOAN: {
+    message: "Vous ne pouvez pas modifier un emprunt qui a déjà été rendu",
     statusCode: 403,
   },
 

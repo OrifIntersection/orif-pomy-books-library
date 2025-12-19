@@ -4,6 +4,7 @@ import {
     getLoan,
     postLoan,
     deleteLoan,
+    patchLoan,
 } from "../handlers/loansHandler.js";
 
 import { attachCollaborator, requireCollaborator } from "../handlers/authHandler.js";
@@ -17,6 +18,7 @@ router
 
 router.route("/:id") //  -> '/api/v1/loans/:id'
     .get(attachCollaborator, requireCollaborator, getLoan)
+    .patch(attachCollaborator, requireCollaborator, patchLoan)
     .delete(attachCollaborator, requireCollaborator, deleteLoan);
 
 export default router;

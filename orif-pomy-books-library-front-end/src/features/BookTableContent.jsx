@@ -1,83 +1,16 @@
 import { useNavigate } from "react-router";
+import SortButton from "./SortButton.jsx";
 
-function BookTableHead({ searchParams, setSearchParams, books }) {
-  function sortBooks(e) {
-    //
-    // function to set sort queries to the URL whenever a sort button is clicked
-    // this will automatically query the API via useEffect
-    //
-
-    const sortBy = e.target.name;
-    let currentParams = Object.fromEntries([...searchParams]);
-
-    if (currentParams.sortQuery === sortBy) {
-      currentParams.sortQuery = `-${sortBy}`;
-      setSearchParams(currentParams);
-      return;
-    }
-
-    currentParams.sortQuery = sortBy;
-    setSearchParams(currentParams);
-  }
-
-  function sortIcon(column) {
-    //
-    //  Render icon dynamically based on current sort state
-    //  If only one book is available, no sort icon is shown
-    //
-
-    if (books.length === 1) return;
-
-    if (!searchParams) return;
-
-    if (searchParams.get("sortQuery") === column) {
-      return "↑";
-    } else if (searchParams.get("sortQuery") === `-${column}`) {
-      return "↓";
-    }
-
-    return "⇅";
-  }
-
+function BookTableHead({ searchParams, setSearchParams, columnName }) {
   return (
-    <>
-      <th>
-        Titre
-        <button className="sortButton" name="Title" onClick={sortBooks}>
-          {sortIcon("Title")}
-        </button>
-      </th>
-      <th>
-        Auteur
-        <button className="sortButton" name="Author" onClick={sortBooks}>
-          {sortIcon("Author")}
-        </button>
-      </th>
-      <th>
-        Genre
-        <button className="sortButton" name="Genre" onClick={sortBooks}>
-          {sortIcon("Genre")}
-        </button>
-      </th>
-      <th>
-        Sujet
-        <button className="sortButton" name="Subject" onClick={sortBooks}>
-          {sortIcon("Subject")}
-        </button>
-      </th>
-      <th>
-        Emplacement
-        <button className="sortButton" name="Location" onClick={sortBooks}>
-          {sortIcon("Location")}
-        </button>
-      </th>
-      <th>
-        Disponilibité
-        <button className="sortButton" name="ActiveLoan" onClick={sortBooks}>
-          {sortIcon("ActiveLoan")}
-        </button>
-      </th>
-    </>
+    <th>
+      {Object.keys(columnName)[0]}
+      <SortButton
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+        columnName={Object.values(columnName)[0]}
+      />
+    </th>
   );
 }
 
@@ -88,7 +21,6 @@ function BookTableBody({ book }) {
   //
 
   const navigate = useNavigate();
-
 
   return (
     <tr
@@ -102,11 +34,11 @@ function BookTableBody({ book }) {
       <td>{book.Location}</td>
       {book.ActiveLoan ? (
         <td style={{ color: "red" }}>
-          Emprunté - Retour le {" "}
+          Emprunté - Retour le{" "}
           {new Date(book.ActiveLoan.EndDate).toLocaleDateString("fr-FR")}{" "}
         </td>
       ) : (
-        <td>Disponible</td>
+        <td style={{ color: "green" }}>Disponible</td>
       )}
     </tr>
   );
@@ -117,30 +49,40 @@ export default function BookTableContent({
   searchParams,
   setSearchParams,
 }) {
-    
   //
   // Renders BookTableHead and BookTableBody
   // (based on the number of books found)
   //
 
-  return (
+  const tableColumnNames = [
+    { Titre: "Title" },
+    { Auteur: "Author" },
+    { Genre: "Genre" },
+    { Sujet: "Subject" },
+    { Emplacement: "Location" },
+    { Disponibilité: "ActiveLoan" },
+  ];
 
-      <table className="bookTable">
-        <thead>
-          <tr>
+  return (
+    <table className="bookTable">
+      <thead>
+        <tr>
+          {tableColumnNames.map((columnName) => (
             <BookTableHead
+              key={Object.keys(columnName)[0]}
               searchParams={searchParams}
               setSearchParams={setSearchParams}
-              books={books}
+              columnName={columnName}
             />
-          </tr>
-        </thead>
-        <tbody>
-          {books.map((book) => (
-            <BookTableBody key={book._id} book={book} />
           ))}
-        </tbody>
-      </table>
+        </tr>
+      </thead>
 
+      <tbody>
+        {books.map((book) => (
+          <BookTableBody key={book._id} book={book} />
+        ))}
+      </tbody>
+    </table>
   );
 }

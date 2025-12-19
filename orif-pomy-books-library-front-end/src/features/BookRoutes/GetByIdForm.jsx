@@ -1,7 +1,7 @@
 import { useParams } from "react-router";
 import { useState, useEffect } from "react";
 import BookTableContent from "../BookTableContent.jsx";
-import SingleBookOptions from "../SingleBookOptions.jsx";
+import BookOptions from "../BookOptions.jsx";
 
 import APIHandler from "../../utils/APIHandler.jsx";
 
@@ -29,16 +29,14 @@ export default function GetByIdForm() {
     getAPI();
   }, [id]);
 
-  //
-  // This search form will only show when multiple books are available
-  // if a single book is found, it will no longer show (see BookTable conditional return)
-  //
-
   if (pageError) return <p className="structuredError">{pageError}</p>;
+
+  // BookOptions expects a  book object
+  // BookTableContent expects an array of books (an array of length 1 is fine)
 
   return book ? (
     <div className="structuredInfo">
-      <SingleBookOptions book={book} />
+      <BookOptions book={book[0]} />
       <BookTableContent books={book} />
     </div>
   ) : (

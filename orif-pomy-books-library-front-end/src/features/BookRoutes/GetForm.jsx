@@ -1,4 +1,4 @@
-import { useSearchParams, useNavigate } from "react-router";
+import { useSearchParams } from "react-router";
 import { useState, useEffect } from "react";
 import BookTableContent from "../BookTableContent.jsx";
 
@@ -10,11 +10,6 @@ export default function GetForm() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [books, setBooks] = useState();
   const [pageError, setPageError] = useState();
-
-  //
-  // function to set search queries to the URL whenever the SearchBookTable form is submitted
-  // this will automatically query the API via useEffect
-  //
 
   useEffect(() => {
     async function getAPI() {
@@ -34,6 +29,12 @@ export default function GetForm() {
   }, [setSearchParams]);
 
   function submitSearch(e) {
+    //
+    // function to set search queries to the URL whenever the SearchBookTable form is submitted
+    // this will automatically query the API via useEffect
+    // setSearchParams & searchParams are used by BookTableContent to handle the column sort buttons!
+    //
+
     e.preventDefault();
 
     const formData = new FormData(e.target);
@@ -43,11 +44,6 @@ export default function GetForm() {
 
     setSearchParams({ search: search, searchType: searchType });
   }
-
-  //
-  // This search form will only show when multiple books are available
-  // if a single book is found, it will no longer show (see BookTable conditional return)
-  //
 
   return (
     <div className="structuredInfo">

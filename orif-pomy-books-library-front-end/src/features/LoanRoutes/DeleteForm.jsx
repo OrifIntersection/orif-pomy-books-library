@@ -48,7 +48,7 @@ export default function DeleteForm() {
         {loan.Book.Author.join(", ")}
       </p>
       <p className="structuredInfo">
-        Ce emprunt devra être rendu pour:{" "}
+        Cet emprunt devra être rendu pour:{" "}
         {new Date(loan.EndDate).toLocaleDateString("fr-FR")}
       </p>
       <form onSubmit={handleSubmit}>

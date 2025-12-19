@@ -37,25 +37,17 @@ export async function getLoan(req, res, next) {
 
   const { id } = req.params;
 
+  if (!id) throw new AppError("NO_LOAN_ID");
+
   const loanDoc = await Loan.findById(id)
     .populate("Book")
     .populate("Collaborator");
   if (!loanDoc) throw new AppError("UNFOUND_LOAN_ID");
 
-  // Convert to object to add IsUserLoan property
-  let loan = loanDoc.toObject({ virtuals: true, getters: true });
-
-  // Mark if the loan belongs to the logged in user
-  if (
-    req.collaboratorId &&
-    loanDoc.Collaborator._id.toString() === req.collaboratorId.toString()
-  )
-    loan.IsUserLoan = true;
-
   return res.status(200).json({
     status: "success",
     message: `Loan with ID: ${id} retrieved successfully.`,
-    data: loan,
+    data: loanDoc,
   });
 }
 
@@ -64,6 +56,31 @@ export async function patchLoan(req, res, next) {
   // Update EndDate of a loan
   // Only EndDate can be modified
   //
+
+  const { id } = req.params;
+  const { endDate } = req.body;
+  const collaboratorId = req.collaboratorId;
+
+  if (!id) throw new AppError("NO_LOAN_ID");
+  if (!collaboratorId) throw new AppError("UNAUTHORIZED");
+  if (!endDate) throw new AppError("NO_DATE");
+  if (new Date(endDate) < Date.now()) throw new AppError("INVALID_DATE");
+
+  const loanDoc = await Loan.findById(id)
+    .populate("Book")
+    .populate("Collaborator");
+  if (!loanDoc) throw new AppError("UNFOUND_LOAN_ID");
+  if (id !== loanDoc.Collaborator._id) throw new AppError("CANNOT_MODIFY_OTHER_LOAN")
+  if (loanDoc.Returned === true) throw new AppError("CANNOT_RETURN_RETURNED_LOAN")
+
+  loanDoc.EndDate = new Date(endDate);
+  await loanDoc.save();
+  
+  return res.status(201).json({
+    status: "success",
+    message: "Loan updated successfully.",
+  });
+
 }
 
 export async function postLoan(req, res, next) {
@@ -78,15 +95,15 @@ export async function postLoan(req, res, next) {
   const collaboratorId = req.collaboratorId;
 
   if (!bookId) throw new AppError("NO_BOOK_ID");
+  if (!endDate) throw new AppError("NO_DATE");
   if (!collaboratorId) throw new AppError("UNAUTHORIZED");
+  if (new Date(endDate) < Date.now()) throw new AppError("INVALID_DATE");
 
   // logic to check if the book is already on loan
   const existingLoan = await Loan.exists({ Book: bookId, Returned: false });
   if (existingLoan) throw new AppError("CANNOT_LOAN_WHILE_LOANED");
 
   let loan = new Loan({ Book: bookId, Collaborator: collaboratorId });
-  if (!endDate) throw new AppError("NO_DATE");
-  if (new Date(endDate) < Date.now()) throw new AppError("INVALID_DATE");
 
   loan.EndDate = new Date(endDate);
   const newLoan = await loan.save();
