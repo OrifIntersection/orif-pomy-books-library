@@ -26,6 +26,10 @@ export const ERROR_CODES = {
   },
 
   // 400 BAD REQUEST
+  MALFORMED_ID: {
+    message: "L'identificateur fourni pour cette ressource est invalide. Veuillez vérifier les données.",
+    statusCode: 400,
+  },
   NO_BOOK_ID: {
     message: "Aucun identificateur de livre à été fourni.",
     statusCode: 400,

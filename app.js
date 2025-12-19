@@ -35,7 +35,7 @@ app.use((err, req, res, next) => {
   // use to handle mongoose/express operational errors before reaching the final error handler
   //
 
-  if (err.name === "CastError") return next(new AppError(`${err.value} is not what ${err.path} expects as a value: ${err.kind}`, 400));
+  if (err.name === "CastError") return next(new AppError("MALFORMED_ID"));
   if (err.name === "ValidationError") {
     const messages = Object.values(err.errors).map(el => el.message);
     return next(new AppError(`Invalid input data. ${messages.join(". ")}`, 400));
