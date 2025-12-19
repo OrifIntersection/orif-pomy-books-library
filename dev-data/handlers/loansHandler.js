@@ -70,7 +70,7 @@ export async function patchLoan(req, res, next) {
     .populate("Book")
     .populate("Collaborator");
   if (!loanDoc) throw new AppError("UNFOUND_LOAN_ID");
-  if (collaboratorId !== loanDoc.Collaborator._id) throw new AppError("CANNOT_MODIFY_OTHER_LOAN")
+  if (loanDoc.Collaborator._id.toString() !== collaboratorId.toString()) throw new AppError("CANNOT_MODIFY_OTHER_LOAN")
   if (loanDoc.Returned === true) throw new AppError("CANNOT_RETURN_RETURNED_LOAN")
 
   loanDoc.EndDate = new Date(endDate);
@@ -122,6 +122,10 @@ export async function deleteLoan(req, res, next) {
   //
 
   const { id } = req.params;
+  const collaboratorId = req.collaboratorId;
+
+  if (!id) throw new AppError("NO_LOAN_ID");
+  if (!collaboratorId) throw new AppError("UNAUTHORIZED");
 
   const loan = await Loan.findById(id);
 
