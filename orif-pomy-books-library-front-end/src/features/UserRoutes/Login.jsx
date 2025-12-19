@@ -5,8 +5,9 @@ import NavButton from "../NavButton.jsx";
 const collaboratorsAPIHandler = new APIHandler("collaborators/login");
 
 export default function Login() {
+
   //
-  //  On successful login, we store the user's name and JWT token in sessionStorage
+  //  On successful login, the API handler will automatically sore the JWT & user name in sessionStorage
   //  User name is used for display purposes
   //  JWT token is used handled in APIHandler for authorization via headers
   //

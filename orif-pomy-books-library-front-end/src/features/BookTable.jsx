@@ -20,36 +20,36 @@ export default function BookTable() {
   // defaults to return all books
   //
 
-  useEffect(() => {
-    async function getAPI() {
-      try {
-        const body = await booksAPIHandler.get(searchParams, id);
-        if (Array.isArray(body.data)) setBooks(body.data);
-        else setBooks([body.data]);
-        setPageError(null);
-      } catch (error) {
-        console.error(error);
-        setPageError(error.message);
+    useEffect(() => {
+      async function getAPI() {
+        try {
+          const body = await booksAPIHandler.get(searchParams, id);
+          if (Array.isArray(body.data)) setBooks(body.data);
+          else setBooks([body.data]);
+
+          setPageError(null);
+        } catch (error) {
+          console.error(error);
+          setPageError(error.message);
+
+          setBooks(null);
+        }
       }
-    }
-    getAPI();
-  }, [id, setSearchParams]);
+      getAPI();
+    }, [id, setSearchParams]);
 
-  //
-  // need to fix for if an ID has correct syntax but doesn't exist
-  // returns an emtpy object on setBooks => [{}]
-  //
 
-  if (books && books.length === 1) return (
-    <div className="structuredInfo">
-      <SingleBookOptions book={books[0]} />
-      <BookTableContent
+  if (books && books.length === 1)
+    return (
+      <div className="structuredInfo">
+        <SingleBookOptions book={books[0]} />
+        <BookTableContent
           books={books}
           searchParams={searchParams}
           setSearchParams={setSearchParams}
-      />
-    </div>
-  )
+        />
+      </div>
+    );
 
   if (books)
     return (
@@ -67,6 +67,9 @@ export default function BookTable() {
       </div>
     );
 
-  return <p className="loadingBar">Loading...</p>;
+  return pageError ? (
+    <p className="structuredError">{pageError}</p>
+  ) : (
+    <p className="loadingBar">Loading...</p>
+  );
 }
-

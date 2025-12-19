@@ -89,6 +89,7 @@ function BookTableBody({ book }) {
 
   const navigate = useNavigate();
 
+
   return (
     <tr
       onClick={() => navigate(`/livres/${book._id}`)}
