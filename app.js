@@ -10,7 +10,7 @@ import AppError from "./dev-data/utils/AppError.js";
 // global middleware
 const app = express();
 
-app.use(cors({ origin: "https://ideal-trout-5g7x9xxvxg462p-5173.app.github.dev" }));
+app.use(cors({ origin: "http://localhost:5173" }));
 app.use(express.json());
 
 
