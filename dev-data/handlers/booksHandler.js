@@ -203,9 +203,9 @@ export async function getDistinctFields(req, res, next) {
 
   // will return each distinct/unique field on /api/v1/books/distinct
 
-  const uniqueGenres = Book.distinct("Genre")
-  const uniqueSubjects = Book.distinct("Subject");
-  const uniqueLocations = Book.distinct("Location");
+  const uniqueGenres = await Book.distinct("Genre")
+  const uniqueSubjects = await Book.distinct("Subject");
+  const uniqueLocations = await Book.distinct("Location");
 
   const resData = { Genres: uniqueGenres, Subjects: uniqueSubjects, Locations: uniqueLocations };
 
