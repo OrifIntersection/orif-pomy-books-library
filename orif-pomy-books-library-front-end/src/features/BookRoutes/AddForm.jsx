@@ -5,41 +5,38 @@ import { useState, useEffect } from "react";
 const booksAPIHandler = new APIHandler("books");
 const distinctBooksAPIHandler = new APIHandler("books/distinct");
 
-function Option({ value }) {
-  return <option>{value}</option>
-}
+function SelectWithOther({ name, values }) {
+  const [isOther, setIsOther] = useState(false);
 
-function SelectField({ id, values, setSelection }) {
   return (
     <>
-      <label htmlFor={id}>
-        {id} <span style={{ color: "red" }}>*</span>:{" "}
+      <label htmlFor={name}>
+        {name} <span style={{ color: "red" }}>*</span>:{" "}
       </label>
-      <select name={id} onChange={(e) => setSelection(e.target.value)} required>
+      <select
+        name={name}
+        onChange={(e) => setIsOther(e.target.value === "-- Autre --")}
+        required
+      >
         {values.map((value) => (
-          <Option id={id} value={value}/>
+          <option key={value}>{value}</option>
         ))}
       </select>
+
+      {isOther && <input type="text" name={`custom${name}`} />}
     </>
   );
 }
 
 export default function AddForm() {
   const navigate = useNavigate();
+
   const [getError, setGetError] = useState();
   const [postError, setPostError] = useState();
 
   const [distinctGenres, setDistinctGenres] = useState();
   const [distinctSubjects, setDistinctSubjects] = useState();
   const [distinctLocations, setDistinctLocations] = useState();
-
-  const [genreSelection, setGenreSelection] = useState();
-  const [subjectSelection, setSubjectSelection] = useState();
-  const [locationSelection, setLocationSelection] = useState();
-
-  const [customGenre, setCustomGenre] = useState()
-  const [customSubject, setCustomSubject] = useState()
-  const [customLocation, setCustomLocation] = useState()
 
   useEffect(() => {
     async function getAPI() {
@@ -66,15 +63,19 @@ export default function AddForm() {
 
     const formData = new FormData(e.target);
 
-    const Genre = formData.get("Genre") === "-- Autre --" ? customGenre : formData.get("Genre");
-    const Subject = formData.get("Subject") === "-- Autre --" ? customSubject : formData.get("Subject");
-    const Location = formData.get("Location") === "-- Autre --" ? customLocation : formData.get("Location");
+    function getValue(name) {
+      return formData.get(name) === "-- Autre --"
+        ? formData.get(`custom${name}`)
+        : formData.get(name);
+    }
 
     try {
       const body = await booksAPIHandler.post({
         Title: formData.get("Title"),
         Author: formData.get("Author").split(", "),
-        Genre, Subject, Location
+        Genre: getValue("Genre"),
+        Subject: getValue("Subject"),
+        Location: getValue("Location"),
       });
 
       alert(body.message);
@@ -88,28 +89,25 @@ export default function AddForm() {
 
   if (getError) return <p className="structuredError">{getError}</p>;
 
-  return distinctLocations && distinctSubjects && distinctLocations ? (
+  return distinctGenres && distinctSubjects && distinctLocations ? (
     <form onSubmit={submitBook} className="bookForm">
       {postError ? <p className="structuredError">{postError}</p> : null}
-      <label htmlFor="title">
+      <label htmlFor="Title">
         Titre <span style={{ color: "red" }}>*</span>:{" "}
       </label>
-      <input type="text" id="title" name="Title" required />
-      <label htmlFor="author">
+      <input type="text" name="Title" required />
+      <label htmlFor="Author">
         Auteur <span style={{ color: "red" }}>*</span>:{" "}
       </label>
-      <input type="text" id="author" name="Author" required />
+      <input type="text" name="Author" required />
 
-      <SelectField key="genre" values={distinctGenres} id="Genre" setSelection={setGenreSelection}/>
-      {genreSelection === "-- Autre --" && <input type="text" id="Genre" name="Genre" onChange={(e) => setCustomGenre(e.target.value)}/>}
-
-      <SelectField key="subject" values={distinctSubjects} id="Subject" setSelection={setSubjectSelection}/>
-      {subjectSelection === "-- Autre --" && <input type="text" id="Genre" name="Genre" onChange={(e) => setCustomSubject(e.target.value)}/>}
-
-      <SelectField key="location" values={distinctLocations} id="Location" setSelection={setLocationSelection}/>
-      {locationSelection === "-- Autre --" && <input type="text" id="Genre" name="Genre" onChange={(e) => setCustomLocation(e.target.value)}/>}
+      <SelectWithOther name="Genre" values={distinctGenres} />
+      <SelectWithOther name="Subject" values={distinctSubjects} />
+      <SelectWithOther name="Location" values={distinctLocations} />
 
       <input type="submit" value="Envoyer" />
     </form>
-  ) : <p className="loadingBar">Loading...</p>;
+  ) : (
+    <p className="loadingBar">Loading...</p>
+  );
 }
