@@ -1,12 +1,30 @@
 import APIHandler from "../../utils/APIHandler";
 import { useNavigate } from "react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const booksAPIHandler = new APIHandler("books");
+const distinctBooksAPIHandler = new APIHandler("books/distinct")
 
 export default function AddForm() {
   const navigate = useNavigate();
+  const [getError, setGetError] = useState();
   const [postError, setPostError] = useState();
+  const [distinctFields, setDistinctFields] = useState();
+
+  useEffect(() => {
+    async function getAPI() {
+      try {
+      const body = await distinctBooksAPIHandler.get();
+      setDistinctFields(body.data);
+      } catch (error) {
+      console.error(error);
+      setGetError(error.message);
+      }
+    }
+    getAPI();
+  }, [])
+
+  console.log(distinctFields);
 
   async function submitBook(e) {
     e.preventDefault();
@@ -30,6 +48,8 @@ export default function AddForm() {
       setPostError(error.message)
     }
   }
+
+  if (getError) return <p className="structuredError">{getError}</p>
 
   return (
     <form onSubmit={submitBook} className="bookForm">

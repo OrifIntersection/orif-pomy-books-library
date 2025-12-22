@@ -197,3 +197,21 @@ export async function deleteBook(req, res, next) {
     message: `Book has been deleted`,
   });
 }
+
+
+export async function getDistinctFields(req, res, next) {
+
+  // will return each distinct/unique field on /api/v1/books/distinct
+
+  const uniqueGenres = Book.distinct("Genre")
+  const uniqueSubjects = Book.distinct("Subject");
+  const uniqueLocations = Book.distinct("Location");
+
+  const resData = { Genres: uniqueGenres, Subjects: uniqueSubjects, Locations: uniqueLocations };
+
+  res.status(200).json({
+    status: "success",
+    message: "unique identifiers returned",
+    data: resData,
+  });
+}

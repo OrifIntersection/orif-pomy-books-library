@@ -5,11 +5,14 @@ import {
   postBook,
   patchBook,
   deleteBook,
+  getDistinctFields
 } from "../handlers/booksHandler.js";
 import { attachCollaborator, requireCollaborator } from "../handlers/authHandler.js"
 
 
 const router = express.Router();
+
+router.route("/distinct").get(getDistinctFields)
 
 router
   .route("/") //  -> '/api/v1/books/'
