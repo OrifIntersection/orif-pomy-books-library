@@ -30,6 +30,42 @@ export const ERROR_CODES = {
     message: "L'identificateur fourni pour cette ressource est invalide. Veuillez vérifier les données.",
     statusCode: 400,
   },
+  INVALID_EMAIL: {
+    message: "L'email fourni est invalide, veuillez vérifier votre saisi.",
+    statusCode: 400,
+  },
+  INVALID_NAME: {
+    message: "Le nom d'utilisateur fourni est invalide, veuillez vérifier votre saisi.",
+    statusCode: 400,
+  },
+  INVALID_SEARCH: {
+    message: "Le critère de recherche fourni est invalide, veuillez vérifier votre saisi.",
+    statusCode: 400,
+  },
+  INVALID_SORT: {
+    message: "Le critère de tri fourni est invalide, veuillez vérifier votre saisi.",
+    statusCode: 400,
+  },
+  INVALID_TITLE: {
+    message: "Le titre de livre fourni est invalide, veuillez vérifier votre saisi.",
+    statusCode: 400,
+  },
+  INVALID_AUTHOR: {
+    message: "L'auteur de livre fourni est invalide, veuillez vérifier votre saisi.",
+    statusCode: 400,
+  },
+  INVALID_GENRE: {
+    message: "Le genre de livre fourni est invalide, veuillez vérifier votre saisi.",
+    statusCode: 400,
+  },
+  INVALID_SUBJECT: {
+    message: "Le sujet de livre fourni est invalide, veuillez vérifier votre saisi.",
+    statusCode: 400,
+  },
+  INVALID_LOCATION: {
+    message: "L'emplacement de livre fourni est invalide, veuillez vérifier votre saisi.",
+    statusCode: 400,
+  },
   NO_BOOK_ID: {
     message: "Aucun identificateur de livre à été fourni.",
     statusCode: 400,

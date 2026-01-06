@@ -1,13 +1,17 @@
 import { Book } from "../models/bookModel.js";
 import AppError from "../utils/AppError.js";
+import StringAPI from "../utils/StringAPI.js";
 
 export async function getAllBooks(req, res, next) {
-
   //
   //  Search functionality, if no query params, return all books
   //
 
   const { search, searchType, sortQuery } = req.query;
+
+  if (typeof search !== "string") throw new AppError("INVALID_SEARCH");
+  if (typeof searchType !== "string") throw new AppError("INVALID_SEARCH");
+  if (typeof sortQuery !== "string") throw new AppError("INVALID_SORT");
 
   // only return books that are not deleted
   let booksQuery = Book.find().where("Deleted").equals(false);
@@ -22,7 +26,7 @@ export async function getAllBooks(req, res, next) {
       { Author: new RegExp(search, "i") },
       { Genre: new RegExp(search, "i") },
       { Subject: new RegExp(search, "i") },
-      { Location: new RegExp(search, "i") }
+      { Location: new RegExp(search, "i") },
     ]);
   }
 
@@ -38,22 +42,26 @@ export async function getAllBooks(req, res, next) {
 
   if (sortQuery === "ActiveLoan")
     books.sort((a, b) => {
-      if (a.ActiveLoan && !b.ActiveLoan) return -1;             // if a has loan and b doesn't, a comes first
-      else if (!a.ActiveLoan && b.ActiveLoan) return 1;         // if a has no loan and a does, b comes first
-      else if (a.ActiveLoan && b.ActiveLoan) {                  // if both have loans, sort by EndDate
+      if (a.ActiveLoan && !b.ActiveLoan)
+        return -1; // if a has loan and b doesn't, a comes first
+      else if (!a.ActiveLoan && b.ActiveLoan)
+        return 1; // if a has no loan and a does, b comes first
+      else if (a.ActiveLoan && b.ActiveLoan) {
+        // if both have loans, sort by EndDate
         return new Date(a.ActiveLoan.EndDate) - new Date(b.ActiveLoan.EndDate);
-      }
-      else return 0;
+      } else return 0;
     });
 
   if (sortQuery === "-ActiveLoan")
     books.sort((a, b) => {
-      if (a.ActiveLoan && !b.ActiveLoan) return 1;              // if a has loan and b doesn't, b comes first
-      else if (!a.ActiveLoan && b.ActiveLoan) return -1;        // if a has no loan and a does, a comes first
-      else if (a.ActiveLoan && b.ActiveLoan) {                  // if both have loans, sort by EndDate
+      if (a.ActiveLoan && !b.ActiveLoan)
+        return 1; // if a has loan and b doesn't, b comes first
+      else if (!a.ActiveLoan && b.ActiveLoan)
+        return -1; // if a has no loan and a does, a comes first
+      else if (a.ActiveLoan && b.ActiveLoan) {
+        // if both have loans, sort by EndDate
         return new Date(a.ActiveLoan.EndDate) - new Date(b.ActiveLoan.EndDate);
-      }
-      else return 0;
+      } else return 0;
     });
 
   // --------------------------------------------------------------------------------------- //
@@ -87,10 +95,13 @@ export async function getBook(req, res, next) {
   if (bookDoc.Deleted) throw new AppError("DELETED");
 
   // Convert to object to add HasUserLoan virtual
-  let book = bookDoc.toObject({ virtuals: true, getters: true })
+  let book = bookDoc.toObject({ virtuals: true, getters: true });
 
   // Mark if the active loan belongs to the logged in user
-  if (userId && bookDoc.ActiveLoan?.Collaborator.toString() === userId.toString())
+  if (
+    userId &&
+    bookDoc.ActiveLoan?.Collaborator.toString() === userId.toString()
+  )
     book.HasUserLoan = true;
 
   return res.status(200).json({
@@ -107,7 +118,10 @@ export async function postBook(req, res, next) {
   // The collaborator creating the book will be added to Book.ModifiedBy
   //
 
-  const { Title, Author, Genre, Subject, Location } = req.body;
+  let { Title, Author, Genre, Subject, Location } = req.body;
+  const collaboratorId = req.collaboratorId;
+
+  if (!collaboratorId) throw new AppError("UNAUTHORIZED");
 
   if (!Title) throw new AppError("NO_TITLE");
   if (!Author) throw new AppError("NO_AUTHOR");
@@ -115,22 +129,25 @@ export async function postBook(req, res, next) {
   if (!Subject) throw new AppError("NO_SUBJECT");
   if (!Location) throw new AppError("NO_LOCATION");
 
-  const newBookData = { Title, Author, Genre, Subject, Location };
-  const collaboratorId = req.collaboratorId;
-
-  if (!collaboratorId) throw new AppError("UNAUTHORIZED");
+  const newBookData = {
+    Title: StringAPI.Format(Title),
+    Author: StringAPI.Format(Author),
+    Genre: StringAPI.Format(Genre),
+    Subject: StringAPI.Format(Subject),
+    Location: StringAPI.Format(Location),
+  };
 
   newBookData.ModifiedBy = collaboratorId;
+
   const createdBook = await Book.create(newBookData);
 
-  res.status(201).json({  
+  res.status(201).json({
     status: "success",
     data: createdBook,
   });
 }
 
 export async function patchBook(req, res, next) {
-
   //
   // Find book by ID, then update
   // Only Title, Author, Genre, Subject, Location can be modified
@@ -140,6 +157,12 @@ export async function patchBook(req, res, next) {
   //
 
   const { Title, Author, Genre, Subject, Location } = req.body;
+  const bookId = req.params.id;
+  const collaboratorId = req.collaboratorId;
+
+  if (!collaboratorId) throw new AppError("UNAUTHORIZED");
+
+  if (!bookId) throw new AppError("NO_BOOK_ID");
 
   if (!Title) throw new AppError("NO_TITLE");
   if (!Author) throw new AppError("NO_AUTHOR");
@@ -147,21 +170,22 @@ export async function patchBook(req, res, next) {
   if (!Subject) throw new AppError("NO_SUBJECT");
   if (!Location) throw new AppError("NO_LOCATION");
 
-  const bookId = req.params.id;
+  const updatedBookData = {
+    Title: StringAPI.Format(Title),
+    Author: StringAPI.Format(Author),
+    Genre: StringAPI.Format(Genre),
+    Subject: StringAPI.Format(Subject),
+    Location: StringAPI.Format(Location),
+  };
 
-  if (!bookId) throw new AppError("NO_BOOK_ID");
-
-  const collaboratorId = req.collaboratorId;
-
-  if (!collaboratorId) throw new AppError("UNAUTHORIZED");
-
-  const updatedBookData = { Title, Author, Genre, Subject, Location };
-  updatedBookData.ModifiedBy = req.collaboratorId;
+  updatedBookData.ModifiedBy = collaboratorId;
   updatedBookData.ModifiedOn = Date.now();
 
-  const updatedBook = await Book.findById(bookId).where("Deleted").equals(false);
+  const updatedBook = await Book.findById(bookId)
+    .where("Deleted")
+    .equals(false);
 
-  if (!updatedBook) throw new AppError("UNFOUND_BOOK_ID")
+  if (!updatedBook) throw new AppError("UNFOUND_BOOK_ID");
 
   Object.assign(updatedBook, updatedBookData);
   await updatedBook.save();
@@ -173,7 +197,6 @@ export async function patchBook(req, res, next) {
 }
 
 export async function deleteBook(req, res, next) {
-  
   //
   //  Find book by ID, then update Deleted field to true
   //  Collaborator must be logged in
@@ -187,7 +210,8 @@ export async function deleteBook(req, res, next) {
 
   if (!bookDoc) throw new AppError("UNFOUND_BOOK_ID");
   if (bookDoc.ActiveLoan) throw new AppError("CANNOT_DELETE_WHILE_LOANED");
-  if (bookDoc.Deleted === true) throw new AppError("CANNOT_DELETE_DELETED_BOOK")
+  if (bookDoc.Deleted === true)
+    throw new AppError("CANNOT_DELETE_DELETED_BOOK");
 
   bookDoc.Deleted = true;
   await bookDoc.save();
@@ -198,16 +222,18 @@ export async function deleteBook(req, res, next) {
   });
 }
 
-
 export async function getDistinctFields(req, res, next) {
-
   // will return each distinct/unique field on /api/v1/books/distinct
 
-  const uniqueGenres = await Book.distinct("Genre", { Deleted: false })
+  const uniqueGenres = await Book.distinct("Genre", { Deleted: false });
   const uniqueSubjects = await Book.distinct("Subject", { Deleted: false });
   const uniqueLocations = await Book.distinct("Location", { Deleted: false });
 
-  const resData = { Genres: uniqueGenres, Subjects: uniqueSubjects, Locations: uniqueLocations };
+  const resData = {
+    Genres: uniqueGenres,
+    Subjects: uniqueSubjects,
+    Locations: uniqueLocations,
+  };
 
   res.status(200).json({
     status: "success",

@@ -28,12 +28,12 @@
 
 
 .navButton:hover,
-.signupButton:hover {
+.signupButton:hover,
+.addButton:hover,
+.selectionButton:hover {
   background: rgb(0, 90, 170, 0.75);
   color: white;
 }
-
-
 
 
 .loginButton {
@@ -78,4 +78,32 @@
   border: none;
   cursor: pointer;
   font-size: 14px;
+}
+
+.selectionButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px;
+  margin: 3px;
+  background: rgb(0, 90, 170, 1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.addButton {
+  display: inline-flex;
+  padding: 10px;
+  background: rgb(0, 90, 170, 1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
 }

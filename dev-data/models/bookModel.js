@@ -1,56 +1,54 @@
 import mongoose from "mongoose";
 
 const booksSchema = new mongoose.Schema({
-    Title: {
-        type: String,
-        required: [true, "A book must have a title"],
-    },
-    Author: {
-        type: [String],
-        required: [true, "A book must have an author"],
-    },
-    Genre: {
-        type: [String],
-        required: [true, "A book must have a genre"],
-    },
-    Subject: {
-        type: [String],
-        required: [true, "A book must have a subject"],
-    },
-    Location: {
-        type: String,
-        required: [true, "A book must have a location"],
-    },
-    ModifiedBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: [true, "A user must be logged in to create or modify a book"],
-        ref: "Collaborator",
-    },
-    ModifiedOn: {
-        type: Date,
-        default: Date.now(),
-    },
-    Deleted: {
-        type: Boolean,
-        default: false,
-    },
-/*     OwnedBy: {
+  Title: {
+    type: String,
+    required: [true, "A book must have a title"],
+  },
+  Author: {
+    type: String,
+    required: [true, "A book must have an author"],
+  },
+  Genre: {
+    type: [String],
+    required: [true, "A book must have a genre"],
+  },
+  Subject: {
+    type: [String],
+    required: [true, "A book must have a subject"],
+  },
+  Location: {
+    type: String,
+    required: [true, "A book must have a location"],
+  },
+  ModifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: [true, "A user must be logged in to create or modify a book"],
+    ref: "Collaborator",
+  },
+  ModifiedOn: {
+    type: Date,
+    default: Date.now(),
+  },
+  Deleted: {
+    type: Boolean,
+    default: false,
+  },
+  /*     OwnedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Collaborator",
     }, */
-
 });
-
 
 // To be used alongside .populate("ActiveLoan") in queries
 // Will get the active loan for the book, if it exists
 
 booksSchema.virtual("ActiveLoan", {
-    ref: "Loan",
-    localField: "_id",
-    foreignField: "Book",
-    justOne: true,
-    match: { Returned: false } // Only return the active loan
+  ref: "Loan",
+  localField: "_id",
+  foreignField: "Book",
+  justOne: true,
+  match: { Returned: false }, // Only return the active loan
 });
 
 booksSchema.set("toObject", { virtuals: true });

@@ -28,7 +28,7 @@ function BookTableBody({ book }) {
       style={{ cursor: "pointer" }}
     >
       <td>{book.Title}</td>
-      <td>{book.Author.join(", ")}</td>
+      <td>{book.Author}</td>
       <td>{book.Genre.join(", ")}</td>
       <td>{book.Subject.join(", ")}</td>
       <td>{book.Location}</td>

@@ -1,4 +1,5 @@
 import APIHandler from "../../utils/APIHandler";
+import Cross from "../../styles/icons/cross.jsx";
 import { useNavigate } from "react-router";
 import { useState, useEffect } from "react";
 
@@ -6,7 +7,9 @@ const booksAPIHandler = new APIHandler("books");
 const distinctBooksAPIHandler = new APIHandler("books/distinct");
 
 function SelectWithOther({ name, values }) {
+  const [selectionValues, setSelectionValues] = useState([]);
   const [isOther, setIsOther] = useState(false);
+  const [otherValue, setOtherValue] = useState();
 
   return (
     <>
@@ -15,15 +18,55 @@ function SelectWithOther({ name, values }) {
       </label>
       <select
         name={name}
-        onChange={(e) => setIsOther(e.target.value === "-- Autre --")}
-        required
+        onChange={(e) =>
+          e.target.value === "-- Autre --"
+            ? setIsOther(true)
+            : setSelectionValues((prevValue) =>
+                prevValue.includes(e.target.value)
+                  ? prevValue
+                  : [...prevValue, e.target.value]
+              )
+        }
       >
         {values.map((value) => (
           <option key={value}>{value}</option>
         ))}
       </select>
 
-      {isOther && <input type="text" name={`custom${name}`} />}
+      <div>
+        {selectionValues.map((value) => (
+          <button
+            className="selectionButton"
+            key={value}
+            onClick={() =>
+              setSelectionValues((prevValue) =>
+                prevValue.filter((v) => v !== value)
+              )
+            }
+          >
+            {value} <Cross />
+          </button>
+        ))}
+      </div>
+
+      {isOther && (
+        <div>
+          <input type="text" onChange={(e) => setOtherValue(e.target.value)} />
+          <button
+            className="addButton"
+            onClick={(e) => {
+              e.preventDefault();
+              setSelectionValues((prevValue) =>
+                prevValue.includes(otherValue)
+                  ? prevValue
+                  : [...prevValue, otherValue]
+              );
+            }}
+          >
+            Ajouter
+          </button>
+        </div>
+      )}
     </>
   );
 }
@@ -63,16 +106,14 @@ export default function AddForm() {
 
     const formData = new FormData(e.target);
 
-    function getValue(name) {
-      return formData.get(name) === "-- Autre --"
-        ? formData.get(`custom${name}`)
-        : formData.get(name);
-    }
+    console.log(formData.get("Genre"));
+    console.log(formData.get("Subject"));
+    console.log(formData.get("Location"));
 
     try {
       const body = await booksAPIHandler.post({
         Title: formData.get("Title"),
-        Author: formData.get("Author").split(", "),
+        Author: formData.get("Author"),
         Genre: getValue("Genre"),
         Subject: getValue("Subject"),
         Location: getValue("Location"),
@@ -88,6 +129,8 @@ export default function AddForm() {
   }
 
   if (getError) return <p className="structuredError">{getError}</p>;
+
+  distinctGenres && console.log(distinctGenres);
 
   return distinctGenres && distinctSubjects && distinctLocations ? (
     <form onSubmit={submitBook} className="bookForm">
