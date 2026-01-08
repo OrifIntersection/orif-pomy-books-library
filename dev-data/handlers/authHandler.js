@@ -46,7 +46,7 @@ export async function signup(req, res, next) {
   if (!validator.isEmail(email)) throw new AppError("INVALID_EMAIL");
 
   // could cause problems for case-sensitive emails
-  validator.normalizeEmail(email, { all_lowercase: true });
+  email = validator.normalizeEmail(email, { all_lowercase: true });
 
   const createdCollaborator = await Collaborator.create({
     Name: name,
@@ -80,7 +80,7 @@ export async function login(req, res, next) {
   if (!validator.isEmail(email)) throw new AppError("INVALID_EMAIL");
 
   // could cause problems for case-sensitive emails
-  validator.normalizeEmail(email, { all_lowercase: true });
+  email = validator.normalizeEmail(email, { all_lowercase: true });
 
   const collaborator = await Collaborator.findOne()
     .where("Email")
