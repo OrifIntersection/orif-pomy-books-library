@@ -9,9 +9,12 @@ export async function getAllBooks(req, res, next) {
 
   const { search, searchType, sortQuery } = req.query;
 
-  if (typeof search !== "string") throw new AppError("INVALID_SEARCH");
-  if (typeof searchType !== "string") throw new AppError("INVALID_SEARCH");
-  if (typeof sortQuery !== "string") throw new AppError("INVALID_SORT");
+  if (search && typeof search !== "string")
+    throw new AppError("INVALID_SEARCH");
+  if (searchType && typeof searchType !== "string")
+    throw new AppError("INVALID_SEARCH");
+  if (sortQuery && typeof sortQuery !== "string")
+    throw new AppError("INVALID_SORT");
 
   // only return books that are not deleted
   let booksQuery = Book.find().where("Deleted").equals(false);
