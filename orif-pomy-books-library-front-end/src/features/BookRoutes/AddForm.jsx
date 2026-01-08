@@ -6,19 +6,22 @@ import { useState, useEffect } from "react";
 const booksAPIHandler = new APIHandler("books");
 const distinctBooksAPIHandler = new APIHandler("books/distinct");
 
-function StringSelectWithOther({ name, values }) {
+function StringSelectWithOther({ label, name, values }) {
   const [isOther, setIsOther] = useState(false);
 
   return (
     <>
       <label htmlFor={name}>
-        {name} <span style={{ color: "red" }}>*</span>:{" "}
+        {label} <span style={{ color: "red" }}>*</span>:{" "}
       </label>
       <select
         name={name}
         onChange={(e) => setIsOther(e.target.value === "-- Autre --")}
       >
-        {values[name].map((value) => (
+        <option value="" disabled selected hidden>
+          -Veuillez Choisir-
+        </option>
+        {values.map((value) => (
           <option key={value}>{value}</option>
         ))}
       </select>
@@ -29,6 +32,7 @@ function StringSelectWithOther({ name, values }) {
 }
 
 function SelectWithOther({
+  label,
   name,
   selectionValues,
   setSelectionValues,
@@ -74,9 +78,12 @@ function SelectWithOther({
   return (
     <>
       <label htmlFor={name}>
-        {name} <span style={{ color: "red" }}>*</span>:{" "}
+        {label} <span style={{ color: "red" }}>*</span>:{" "}
       </label>
       <select name={name} onChange={handleSelectOnChange}>
+        <option value="" disabled selected hidden>
+          -Veuillez Choisir-
+        </option>
         {values[name].map((value) => (
           <option key={value}>{value}</option>
         ))}
@@ -114,13 +121,13 @@ export default function AddForm() {
 
   const [distinctValues, setDistinctValues] = useState({
     Genres: [],
-    Sujets: [],
-    Emplacement: [],
+    Subjects: [],
+    Locations: [],
   });
 
   const [selectionValues, setSelectionValues] = useState({
     Genres: [],
-    Sujets: [],
+    Subjects: [],
   });
 
   useEffect(() => {
@@ -128,14 +135,14 @@ export default function AddForm() {
       try {
         const body = await distinctBooksAPIHandler.get();
 
-        body.data.Genres.push("-- Autre --");
-        body.data.Subjects.push("-- Autre --");
-        body.data.Locations.push("-- Autre --");
+        body.data.uniqueGenres.push("-- Autre --");
+        body.data.uniqueSubjects.push("-- Autre --");
+        body.data.uniqueLocations.push("-- Autre --");
 
         setDistinctValues({
-          Genres: body.data.Genres,
-          Sujets: body.data.Subjects,
-          Emplacement: body.data.Locations,
+          Genres: body.data.uniqueGenres,
+          Subjects: body.data.uniqueSubjects,
+          Locations: body.data.uniqueLocations,
         });
       } catch (error) {
         console.error(error);
@@ -150,27 +157,16 @@ export default function AddForm() {
 
     const formData = new FormData(e.target);
 
-    console.log({
-      Title: formData.get("Title"),
-      Author: formData.get("Author"),
-      Genre: selectionValues.Genres,
-      Subject: selectionValues.Sujets,
-      Location:
-        formData.get("Emplacement") === "-- Autre --"
-          ? formData.get("customEmplacement")
-          : formData.get("Emplacement"),
-    });
-
     try {
       const body = await booksAPIHandler.post({
         Title: formData.get("Title"),
         Author: formData.get("Author"),
         Genre: selectionValues.Genres,
-        Subject: selectionValues.Sujets,
+        Subject: selectionValues.Subjects,
         Location:
-          formData.get("Emplacement") === "-- Autre --"
-            ? formData.get("customEmplacement")
-            : formData.get("Emplacement"),
+          formData.get("Location") === "-- Autre --"
+            ? formData.get("customLocation")
+            : formData.get("Location"),
       });
 
       alert(body.message);
@@ -185,8 +181,8 @@ export default function AddForm() {
   if (getError) return <p className="structuredError">{getError}</p>;
 
   return distinctValues.Genres &&
-    distinctValues.Sujets &&
-    distinctValues.Emplacement ? (
+    distinctValues.Subjects &&
+    distinctValues.Locations ? (
     <form onSubmit={submitBook} className="bookForm">
       {postError ? <p className="structuredError">{postError}</p> : null}
       <label htmlFor="Title">
@@ -199,18 +195,24 @@ export default function AddForm() {
       <input type="text" name="Author" required />
 
       <SelectWithOther
+        label="Genres"
         name="Genres"
         selectionValues={selectionValues}
         setSelectionValues={setSelectionValues}
         values={distinctValues}
       />
       <SelectWithOther
-        name="Sujets"
+        label="Sujets"
+        name="Subjects"
         selectionValues={selectionValues}
         setSelectionValues={setSelectionValues}
         values={distinctValues}
       />
-      <StringSelectWithOther name="Emplacement" values={distinctValues} />
+      <StringSelectWithOther
+        label="Emplacement"
+        name="Location"
+        values={distinctValues.Locations}
+      />
 
       <input type="submit" value="Envoyer" />
     </form>

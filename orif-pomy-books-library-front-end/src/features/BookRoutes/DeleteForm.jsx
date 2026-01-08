@@ -40,8 +40,6 @@ export default function DeleteForm() {
       await booksAPIHandler.delete(id);
       alert("le livre à été supprimé");
 
-      window.sessionStorage.removeItem("auth_token");
-
       navigate("/livres");
     } catch (error) {
       console.error(error);
@@ -49,7 +47,7 @@ export default function DeleteForm() {
     }
   }
 
-  if (getError) return <p className="structuredError">{getError}</p>
+  if (getError) return <p className="structuredError">{getError}</p>;
 
   return book ? (
     <form className="deleteForm" onSubmit={deleteBook}>

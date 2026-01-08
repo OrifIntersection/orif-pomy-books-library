@@ -22,6 +22,8 @@ function BookTableBody({ book }) {
 
   const navigate = useNavigate();
 
+  console.log(book);
+
   return (
     <tr
       onClick={() => navigate(`/livres/${book._id}`)}

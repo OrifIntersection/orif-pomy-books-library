@@ -233,9 +233,9 @@ export async function getDistinctFields(req, res, next) {
   const uniqueLocations = await Book.distinct("Location", { Deleted: false });
 
   const resData = {
-    Genres: uniqueGenres,
-    Subjects: uniqueSubjects,
-    Locations: uniqueLocations,
+    uniqueGenres,
+    uniqueSubjects,
+    uniqueLocations,
   };
 
   res.status(200).json({

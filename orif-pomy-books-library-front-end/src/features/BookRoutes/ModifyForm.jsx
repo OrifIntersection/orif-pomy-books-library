@@ -8,9 +8,41 @@ export default function ModifyForm() {
   const [book, setBook] = useState();
   const [getError, setGetError] = useState();
   const [patchError, setPatchError] = useState();
+  const [distinctValues, setDistinctValues] = useState({
+    Genres: [],
+    Sujets: [],
+    Emplacement: [],
+  });
+
+  const [selectionValues, setSelectionValues] = useState({
+    Genres: [],
+    Sujets: [],
+  });
+
   const { id } = useParams();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    async function getAPI() {
+      try {
+        const body = await distinctBooksAPIHandler.get();
+
+        body.data.Genres.push("-- Autre --");
+        body.data.Subjects.push("-- Autre --");
+        body.data.Locations.push("-- Autre --");
+
+        setDistinctValues({
+          Genres: body.data.Genres,
+          Sujets: body.data.Subjects,
+          Emplacement: body.data.Locations,
+        });
+      } catch (error) {
+        console.error(error);
+        setGetError(error.message);
+      }
+    }
+    getAPI();
+  }, []);
 
   //
   // useEffect to getBookById from the API and render it
@@ -20,13 +52,16 @@ export default function ModifyForm() {
   useEffect(() => {
     async function getAPI() {
       try {
-        const body = await booksAPIHandler.get("", id)
+        const body = await booksAPIHandler.get("", id);
         setBook(body.data);
+        setSelectionValues({
+          Genres: body.data.Genre,
+          Sujets: body.data.Subject,
+        });
       } catch (error) {
         console.error(error);
         setGetError(error.message);
       }
-
     }
     getAPI();
   }, []);
@@ -42,50 +77,38 @@ export default function ModifyForm() {
     const formData = new FormData(e.target);
 
     try {
+      await booksAPIHandler.patch(
+        {
+          Title: formData.get("title"),
+          Author: formData.get("author"),
+          Genre: [formData.get("genre")],
+          Subject: [formData.get("subject")],
+          Location: formData.get("location"),
+        },
+        id
+      );
 
-      await booksAPIHandler.patch({
-        Title: formData.get("title"),
-        Author: formData.get("author").split(", "),
-        Genre: formData.get("genre").split(", "),
-        Subject: formData.get("subject").split(", "),
-        Location: formData.get("location"),
-      }, id);
-
-      alert("le livre à été modifié !")
+      alert("le livre à été modifié !");
 
       navigate("/livres/" + id);
     } catch (error) {
       console.error(error);
-      setPatchError(error.message)
+      setPatchError(error.message);
     }
-
   }
 
-  if (getError) return <p className="structuredError">{getError}</p>
+  if (getError) return <p className="structuredError">{getError}</p>;
 
   return book ? (
     <form onSubmit={handleFormSubmit} className="modifyForm">
       {patchError ? <p className="structuredError">{patchError}</p> : null}
       <label htmlFor="title">Titre: </label>
-      <input
-        type="text"
-        id="title"
-        name="title"
-        defaultValue={book.Title}
-        required
-      />
+      <input type="text" name="title" defaultValue={book.Title} required />
       <label htmlFor="author">Auteur: </label>
-      <input
-        type="text"
-        id="author"
-        name="author"
-        defaultValue={book.Author.join(", ")}
-        required
-      />
+      <input type="text" name="author" defaultValue={book.Author} required />
       <label htmlFor="genre">Genre: </label>
       <input
         type="text"
-        id="genre"
         name="genre"
         defaultValue={book.Genre.join(", ")}
         required
@@ -93,7 +116,6 @@ export default function ModifyForm() {
       <label htmlFor="subject">Sujet: </label>
       <input
         type="text"
-        id="subject"
         name="subject"
         defaultValue={book.Subject.join(", ")}
         required
@@ -101,7 +123,6 @@ export default function ModifyForm() {
       <label htmlFor="location">Emplacement: </label>
       <input
         type="text"
-        id="location"
         name="location"
         defaultValue={book.Location}
         required
