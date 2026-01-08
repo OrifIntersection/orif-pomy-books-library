@@ -9,7 +9,7 @@ import AppError from "./dev-data/utils/AppError.js";
 import dotenv from "dotenv";
 
 // import global environment variables
-dotenv.config({ paht: "./config.env" });
+dotenv.config({ path: "./config.env" });
 
 // global middleware
 const app = express();
