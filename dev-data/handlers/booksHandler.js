@@ -121,7 +121,7 @@ export async function postBook(req, res, next) {
   // The collaborator creating the book will be added to Book.ModifiedBy
   //
 
-  let { Title, Author, Genre, Subject, Location } = req.body;
+  const { Title, Author, Genre, Subject, Location } = req.body;
   const collaboratorId = req.collaboratorId;
 
   if (!collaboratorId) throw new AppError("UNAUTHORIZED");
@@ -135,8 +135,8 @@ export async function postBook(req, res, next) {
   const newBookData = {
     Title: StringAPI.Format(Title),
     Author: StringAPI.Format(Author),
-    Genre: StringAPI.Format(Genre),
-    Subject: StringAPI.Format(Subject),
+    Genre: Genre.map((el) => StringAPI.Format(el)),
+    Subject: Subject.map((el) => StringAPI.Format(el)),
     Location: StringAPI.Format(Location),
   };
 
@@ -176,8 +176,8 @@ export async function patchBook(req, res, next) {
   const updatedBookData = {
     Title: StringAPI.Format(Title),
     Author: StringAPI.Format(Author),
-    Genre: StringAPI.Format(Genre),
-    Subject: StringAPI.Format(Subject),
+    Genre: Genre.map((el) => StringAPI.Format(el)),
+    Subject: Subject.map((el) => StringAPI.Format(el)),
     Location: StringAPI.Format(Location),
   };
 
