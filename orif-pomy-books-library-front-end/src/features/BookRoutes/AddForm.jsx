@@ -6,6 +6,67 @@ import { useState, useEffect } from "react";
 const booksAPIHandler = new APIHandler("books");
 const distinctBooksAPIHandler = new APIHandler("books/distinct");
 
+function CustomTagInput() {
+  // Creates an input field with a button
+
+  return (
+    <div>
+      <input
+        type="text"
+        onChange={(e) => setOtherValue(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleIsOtherAddButton(e);
+          }
+        }}
+      />
+      <button className="addButton" onClick={handleIsOtherAddButton}>
+        Ajouter
+      </button>
+    </div>
+  );
+}
+
+function TagButtons({ handleDeletion, tagValues }) {
+  // Creates a div of tags/buttons from an array of tagValues
+  // Requires a handler for when a button is clicked on for deletion
+
+  return (
+    <div>
+      {tagValues.map((value) => (
+        <button
+          className="selectionButton"
+          key={value}
+          onClick={() => handleDeletion(value)}
+        >
+          {value} <Cross />
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function DropDownList({ label, handleSelection, listValues }) {
+  // A dropdown list for a form that populates the select dropdown with an array of listValues
+  // requires a handler for when a value is selected, and a label value
+
+  return (
+    <>
+      <label>
+        {label} <span style={{ color: "red" }}>*</span>:{" "}
+      </label>
+      <select onChange={handleSelection}>
+        <option value="" disabled selected hidden>
+          -Veuillez Choisir-
+        </option>
+        {listValues.map((value) => (
+          <option key={value}>{value}</option>
+        ))}
+      </select>
+    </>
+  );
+}
+
 function StringSelectWithOther({ label, name, listValues }) {
   const [isOther, setIsOther] = useState(false);
 
@@ -40,7 +101,7 @@ function SelectWithOther({
   const [isOther, setIsOther] = useState(false);
   const [otherValue, setOtherValue] = useState();
 
-  function handleSelectOnChange(e) {
+  function handleDropDownSelection(e) {
     if (e.target.value === "-- Autre --") {
       setIsOther(true);
     } else if (selectedValues.includes(e.target.value)) {
@@ -52,7 +113,7 @@ function SelectWithOther({
     }
   }
 
-  function handleDeleteButtonOnChange(value, e) {
+  function handleDeleteTag(value, e) {
     setSelectedValues((prev) => prev.filter((el) => el !== value));
   }
 
@@ -68,29 +129,13 @@ function SelectWithOther({
 
   return (
     <>
-      <label>
-        {label} <span style={{ color: "red" }}>*</span>:{" "}
-      </label>
-      <select onChange={handleSelectOnChange}>
-        <option value="" disabled selected hidden>
-          -Veuillez Choisir-
-        </option>
-        {listValues.map((value) => (
-          <option key={value}>{value}</option>
-        ))}
-      </select>
+      <DropDownList
+        label={label}
+        handleSelection={handleDropDownSelection}
+        listValues={listValues}
+      />
 
-      <div>
-        {selectedValues.map((value) => (
-          <button
-            className="selectionButton"
-            key={value}
-            onClick={() => handleDeleteButtonOnChange(value)}
-          >
-            {value} <Cross />
-          </button>
-        ))}
-      </div>
+      <TagButtons handleDeletion={handleDeleteTag} tagValues={selectedValues} />
 
       {isOther && (
         <div>
