@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 const booksAPIHandler = new APIHandler("books");
 const distinctBooksAPIHandler = new APIHandler("books/distinct");
 
-function StringSelectWithOther({ label, name, values }) {
+function StringSelectWithOther({ label, name, listValues }) {
   const [isOther, setIsOther] = useState(false);
 
   return (
@@ -21,7 +21,7 @@ function StringSelectWithOther({ label, name, values }) {
         <option value="" disabled selected hidden>
           -Veuillez Choisir-
         </option>
-        {values.map((value) => (
+        {listValues.map((value) => (
           <option key={value}>{value}</option>
         ))}
       </select>
@@ -33,10 +33,9 @@ function StringSelectWithOther({ label, name, values }) {
 
 function SelectWithOther({
   label,
-  name,
-  selectionValues,
-  setSelectionValues,
-  values,
+  selectedValues,
+  setSelectedValues,
+  listValues,
 }) {
   const [isOther, setIsOther] = useState(false);
   const [otherValue, setOtherValue] = useState();
@@ -44,53 +43,45 @@ function SelectWithOther({
   function handleSelectOnChange(e) {
     if (e.target.value === "-- Autre --") {
       setIsOther(true);
-    } else if (selectionValues[name].includes(e.target.value)) {
+    } else if (selectedValues.includes(e.target.value)) {
       setIsOther(false);
       return;
     } else {
       setIsOther(false);
-      setSelectionValues((prev) => ({
-        ...prev,
-        [name]: [...prev[name], e.target.value],
-      }));
+      setSelectedValues((prev) => [...prev, e.target.value]);
     }
   }
 
   function handleDeleteButtonOnChange(value, e) {
-    setSelectionValues((prev) => ({
-      ...prev,
-      [name]: prev[name].filter((el) => el !== value),
-    }));
+    setSelectedValues((prev) => prev.filter((el) => el !== value));
   }
 
   function handleIsOtherAddButton(e) {
     e.preventDefault();
-    if (selectionValues[name].includes(otherValue)) {
+
+    if (selectedValues.includes(otherValue)) {
       return;
     } else {
-      setSelectionValues((prev) => ({
-        ...prev,
-        [name]: [...prev[name], otherValue],
-      }));
+      setSelectedValues((prev) => [...prev, otherValue]);
     }
   }
 
   return (
     <>
-      <label htmlFor={name}>
+      <label>
         {label} <span style={{ color: "red" }}>*</span>:{" "}
       </label>
-      <select name={name} onChange={handleSelectOnChange}>
+      <select onChange={handleSelectOnChange}>
         <option value="" disabled selected hidden>
           -Veuillez Choisir-
         </option>
-        {values[name].map((value) => (
+        {listValues.map((value) => (
           <option key={value}>{value}</option>
         ))}
       </select>
 
       <div>
-        {selectionValues[name].map((value) => (
+        {selectedValues.map((value) => (
           <button
             className="selectionButton"
             key={value}
@@ -103,7 +94,15 @@ function SelectWithOther({
 
       {isOther && (
         <div>
-          <input type="text" onChange={(e) => setOtherValue(e.target.value)} />
+          <input
+            type="text"
+            onChange={(e) => setOtherValue(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleIsOtherAddButton(e);
+              }
+            }}
+          />
           <button className="addButton" onClick={handleIsOtherAddButton}>
             Ajouter
           </button>
@@ -119,15 +118,13 @@ export default function AddForm() {
   const [getError, setGetError] = useState();
   const [postError, setPostError] = useState();
 
-  const [distinctValues, setDistinctValues] = useState({
-    Genres: [],
-    Subjects: [],
-    Locations: [],
-  });
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
 
-  const [selectionValues, setSelectionValues] = useState({
-    Genres: [],
-    Subjects: [],
+  const [distinctValues, setDistinctValues] = useState({
+    uniqueGenres: [],
+    uniqueSubjects: [],
+    uniqueLocations: [],
   });
 
   useEffect(() => {
@@ -140,9 +137,9 @@ export default function AddForm() {
         body.data.uniqueLocations.push("-- Autre --");
 
         setDistinctValues({
-          Genres: body.data.uniqueGenres,
-          Subjects: body.data.uniqueSubjects,
-          Locations: body.data.uniqueLocations,
+          uniqueGenres: body.data.uniqueGenres,
+          uniqueSubjects: body.data.uniqueSubjects,
+          uniqueLocations: body.data.uniqueLocations,
         });
       } catch (error) {
         console.error(error);
@@ -161,8 +158,8 @@ export default function AddForm() {
       const body = await booksAPIHandler.post({
         Title: formData.get("Title"),
         Author: formData.get("Author"),
-        Genre: selectionValues.Genres,
-        Subject: selectionValues.Subjects,
+        Genre: selectedGenres,
+        Subject: selectedSubjects,
         Location:
           formData.get("Location") === "-- Autre --"
             ? formData.get("customLocation")
@@ -180,9 +177,9 @@ export default function AddForm() {
 
   if (getError) return <p className="structuredError">{getError}</p>;
 
-  return distinctValues.Genres &&
-    distinctValues.Subjects &&
-    distinctValues.Locations ? (
+  return distinctValues.uniqueGenres &&
+    distinctValues.uniqueSubjects &&
+    distinctValues.uniqueLocations ? (
     <form onSubmit={submitBook} className="bookForm">
       {postError ? <p className="structuredError">{postError}</p> : null}
       <label htmlFor="Title">
@@ -196,22 +193,20 @@ export default function AddForm() {
 
       <SelectWithOther
         label="Genres"
-        name="Genres"
-        selectionValues={selectionValues}
-        setSelectionValues={setSelectionValues}
-        values={distinctValues}
+        selectedValues={selectedGenres}
+        setSelectedValues={setSelectedGenres}
+        listValues={distinctValues.uniqueGenres}
       />
       <SelectWithOther
         label="Sujets"
-        name="Subjects"
-        selectionValues={selectionValues}
-        setSelectionValues={setSelectionValues}
-        values={distinctValues}
+        selectedValues={selectedSubjects}
+        setSelectedValues={setSelectedSubjects}
+        listValues={distinctValues.uniqueSubjects}
       />
       <StringSelectWithOther
         label="Emplacement"
         name="Location"
-        values={distinctValues.Locations}
+        listValues={distinctValues.uniqueLocations}
       />
 
       <input type="submit" value="Envoyer" />
