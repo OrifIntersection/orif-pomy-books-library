@@ -60,7 +60,7 @@ app.use((err, req, res, next) => {
   console.error(err);
 
   if (err.isOperational)
-    res.status(statusCode).json({
+    return res.status(statusCode).json({
       status,
       message,
     });
