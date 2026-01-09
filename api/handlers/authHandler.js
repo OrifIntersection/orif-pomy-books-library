@@ -2,7 +2,7 @@ import AppError from "../utils/AppError.js";
 import jwt from "jsonwebtoken";
 import { Collaborator } from "../models/collaboratorModel.js";
 import validator from "validator";
-import parseWhitelist from "../utils/emailHosts.js";
+import { parseWhitelist } from "../utils/emailHosts.js";
 
 export async function attachCollaborator(req, res, next) {
   //
