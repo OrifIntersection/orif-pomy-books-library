@@ -43,7 +43,8 @@ export async function signup(req, res, next) {
 
   if (!name) throw new AppError("NO_NAME");
   if (!email) throw new AppError("NO_EMAIL");
-  if (!validator.isEmail(email)) throw new AppError("INVALID_EMAIL");
+  if (!validator.isEmail(email, { host_whitelist: ["orif"] }))
+    throw new AppError("INVALID_EMAIL");
 
   // could cause problems for case-sensitive emails
   email = validator.normalizeEmail(email, { all_lowercase: true });
@@ -106,7 +107,8 @@ export async function modify(req, res, next) {
   if (!collaboratorId) throw new AppError("UNAUTHORIZED");
   if (!name) throw new AppError("NO_EMAIL");
   if (!email) throw new AppError("NO_NAME");
-  if (!validator.isEmail(email)) throw new AppError("INVALID_EMAIL");
+  if (!validator.isEmail(email, { host_whitelist: ["orif"] }))
+    throw new AppError("INVALID_EMAIL");
 
   // could cause problems for case-sensitive emails
   validator.normalizeEmail(email, { all_lowercase: true });
