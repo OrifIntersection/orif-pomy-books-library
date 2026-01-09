@@ -77,23 +77,28 @@ app.use((err, req, res, next) => {
 const transporter = nodemailer.createTransport({
   host: "smtp.resend.com",
   port: 465,
-  secure: true,
+  secure: false,
   auth: {
     user: "resend",
     pass: process.env.RESEND_API_KEY,
   },
 });
 
-await transporter
-  .sendMail({
-    from: "onboarding@resend.dev",
-    to: "lithiumium@gmail.com",
-    subject: "Server Mail",
-    text: "This is a test mail",
-  })
-  .then(() => {
-    console.log("email sent");
-  });
+(async () => {
+  try {
+    const info = await transporter.sendMail({
+      from: '"Test" <onboarding@resend.dev>', // sender address
+      to: "lithiumium@gmail.com", // list of recipients
+      subject: "Hello", // subject line
+      text: "Hello world?", // plain text body
+      html: "<b>Hello world?</b>", // HTML body
+    });
+
+    console.log("Message sent: %s", info.messageId);
+  } catch (err) {
+    console.error("Error while sending mail", err);
+  }
+})();
 
 //
 // connect to database via mongoose
