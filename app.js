@@ -9,6 +9,7 @@ import AppError from "./api/utils/AppError.js";
 import dotenv from "dotenv";
 
 import { Resend } from "resend";
+import nodemailer from "nodemailer";
 
 // import global environment variables
 dotenv.config({ path: "./config.env" });
@@ -73,13 +74,21 @@ app.use((err, req, res, next) => {
   });
 });
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  host: "api.resend.com/emails",
+  port: 465,
+  secure: true,
+  auth: {
+    user: "resend",
+    pass: process.env.RESEND_API_KEY,
+  },
+});
 
-resend.emails.send({
+await transporter.sendMail({
   from: "onboarding@resend.dev",
   to: "lithiumium@gmail.com",
-  subject: "Hello World",
-  html: "<p>Congrats on sending your <strong>first email</strong>!</p>",
+  subject: "Server Mail",
+  text: "This is a test mail",
 });
 
 //
