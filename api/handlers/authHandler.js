@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { Collaborator } from "../models/collaboratorModel.js";
 import validator from "validator";
 
+console.log(process.env.EMAIL_HOSTS);
 const hosts = process.env.EMAIL_HOSTS.split(",");
 
 const hostWhitelist = hosts.map((h) => {
