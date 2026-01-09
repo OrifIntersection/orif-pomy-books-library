@@ -4,20 +4,26 @@ import APIHandler from "../../utils/APIHandler.jsx";
 
 const booksAPIHandler = new APIHandler("books");
 
+// Needs to get -> Unique locations
+//              -> BookById
+//
+// Render BookById info, with dropdown menus & tagbuttons on Subjects, Genres + dropdown for location
+//
+// Then patch   -> BookById
+
 export default function ModifyForm() {
   const [book, setBook] = useState();
   const [getError, setGetError] = useState();
   const [patchError, setPatchError] = useState();
+
   const [distinctValues, setDistinctValues] = useState({
-    Genres: [],
-    Sujets: [],
-    Emplacement: [],
+    uniqueGenres: [],
+    uniqueSubjects: [],
+    uniqueLocations: [],
   });
 
-  const [selectionValues, setSelectionValues] = useState({
-    Genres: [],
-    Sujets: [],
-  });
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState([]);
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -27,14 +33,14 @@ export default function ModifyForm() {
       try {
         const body = await distinctBooksAPIHandler.get();
 
-        body.data.Genres.push("-- Autre --");
-        body.data.Subjects.push("-- Autre --");
-        body.data.Locations.push("-- Autre --");
+        body.data.uniqueGenres.push("-- Autre --");
+        body.data.uniqueSubjects.push("-- Autre --");
+        body.data.uniqueLocations.push("-- Autre --");
 
         setDistinctValues({
-          Genres: body.data.Genres,
-          Sujets: body.data.Subjects,
-          Emplacement: body.data.Locations,
+          uniqueGenres: body.data.uniqueGenres,
+          uniqueSubjects: body.data.uniqueSubjects,
+          uniqueLocations: body.data.uniqueLocations,
         });
       } catch (error) {
         console.error(error);
@@ -54,10 +60,8 @@ export default function ModifyForm() {
       try {
         const body = await booksAPIHandler.get("", id);
         setBook(body.data);
-        setSelectionValues({
-          Genres: body.data.Genre,
-          Sujets: body.data.Subject,
-        });
+        setSelectedGenres(body.data.Genre);
+        setSelectedSubjects(body.data.Subject);
       } catch (error) {
         console.error(error);
         setGetError(error.message);
@@ -79,11 +83,14 @@ export default function ModifyForm() {
     try {
       await booksAPIHandler.patch(
         {
-          Title: formData.get("title"),
-          Author: formData.get("author"),
-          Genre: [formData.get("genre")],
-          Subject: [formData.get("subject")],
-          Location: formData.get("location"),
+          Title: formData.get("Title"),
+          Author: formData.get("Author"),
+          Genre: selectedGenres,
+          Subject: selectedSubjects,
+          Location:
+            formData.get("Location") === "-- Autre --"
+              ? formData.get("customLocation")
+              : formData.get("Location"),
         },
         id
       );

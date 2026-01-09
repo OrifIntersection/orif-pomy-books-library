@@ -6,57 +6,59 @@ import { useState, useEffect } from "react";
 const booksAPIHandler = new APIHandler("books");
 const distinctBooksAPIHandler = new APIHandler("books/distinct");
 
-function CustomTagInput() {
-  // Creates an input field with a button
+function TextInputWithButton({ setTempInputValue, setInputValue }) {
+  // Text input that sets a temporary input, and a final input
+  // final input value is set both when the button is clicked, and when the enter key is pressed
+  // e.preventDefault() is required to make sure that the form isn't accidentally sent when the enter key is pressed.
 
   return (
     <div>
       <input
         type="text"
-        onChange={(e) => setOtherValue(e.target.value)}
+        onChange={(e) => setTempInputValue(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
-            handleIsOtherAddButton(e);
+            setInputValue(e);
           }
         }}
       />
-      <button className="addButton" onClick={handleIsOtherAddButton}>
+      <button className="addButton" onClick={setInputValue}>
         Ajouter
       </button>
     </div>
   );
 }
 
-function TagButtons({ handleDeletion, tagValues }) {
-  // Creates a div of tags/buttons from an array of tagValues
-  // Requires a handler for when a button is clicked on for deletion
+function Tag({ value, onDelete }) {
+  // Tag buttons that can be deleted onClick via the onDelete prop
+  // the value simply represents the rendered name of the tag
 
   return (
-    <div>
-      {tagValues.map((value) => (
-        <button
-          className="selectionButton"
-          key={value}
-          onClick={() => handleDeletion(value)}
-        >
-          {value} <Cross />
-        </button>
-      ))}
-    </div>
+    <button className="selectionButton" onClick={(e) => onDelete(value, e)}>
+      {value} <Cross />
+    </button>
   );
 }
 
-function DropDownList({ label, handleSelection, listValues }) {
+function DropDownList({ label, selectDropdown, listValues }) {
   // A dropdown list for a form that populates the select dropdown with an array of listValues
   // requires a handler for when a value is selected, and a label value
+
+  const [selectedValue, setSelectedValue] = useState("");
 
   return (
     <>
       <label>
         {label} <span style={{ color: "red" }}>*</span>:{" "}
       </label>
-      <select onChange={handleSelection}>
-        <option value="" disabled selected hidden>
+      <select
+        onChange={(e) => {
+          setSelectedValue(e.target.value);
+          selectDropdown(e);
+        }}
+        value={selectedValue}
+      >
+        <option value="" hidden>
           -Veuillez Choisir-
         </option>
         {listValues.map((value) => (
@@ -101,7 +103,7 @@ function SelectWithOther({
   const [isOther, setIsOther] = useState(false);
   const [otherValue, setOtherValue] = useState();
 
-  function handleDropDownSelection(e) {
+  function selectDropdown(e) {
     if (e.target.value === "-- Autre --") {
       setIsOther(true);
     } else if (selectedValues.includes(e.target.value)) {
@@ -113,11 +115,13 @@ function SelectWithOther({
     }
   }
 
-  function handleDeleteTag(value, e) {
+  function deleteTag(value, e) {
+    e.preventDefault();
+
     setSelectedValues((prev) => prev.filter((el) => el !== value));
   }
 
-  function handleIsOtherAddButton(e) {
+  function addCustomTag(e) {
     e.preventDefault();
 
     if (selectedValues.includes(otherValue)) {
@@ -131,27 +135,21 @@ function SelectWithOther({
     <>
       <DropDownList
         label={label}
-        handleSelection={handleDropDownSelection}
+        selectDropdown={selectDropdown}
         listValues={listValues}
       />
 
-      <TagButtons handleDeletion={handleDeleteTag} tagValues={selectedValues} />
+      <div>
+        {selectedValues.map((value) => (
+          <Tag key={value} value={value} onDelete={deleteTag} />
+        ))}
+      </div>
 
       {isOther && (
-        <div>
-          <input
-            type="text"
-            onChange={(e) => setOtherValue(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleIsOtherAddButton(e);
-              }
-            }}
-          />
-          <button className="addButton" onClick={handleIsOtherAddButton}>
-            Ajouter
-          </button>
-        </div>
+        <TextInputWithButton
+          setTempInputValue={setOtherValue}
+          setInputValue={addCustomTag}
+        />
       )}
     </>
   );

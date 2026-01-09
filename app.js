@@ -1,11 +1,11 @@
 // dependencies
 import express from "express";
 import cors from "cors";
-import booksRouter from "./dev-data/routes/booksRoute.js";
-import collaboratorsRouter from "./dev-data/routes/collaboratorsRoute.js";
-import loansRouter from "./dev-data/routes/loansRoute.js";
+import booksRouter from "./api/routes/booksRoute.js";
+import collaboratorsRouter from "./api/routes/collaboratorsRoute.js";
+import loansRouter from "./api/routes/loansRoute.js";
 import mongoose from "mongoose";
-import AppError from "./dev-data/utils/AppError.js";
+import AppError from "./api/utils/AppError.js";
 import dotenv from "dotenv";
 
 // import global environment variables
