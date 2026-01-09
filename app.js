@@ -75,7 +75,7 @@ app.use((err, req, res, next) => {
 });
 
 const transporter = nodemailer.createTransport({
-  host: "api.resend.com/emails",
+  host: "smtp.resend.com",
   port: 465,
   secure: true,
   auth: {
