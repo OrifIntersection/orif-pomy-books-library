@@ -124,6 +124,15 @@ export const ERROR_CODES = {
       "Des données incomplètes ont été fournies, il faut obligatoirement une date.",
     statusCode: 400,
   },
+  EMAIL_EXISTS: {
+    message: "Un compte existe déjà avec cet email, veuillez choisir un autre.",
+    statusCode: 400,
+  },
+  NAME_EXISTS: {
+    message:
+      "Un compte exist déjà avec ce nom d'utilisateur, veuillez choisir un autre.",
+    statusCode: 400,
+  },
 
   // 403 FORBIDDEN
   DELETED: {

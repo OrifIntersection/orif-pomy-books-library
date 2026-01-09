@@ -44,11 +44,14 @@ export async function signup(req, res, next) {
 
   if (!name) throw new AppError("NO_NAME");
   if (!email) throw new AppError("NO_EMAIL");
+
   if (!validator.isEmail(email, { host_whitelist: parseWhitelist() }))
     throw new AppError("INVALID_EMAIL");
 
-  // could cause problems for case-sensitive emails
   email = validator.normalizeEmail(email, { all_lowercase: true });
+
+  if (Collaborator.exists({ Email: email })) throw new AppError("EMAIL_EXISTS");
+  if (Collaborator.exists({ Name: name })) throw new AppError("NAME_EXISTS");
 
   const createdCollaborator = await Collaborator.create({
     Name: name,
@@ -113,6 +116,14 @@ export async function modify(req, res, next) {
 
   // could cause problems for case-sensitive emails
   validator.normalizeEmail(email, { all_lowercase: true });
+
+  const nameExists = await Collaborator.findOne({ Name: name });
+  if (nameExists && nameExists._id.toString() !== collaboratorId)
+    throw new AppError("NAME_EXISTS");
+
+  const emailExists = await Collaborator.findOne({ Email: email });
+  if (emailExists && emailExists._id.toString() !== collaboratorId)
+    throw new AppError("EMAIL_EXISTS");
 
   await Collaborator.findByIdAndUpdate(collaboratorId, {
     Name: name,
