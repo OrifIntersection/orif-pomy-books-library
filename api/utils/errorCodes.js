@@ -27,43 +27,53 @@ export const ERROR_CODES = {
 
   // 400 BAD REQUEST
   MALFORMED_ID: {
-    message: "L'identificateur fourni pour cette ressource est invalide. Veuillez vérifier les données.",
+    message:
+      "L'identificateur fourni pour cette ressource est invalide. Veuillez vérifier les données.",
     statusCode: 400,
   },
   INVALID_EMAIL: {
-    message: "L'email fourni est invalide, veuillez vérifier votre saisi.",
+    message:
+      "L'email fourni est invalide, notez que vous devez utiliser votre email orif. @formation.orif.ch, @orif.ch, ou autre.",
     statusCode: 400,
   },
   INVALID_NAME: {
-    message: "Le nom d'utilisateur fourni est invalide, veuillez vérifier votre saisi.",
+    message:
+      "Le nom d'utilisateur fourni est invalide, veuillez vérifier votre saisi.",
     statusCode: 400,
   },
   INVALID_SEARCH: {
-    message: "Le critère de recherche fourni est invalide, veuillez vérifier votre saisi.",
+    message:
+      "Le critère de recherche fourni est invalide, veuillez vérifier votre saisi.",
     statusCode: 400,
   },
   INVALID_SORT: {
-    message: "Le critère de tri fourni est invalide, veuillez vérifier votre saisi.",
+    message:
+      "Le critère de tri fourni est invalide, veuillez vérifier votre saisi.",
     statusCode: 400,
   },
   INVALID_TITLE: {
-    message: "Le titre de livre fourni est invalide, veuillez vérifier votre saisi.",
+    message:
+      "Le titre de livre fourni est invalide, veuillez vérifier votre saisi.",
     statusCode: 400,
   },
   INVALID_AUTHOR: {
-    message: "L'auteur de livre fourni est invalide, veuillez vérifier votre saisi.",
+    message:
+      "L'auteur de livre fourni est invalide, veuillez vérifier votre saisi.",
     statusCode: 400,
   },
   INVALID_GENRE: {
-    message: "Le genre de livre fourni est invalide, veuillez vérifier votre saisi.",
+    message:
+      "Le genre de livre fourni est invalide, veuillez vérifier votre saisi.",
     statusCode: 400,
   },
   INVALID_SUBJECT: {
-    message: "Le sujet de livre fourni est invalide, veuillez vérifier votre saisi.",
+    message:
+      "Le sujet de livre fourni est invalide, veuillez vérifier votre saisi.",
     statusCode: 400,
   },
   INVALID_LOCATION: {
-    message: "L'emplacement de livre fourni est invalide, veuillez vérifier votre saisi.",
+    message:
+      "L'emplacement de livre fourni est invalide, veuillez vérifier votre saisi.",
     statusCode: 400,
   },
   NO_BOOK_ID: {
@@ -139,10 +149,10 @@ export const ERROR_CODES = {
     message: "Il est impossible de rendre un emprunt qui a déjà été rendu.",
     statusCode: 403,
   },
-  CANNOT_DELETE_DELETED_BOOK:{
+  CANNOT_DELETE_DELETED_BOOK: {
     message: "Il est impossible de supprimer un livre qui a déjà été supprimé.",
     statusCode: 403,
-  }, 
+  },
   CANNOT_RETURN_OTHER_LOAN: {
     message: "Vous ne pouvez pas rendre un emprunt qui n'est pas la votre.",
     statusCode: 403,

@@ -11,9 +11,6 @@ import dotenv from "dotenv";
 // import global environment variables
 dotenv.config({ path: "./config.env" });
 
-console.log(process.env.EMAIL_HOSTS);
-console.log(process.env.DATABASE);
-
 // global middleware
 const app = express();
 
