@@ -84,12 +84,16 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-await transporter.sendMail({
-  from: "onboarding@resend.dev",
-  to: "lithiumium@gmail.com",
-  subject: "Server Mail",
-  text: "This is a test mail",
-});
+await transporter
+  .sendMail({
+    from: "onboarding@resend.dev",
+    to: "lithiumium@gmail.com",
+    subject: "Server Mail",
+    text: "This is a test mail",
+  })
+  .then(() => {
+    console.log("email sent");
+  });
 
 //
 // connect to database via mongoose
