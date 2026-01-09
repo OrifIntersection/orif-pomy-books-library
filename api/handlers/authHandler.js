@@ -2,16 +2,7 @@ import AppError from "../utils/AppError.js";
 import jwt from "jsonwebtoken";
 import { Collaborator } from "../models/collaboratorModel.js";
 import validator from "validator";
-
-/* const hosts = process.env.EMAIL_HOSTS.split(",");
-
-const hostWhitelist = hosts.map((h) => {
-  if (h.startsWith(".*")) {
-    const base = h.slice(2).replace(/\./g, "\\.");
-    return new RegExp(`^[^.]+\\.${base}$`, "i");
-  }
-  return h;
-}); */
+import parseWhitelist from "../utils/emailHosts.js";
 
 export async function attachCollaborator(req, res, next) {
   //
@@ -53,7 +44,7 @@ export async function signup(req, res, next) {
 
   if (!name) throw new AppError("NO_NAME");
   if (!email) throw new AppError("NO_EMAIL");
-  if (!validator.isEmail(email, { host_whitelist: hostWhitelist }))
+  if (!validator.isEmail(email, { host_whitelist: parseWhitelist() }))
     throw new AppError("INVALID_EMAIL");
 
   // could cause problems for case-sensitive emails
@@ -117,7 +108,7 @@ export async function modify(req, res, next) {
   if (!collaboratorId) throw new AppError("UNAUTHORIZED");
   if (!name) throw new AppError("NO_EMAIL");
   if (!email) throw new AppError("NO_NAME");
-  if (!validator.isEmail(email, { host_whitelist: hostWhitelist }))
+  if (!validator.isEmail(email, { host_whitelist: parseWhitelist() }))
     throw new AppError("INVALID_EMAIL");
 
   // could cause problems for case-sensitive emails
