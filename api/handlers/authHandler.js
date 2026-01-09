@@ -3,8 +3,7 @@ import jwt from "jsonwebtoken";
 import { Collaborator } from "../models/collaboratorModel.js";
 import validator from "validator";
 
-console.log(process.env.EMAIL_HOSTS);
-const hosts = process.env.EMAIL_HOSTS.split(",");
+/* const hosts = process.env.EMAIL_HOSTS.split(",");
 
 const hostWhitelist = hosts.map((h) => {
   if (h.startsWith(".*")) {
@@ -12,7 +11,7 @@ const hostWhitelist = hosts.map((h) => {
     return new RegExp(`^[^.]+\\.${base}$`, "i");
   }
   return h;
-});
+}); */
 
 export async function attachCollaborator(req, res, next) {
   //
