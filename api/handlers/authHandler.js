@@ -50,6 +50,8 @@ export async function signup(req, res, next) {
 
   email = validator.normalizeEmail(email, { all_lowercase: true });
 
+  console.log(Collaborator.exists({ Email: email }));
+
   if (Collaborator.exists({ Email: email })) throw new AppError("EMAIL_EXISTS");
   if (Collaborator.exists({ Name: name })) throw new AppError("NAME_EXISTS");
 
