@@ -123,12 +123,10 @@ export async function modify(req, res, next) {
   const nameExists = await Collaborator.findOne({ Name: name });
   const emailExists = await Collaborator.findOne({ Email: email });
 
-  console.log(nameExists, nameExists._id.toString(), collaboratorId);
-
-  if (nameExists && nameExists._id.toString() !== collaboratorId)
+  if (nameExists && nameExists._id.toString() !== collaboratorId.toString())
     throw new AppError("NAME_EXISTS");
 
-  if (emailExists && emailExists._id.toString() !== collaboratorId)
+  if (emailExists && emailExists._id.toString() !== collaboratorId.toString())
     throw new AppError("EMAIL_EXISTS");
 
   await Collaborator.findByIdAndUpdate(collaboratorId, {
