@@ -12,6 +12,7 @@ function LogoutButton() {
     window.sessionStorage.removeItem("auth_token");
     window.sessionStorage.removeItem("name");
     alert("Vous êtes déconnecté.");
+
     window.location.assign("/livres");
   }
 
@@ -25,23 +26,24 @@ function LogoutButton() {
 export default function UserPage() {
   const [userInfo, setUserInfo] = useState(null);
   const [userLoans, setUserLoans] = useState(null);
-  const [getError, setGetError] = useState();
+
+  const [error, setError] = useState();
 
   useEffect(() => {
     async function getAPI() {
       try {
         // we query the API for loans that belong to the current user & are not returned yet
         const collaboratorBody = await collaboratorsAPIHandler.get();
-        setUserInfo(collaboratorBody.data);
-
         const loansBody = await loansAPIHandler.get({
           mine: true,
           returned: false,
         });
+
+        setUserInfo(collaboratorBody.data);
         setUserLoans(loansBody.data);
       } catch (error) {
         console.error(error);
-        setGetError(error.message);
+        setError(error.message);
       }
     }
     getAPI();
@@ -74,13 +76,12 @@ export default function UserPage() {
         Content="Supprimer mon profil"
       />
       {fixedBooks && userInfo ? (
-          <div className="structuredInfo">
-            Vos livres empruntés (cliquez sur un livre pour plus de détails):
-            <BookTableContent books={fixedBooks} />
-          </div>
-
-      ) : getError ? (
-        <p className="structuredError">{getError}</p>
+        <div className="structuredInfo">
+          Vos livres empruntés (cliquez sur un livre pour plus de détails):
+          <BookTableContent books={fixedBooks} />
+        </div>
+      ) : error ? (
+        <p className="structuredError">{error}</p>
       ) : (
         <p className="loadingBar">Loading...</p>
       )}

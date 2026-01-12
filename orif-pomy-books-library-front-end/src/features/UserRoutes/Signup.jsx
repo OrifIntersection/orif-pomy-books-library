@@ -4,7 +4,8 @@ import { useState } from "react";
 const collaboratorsAPIHandler = new APIHandler("collaborators/signup");
 
 export default function Signup() {
-  const [postError, setPostError] = useState();
+  const [error, setError] = useState();
+  const [success, setSuccess] = useState();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -13,18 +14,23 @@ export default function Signup() {
     const name = e.target.name.value;
 
     try {
-      await collaboratorsAPIHandler.post({ name, email });
-      alert("Votre compte à été créé avec succès!");
-      window.location.assign("/livres"); // reload to update navbar
+      const body = await collaboratorsAPIHandler.post({ name, email });
+
+      setSuccess(body.message);
+
+      setTimeout(() => {
+        window.location.assign("/livres"); // reload to update navbar
+      }, import.meta.env.VITE_NAVIGATE_TIMEOUT);
     } catch (error) {
       console.error(error);
-      setPostError(error.message);
+      setError(error.message);
     }
   }
 
   return (
     <form onSubmit={handleSubmit} className="signupForm">
-      {postError ? <p className="structuredError">{postError}</p> : null}
+      {error && <p className="structuredError">{error}</p>}
+      {success && <p className="structuredSuccess">{success}</p>}
       <label htmlFor="name">Nom d'utilisateur: </label>
       <input type="text" id="name" name="name" />
       <label htmlFor="email">Email: </label>

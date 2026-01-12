@@ -2,7 +2,6 @@ import NavButton from "./NavButton.jsx";
 import LoanOptions from "./LoanOptions.jsx";
 
 export default function BookOptions({ book }) {
-
   //
   // BookOptions will render options for when a book is selected by ID
   // we use this book Prop to PATCH, DELETE, POST, get info for loans, etc...

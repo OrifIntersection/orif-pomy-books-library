@@ -6,10 +6,10 @@ const collaboratorsAPIHandler = new APIHandler("collaborators/me");
 
 export default function ModifyForm() {
   const [collaborator, setCollaborator] = useState();
-  const [getError, setGetError] = useState();
-  const [patchError, setPatchError] = useState();
+
+  const [error, setError] = useState({ get: null, patch: null });
+  const [success, setSuccess] = useState();
   const { id } = useParams();
-  const navigate = useNavigate();
 
   useEffect(() => {
     async function getAPI() {
@@ -18,7 +18,7 @@ export default function ModifyForm() {
         setCollaborator(body.data);
       } catch (error) {
         console.error(error);
-        setGetError(error.message);
+        setError((prev) => ({ ...prev, get: error.message }));
       }
     }
     getAPI();
@@ -30,24 +30,28 @@ export default function ModifyForm() {
     const formData = new FormData(e.target);
 
     try {
-      await collaboratorsAPIHandler.patch(
+      const body = await collaboratorsAPIHandler.patch(
         { name: formData.get("name"), email: formData.get("email") },
         id
       );
-      alert("Votre compte à été modifié avec succès !");
 
-      window.location.assign("/collaborateurs/moi"); // reload to update navbar
+      setSuccess(body.message);
+
+      setTimeout(() => {
+        window.location.assign("/collaborateurs/moi"); // reload to update navbar
+      }, import.meta.env.VITE_NAVIGATE_TIMEOUT);
     } catch (error) {
       console.error(error);
-      setPatchError(error.message);
+      setError((prev) => ({ ...prev, patch: error.message }));
     }
   }
 
-  if (getError) return <p className="structuredError">{getError}</p>;
+  if (error.get) return <p className="structuredError">{error.get}</p>;
 
   return collaborator ? (
     <>
-      {patchError && <p className="structuredError">{patchError}</p>}
+      {error.patch && <p className="structuredError">{error.patch}</p>}
+      {success && <p className="structuredSuccess">{success}</p>}
       <p className="structuredInfo">Vous souhaitez modifier votre compte</p>
       <form className="modifyForm" onSubmit={handleSubmit}>
         <label htmlFor="name">Nom d'utilisateur: </label>

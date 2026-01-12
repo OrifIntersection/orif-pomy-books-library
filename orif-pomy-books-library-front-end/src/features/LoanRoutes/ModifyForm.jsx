@@ -6,8 +6,10 @@ const loansAPIHandler = new APIHandler("loans");
 
 export default function ModifyForm() {
   const [loan, setLoan] = useState();
-  const [getError, setGetError] = useState();
-  const [patchError, setPatchError] = useState();
+
+  const [error, setError] = useState({ get: null, patch: null });
+  const [success, setSuccess] = useState();
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -18,7 +20,7 @@ export default function ModifyForm() {
         setLoan(body.data);
       } catch (error) {
         console.error(error);
-        setGetError(error.message);
+        setError((prev) => ({ ...prev, get: error.message }));
       }
     }
     getAPI();
@@ -30,21 +32,27 @@ export default function ModifyForm() {
     const formData = new FormData(e.target);
 
     try {
-      await loansAPIHandler.patch({ endDate: formData.get("endDate") }, id);
-      alert("Votre emprunt à été modifié avec succès !");
+      const body = await loansAPIHandler.patch(
+        { endDate: formData.get("endDate") },
+        id
+      );
+      setSuccess(body.message);
 
-      navigate(`/livres/${loan.Book._id}`);
+      setTimeout(() => {
+        navigate(`/livres/${loan.Book._id}`);
+      }, import.meta.env.VITE_NAVIGATE_TIMEOUT);
     } catch (error) {
       console.error(error);
-      setPatchError(error.message);
+      setError((prev) => ({ ...prev, patch: error.message }));
     }
   }
 
-  if (getError) return <p className="structuredError">{getError}</p>;
+  if (error.get) return <p className="structuredError">{error.get}</p>;
 
   return loan ? (
     <>
-      {patchError && <p className="structuredError">{patchError}</p>}
+      {error.patch && <p className="structuredError">{error.patch}</p>}
+      {success && <p className="structuredSuccess">{success}</p>}
       <p className="structuredInfo">
         Vous souhaitez modifier votre emprunt sur le livre: {loan.Book.Title} -{" "}
         {loan.Book.Author}

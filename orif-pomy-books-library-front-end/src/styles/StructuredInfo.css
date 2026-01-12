@@ -13,3 +13,11 @@
     border-radius: 5px;
     border: 1px solid rgba(170, 0, 0, 0.2)
 }
+
+.structuredSuccess { 
+    margin: 5px;
+    padding: 12px;
+    background-color: rgba(0, 200, 0, 0.2);
+    border-radius: 5px;
+    border: 1px solid rgba(0, 200, 0, 0.4)
+}

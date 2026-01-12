@@ -9,7 +9,7 @@ const booksAPIHandler = new APIHandler("books");
 export default function GetForm() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [books, setBooks] = useState();
-  const [pageError, setPageError] = useState();
+  const [error, setError] = useState();
 
   useEffect(() => {
     async function getAPI() {
@@ -17,12 +17,12 @@ export default function GetForm() {
         const body = await booksAPIHandler.get(searchParams);
         setBooks(body.data);
 
-        setPageError(null);
+        setError(null); // reset error message when a book is found
       } catch (error) {
         console.error(error);
-        setPageError(error.message);
+        setError(error.message);
 
-        setBooks(null);
+        setBooks(null); // reset book data when an error is sent
       }
     }
     getAPI();
@@ -67,7 +67,7 @@ export default function GetForm() {
         </div>
         <input type="submit" value="Recherche" />
       </form>
-      {pageError && <p className="structuredError">{pageError}</p>}
+      {error && <p className="structuredError">{error}</p>}
       {books ? (
         <BookTableContent
           books={books}

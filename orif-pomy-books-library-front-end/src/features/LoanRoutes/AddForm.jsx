@@ -7,8 +7,10 @@ const loansAPIHandler = new APIHandler("loans");
 
 export default function AddForm() {
   const [book, setBook] = useState();
-  const [getError, setGetError] = useState();
-  const [postError, setPostError] = useState();
+
+  const [error, setError] = useState({ get: null, post: null });
+  const [success, setSuccess] = useState();
+
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -19,7 +21,7 @@ export default function AddForm() {
         setBook(body.data);
       } catch (error) {
         console.error(error);
-        setGetError(error.message);
+        setError((prev) => ({ ...prev, get: error.message }));
       }
     }
     getAPI();
@@ -29,21 +31,24 @@ export default function AddForm() {
     e.preventDefault();
     const endDate = e.target.endDate.value;
     try {
-      await loansAPIHandler.post({ bookId: book._id, endDate });
-      alert("Le livre a été emprunté avec succès !");
+      const body = await loansAPIHandler.post({ bookId: book._id, endDate });
+      setSuccess(body.message);
 
-      navigate(`/livres/${book._id}`);
+      setTimeout(() => {
+        navigate(`/livres/${book._id}`);
+      }, import.meta.env.VITE_NAVIGATE_TIMEOUT);
     } catch (error) {
       console.error(error);
-      setPostError(error.message);
+      setError((prev) => ({ ...prev, post: error.message }));
     }
   }
 
-  if (getError) return <p className="structuredError">{getError}</p>;
+  if (error.get) return <p className="structuredError">{error.get}</p>;
 
   return book ? (
     <>
-      {postError ? <p className="structuredError">{postError}</p> : null}
+      {error.post && <p className="structuredError">{error.post}</p>}
+      {success && <p className="structuredSuccess">{success}</p>}
       <p className="structuredInfo">
         Vous souhaitez emprunter: {book.Title} - {book.Author}
       </p>

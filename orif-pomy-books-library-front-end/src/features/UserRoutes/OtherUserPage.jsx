@@ -6,7 +6,7 @@ const collaboratorsAPIHandler = new APIHandler("collaborators");
 
 export default function OtherUserPage() {
   const [collaborator, setCollaborator] = useState();
-  const [getError, setGetError] = useState();
+  const [error, setError] = useState();
   const { id } = useParams();
 
   useEffect(() => {
@@ -16,14 +16,14 @@ export default function OtherUserPage() {
         setCollaborator(body.data);
       } catch (error) {
         console.error(error);
-        setGetError(error.message);
+        setError(error.message);
       }
     }
 
     GetAPI();
   }, []);
 
-  if (getError) return <p className="structuredError">{getError}</p>;
+  if (error) return <p className="structuredError">{error}</p>;
 
   return collaborator ? (
     <>

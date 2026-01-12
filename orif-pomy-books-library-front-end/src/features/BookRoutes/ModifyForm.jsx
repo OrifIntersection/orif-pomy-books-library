@@ -13,8 +13,8 @@ const booksAPIHandler = new APIHandler("books");
 
 export default function ModifyForm() {
   const [book, setBook] = useState();
-  const [getError, setGetError] = useState();
-  const [patchError, setPatchError] = useState();
+  const [error, setError] = useState({ get: null, patch: null });
+  const [success, setSuccess] = useState();
 
   const [distinctValues, setDistinctValues] = useState({
     uniqueGenres: [],
@@ -44,7 +44,7 @@ export default function ModifyForm() {
         });
       } catch (error) {
         console.error(error);
-        setGetError(error.message);
+        setError((prev) => ({ ...prev, get: error.message }));
       }
     }
     getAPI();
@@ -64,7 +64,7 @@ export default function ModifyForm() {
         setSelectedSubjects(body.data.Subject);
       } catch (error) {
         console.error(error);
-        setGetError(error.message);
+        setError((prev) => ({ ...prev, get: error.message }));
       }
     }
     getAPI();
@@ -100,15 +100,15 @@ export default function ModifyForm() {
       navigate("/livres/" + id);
     } catch (error) {
       console.error(error);
-      setPatchError(error.message);
+      setError((prev) => ({ ...prev, patch: error.message }));
     }
   }
 
-  if (getError) return <p className="structuredError">{getError}</p>;
+  if (error.get) return <p className="structuredError">{error.get}</p>;
 
   return book ? (
     <form onSubmit={handleFormSubmit} className="modifyForm">
-      {patchError ? <p className="structuredError">{patchError}</p> : null}
+      {error.patch ? <p className="structuredError">{error.patch}</p> : null}
       <label htmlFor="title">Titre: </label>
       <input type="text" name="title" defaultValue={book.Title} required />
       <label htmlFor="author">Auteur: </label>

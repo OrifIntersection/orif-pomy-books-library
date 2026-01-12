@@ -158,11 +158,19 @@ function SelectWithOther({
 export default function AddForm() {
   const navigate = useNavigate();
 
-  const [getError, setGetError] = useState();
-  const [postError, setPostError] = useState();
+  const [error, setError] = useState({ get: null, post: null });
+  const [success, setSuccess] = useState();
 
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [selectedSubjects, setSelectedSubjects] = useState([]);
+
+  const [formState, setFormState] = useState({
+    Title: "",
+    Author: "",
+    Genre: [],
+    Subject: [],
+    Location: "",
+  });
 
   const [distinctValues, setDistinctValues] = useState({
     uniqueGenres: [],
@@ -186,7 +194,7 @@ export default function AddForm() {
         });
       } catch (error) {
         console.error(error);
-        setGetError(error.message);
+        setError((prev) => ({ ...prev, get: error.message }));
       }
     }
     getAPI();
@@ -209,22 +217,25 @@ export default function AddForm() {
             : formData.get("Location"),
       });
 
-      alert(body.message);
+      setSuccess(body.message);
 
-      navigate("/livres/" + body.data._id);
+      setTimeout(() => {
+        navigate("/livres/" + body.data._id);
+      }, import.meta.env.VITE_NAVIGATE_TIMEOUT);
     } catch (error) {
       console.error(error);
-      setPostError(error.message);
+      setError((prev) => ({ ...prev, post: error.message }));
     }
   }
 
-  if (getError) return <p className="structuredError">{getError}</p>;
+  if (error.get) return <p className="structuredError">{error.get}</p>;
 
   return distinctValues.uniqueGenres &&
     distinctValues.uniqueSubjects &&
     distinctValues.uniqueLocations ? (
     <form onSubmit={submitBook} className="bookForm">
-      {postError ? <p className="structuredError">{postError}</p> : null}
+      {error.post && <p className="structuredError">{error.post}</p>}
+      {success && <p className="structuredSuccess">{success}</p>}
       <label htmlFor="Title">
         Titre <span style={{ color: "red" }}>*</span>:{" "}
       </label>

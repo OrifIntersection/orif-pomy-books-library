@@ -6,9 +6,8 @@ const collaboratorsAPIHandler = new APIHandler("collaborators/me");
 
 export default function DeleteForm() {
   const [book, setBook] = useState();
-  const [getError, setGetError] = useState();
-  const [deleteError, setDeleteError] = useState();
-  const navigate = useNavigate();
+  const [error, setError] = useState({ get: null, delete: null });
+  const [success, setSuccess] = useState();
 
   useEffect(() => {
     async function getAPI() {
@@ -17,7 +16,7 @@ export default function DeleteForm() {
         setBook(body.data);
       } catch (error) {
         console.error(error);
-        setGetError(error.message);
+        setError((prev) => ({ ...prev, get: error.message }));
       }
     }
     getAPI();
@@ -27,23 +26,27 @@ export default function DeleteForm() {
     e.preventDefault();
 
     try {
-      await collaboratorsAPIHandler.delete();
-      alert("Votre compte à été supprimé");
+      const body = await collaboratorsAPIHandler.delete();
+
+      setSuccess(body.message);
 
       window.sessionStorage.removeItem("auth_token");
       window.sessionStorage.removeItem("name");
-      window.location.assign("/livres");
+      setTimeout(() => {
+        window.location.assign("/livres");
+      }, input.meta.env.VITE_NAVIGATE_TIMEOUT);
     } catch (error) {
       console.error(error);
-      setDeleteError(error.message);
+      setError((prev) => ({ ...prev, delete: error.message }));
     }
   }
 
-  if (getError) return <p className="structuredError">{getError}</p>;
+  if (error.get) return <p className="structuredError">{error.get}</p>;
 
   return book ? (
     <form className="deleteForm" onSubmit={handleSubmit}>
-      {deleteError ? <p className="structuredError">{deleteError}</p> : null}
+      {error.delete && <p className="structuredError">{error.delete}</p>}
+      {success && <p className="structuredSuccess">{success}</p>}
       <p className="structuredInfo">
         Êtes vous sûr de vouloir supprimer votre compte?{" "}
         <span style={{ color: "red" }}>Vos données seront irrécupérables.</span>

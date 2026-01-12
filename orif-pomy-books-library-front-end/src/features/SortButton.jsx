@@ -1,5 +1,8 @@
-export default function SortButton({ searchParams, setSearchParams, columnName }) {
-
+export default function SortButton({
+  searchParams,
+  setSearchParams,
+  columnName,
+}) {
   function sortBooks(e) {
     //
     // function to set sort queries to the URL whenever a sort button is clicked
