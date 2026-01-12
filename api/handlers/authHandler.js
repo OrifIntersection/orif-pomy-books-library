@@ -156,7 +156,7 @@ export async function deleteAccount(req, res, next) {
 
   const checkLoans = Loan.exists({
     Collaborator: collaboratorId,
-    exists: true,
+    Returned: false,
   });
 
   if (checkLoans) throw new AppError("CANNOT_DELETE_ACCOUNT_WITH_LOANS");
