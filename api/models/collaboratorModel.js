@@ -4,6 +4,7 @@ const collaboratorSchema = new mongoose.Schema({
   Name: {
     type: String,
     required: [true, "A collaborator must have a name"],
+    unique: true,
   },
   Email: {
     type: String,

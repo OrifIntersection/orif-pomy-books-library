@@ -47,7 +47,7 @@ export default function ModifyForm() {
       {patchError && <p className="structuredError">{patchError}</p>}
       <p className="structuredInfo">
         Vous souhaitez modifier votre emprunt sur le livre: {loan.Book.Title} -{" "}
-        {loan.Book.Author.join(", ")}
+        {loan.Book.Author}
       </p>
       <p className="structuredInfo">
         Cet emprunt devra être rendu pour:{" "}

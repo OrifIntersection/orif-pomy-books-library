@@ -4,6 +4,8 @@ import { Collaborator } from "../models/collaboratorModel.js";
 import validator from "validator";
 import { parseWhitelist } from "../utils/emailHosts.js";
 
+import { Loan } from "../models/loanModel.js";
+
 export async function attachCollaborator(req, res, next) {
   //
   //  Attach collaborator ID to request if valid token is provided
@@ -147,11 +149,17 @@ export async function modify(req, res, next) {
 
 export async function deleteAccount(req, res, next) {
   // deletes the collaborator account
-  // will not handle if any books are loaned by the collaborator
-  // loan docs will point to empty IDs
+  // checks if any loans are active first
 
   const collaboratorId = req.collaboratorId;
   if (!collaboratorId) throw new AppError("UNAUTHORIZED");
+
+  const checkLoans = Loan.exists({
+    Collaborator: collaboratorId,
+    exists: true,
+  });
+
+  if (checkLoans) throw new AppError("CANNOT_DELETE_ACCOUNT_WITH_LOANS");
 
   await Collaborator.findByIdAndDelete(collaboratorId);
 

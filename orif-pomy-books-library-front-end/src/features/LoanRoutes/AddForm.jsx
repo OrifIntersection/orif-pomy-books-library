@@ -45,7 +45,7 @@ export default function AddForm() {
     <>
       {postError ? <p className="structuredError">{postError}</p> : null}
       <p className="structuredInfo">
-        Vous souhaitez emprunter: {book.Title} - {book.Author.join(", ")}
+        Vous souhaitez emprunter: {book.Title} - {book.Author}
       </p>
       <form className="borrowForm" onSubmit={handleSubmit}>
         <label htmlFor="endDate">

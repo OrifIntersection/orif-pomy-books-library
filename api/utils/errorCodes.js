@@ -139,6 +139,11 @@ export const ERROR_CODES = {
     message: "Vous essayez d'accéder à des données qui ont été supprimées.",
     statusCode: 403,
   },
+  CANNOT_DELETE_ACCOUNT_WITH_LOANS: {
+    message:
+      "Vous avez encore des livres empruntés, veuillez les rendre avant de supprimer votre compte.",
+    statusCode: 403,
+  },
   CANNOT_DELETE_WHILE_LOANED: {
     message:
       "Il est impossible de supprimer un livre qui est actuellement emprunté",
