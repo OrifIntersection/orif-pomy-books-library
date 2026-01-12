@@ -20,7 +20,10 @@
 
 export default class APIHandler {
   constructor(url) {
-    this.staticUrl = new URL(url, "http://176.100.36.109:3000/api/v1/");
+    this.staticUrl = new URL(
+      url,
+      "http://bibliotheque.applications.ws/api/v1/"
+    );
     this.url = this.staticUrl;
     this.authId = null;
   }
