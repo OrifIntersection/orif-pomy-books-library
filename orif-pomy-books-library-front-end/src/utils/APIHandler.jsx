@@ -22,7 +22,7 @@ export default class APIHandler {
   constructor(url) {
     this.staticUrl = new URL(
       url,
-      "http://bibliotheque.applications.ws/api/v1/"
+      "https://bibliotheque.applications.ws/api/v1/"
     );
     this.url = this.staticUrl;
     this.authId = null;
@@ -35,8 +35,9 @@ export default class APIHandler {
 
       options.headers = {
         "Content-Type": "application/json",
-        auth_token: this.authId || "",
+        "Auth-Token": this.authId || "",
       };
+
       const res = await fetch(this.url, options);
 
       if (res.status === 500)
