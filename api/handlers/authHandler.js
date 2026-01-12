@@ -50,10 +50,8 @@ export async function signup(req, res, next) {
 
   email = validator.normalizeEmail(email, { all_lowercase: true });
 
-  let emailExists = await Collaborator.exists({ Email: email });
-  let nameExists = await Collaborator.exists({ Name: name });
-
-  console.log(emailExists, nameExists);
+  const emailExists = await Collaborator.exists({ Email: email });
+  const nameExists = await Collaborator.exists({ Name: name });
 
   if (emailExists) throw new AppError("EMAIL_EXISTS");
   if (nameExists) throw new AppError("NAME_EXISTS");
@@ -123,10 +121,13 @@ export async function modify(req, res, next) {
   validator.normalizeEmail(email, { all_lowercase: true });
 
   const nameExists = await Collaborator.findOne({ Name: name });
+  const emailExists = await Collaborator.findOne({ Email: email });
+
+  console.log(nameExists, nameExists._id.toString(), collaboratorId);
+
   if (nameExists && nameExists._id.toString() !== collaboratorId)
     throw new AppError("NAME_EXISTS");
 
-  const emailExists = await Collaborator.findOne({ Email: email });
   if (emailExists && emailExists._id.toString() !== collaboratorId)
     throw new AppError("EMAIL_EXISTS");
 

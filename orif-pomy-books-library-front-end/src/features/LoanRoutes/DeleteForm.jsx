@@ -34,7 +34,7 @@ export default function DeleteForm() {
       navigate(`/livres/${loan.Book._id}`);
     } catch (error) {
       console.error(error);
-      setDeleteError(error.message)
+      setDeleteError(error.message);
     }
   }
 
@@ -45,7 +45,7 @@ export default function DeleteForm() {
       {deleteError ? <p className="structuredError">{deleteError}</p> : null}
       <p className="structuredInfo">
         Vous souhaitez rendre un emprunt sur le livre: {loan.Book.Title} -{" "}
-        {loan.Book.Author.join(", ")}
+        {loan.Book.Author}
       </p>
       <p className="structuredInfo">
         Cet emprunt devra être rendu pour:{" "}
