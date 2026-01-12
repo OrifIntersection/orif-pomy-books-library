@@ -154,7 +154,7 @@ export async function deleteAccount(req, res, next) {
   const collaboratorId = req.collaboratorId;
   if (!collaboratorId) throw new AppError("UNAUTHORIZED");
 
-  const checkLoans = Loan.exists({
+  const checkLoans = await Loan.exists({
     Collaborator: collaboratorId,
     Returned: false,
   });
