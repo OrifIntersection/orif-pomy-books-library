@@ -8,7 +8,6 @@ import mongoose from "mongoose";
 import AppError from "./api/utils/AppError.js";
 import dotenv from "dotenv";
 
-import { Resend } from "resend";
 import nodemailer from "nodemailer";
 
 // import global environment variables
@@ -17,7 +16,6 @@ dotenv.config({ path: "./config.env" });
 // global middleware
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 
 // routers
