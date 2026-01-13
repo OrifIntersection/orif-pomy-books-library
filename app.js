@@ -1,12 +1,12 @@
 // dependencies
 import express from "express";
-import cors from "cors";
 import booksRouter from "./api/routes/booksRoute.js";
 import collaboratorsRouter from "./api/routes/collaboratorsRoute.js";
 import loansRouter from "./api/routes/loansRoute.js";
 import mongoose from "mongoose";
 import AppError from "./api/utils/AppError.js";
 import dotenv from "dotenv";
+import path from "path";
 
 import nodemailer from "nodemailer";
 
