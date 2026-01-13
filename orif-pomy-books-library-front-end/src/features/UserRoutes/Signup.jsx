@@ -1,6 +1,7 @@
 import APIHandler from "../../utils/APIHandler";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router";
+import { UsernameContext } from "../../contexts/UsernameContext";
 
 const collaboratorsAPIHandler = new APIHandler("collaborators/signup");
 
@@ -9,6 +10,8 @@ export default function Signup() {
   const [success, setSuccess] = useState();
 
   const navigate = useNavigate();
+
+  const { setUsername } = useContext(UsernameContext);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -20,6 +23,7 @@ export default function Signup() {
       const body = await collaboratorsAPIHandler.post({ name, email });
 
       setSuccess(body.message);
+      setUsername(sessionStorage.get("username"));
 
       setTimeout(() => {
         navigate("/livres");

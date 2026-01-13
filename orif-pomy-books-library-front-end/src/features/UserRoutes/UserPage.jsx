@@ -1,8 +1,10 @@
 import APIHandler from "../../utils/APIHandler";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import BookTableContent from "../BookTableContent.jsx";
 import NavButton from "../NavButton.jsx";
 import { useNavigate } from "react-router";
+
+import { UsernameContext } from "../../contexts/UsernameContext.jsx";
 
 // Get specifically the current logged in user's info
 const collaboratorsAPIHandler = new APIHandler("collaborators/me");
@@ -10,10 +12,12 @@ const loansAPIHandler = new APIHandler("loans");
 
 function LogoutButton() {
   const navigate = useNavigate();
+  const { setUsername } = useContext(UsernameContext);
 
   function handleLogout() {
     window.sessionStorage.removeItem("auth_token");
     window.sessionStorage.removeItem("username");
+    setUsername(null);
     alert("Vous êtes déconnecté.");
 
     navigate("/livres");

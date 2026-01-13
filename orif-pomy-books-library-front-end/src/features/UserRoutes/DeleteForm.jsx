@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router";
 import APIHandler from "../../utils/APIHandler";
+import { UsernameContext } from "../../contexts/UsernameContext";
 
 const collaboratorsAPIHandler = new APIHandler("collaborators/me");
 
@@ -10,6 +11,7 @@ export default function DeleteForm() {
   const [success, setSuccess] = useState();
 
   const navigate = useNavigate();
+  const { setUsername } = useContext(UsernameContext);
 
   useEffect(() => {
     async function getAPI() {
@@ -34,6 +36,8 @@ export default function DeleteForm() {
 
       window.sessionStorage.removeItem("auth_token");
       window.sessionStorage.removeItem("username");
+      setUsername(null);
+
       setTimeout(() => {
         navigate("/livres");
       }, input.meta.env.VITE_NAVIGATE_TIMEOUT);

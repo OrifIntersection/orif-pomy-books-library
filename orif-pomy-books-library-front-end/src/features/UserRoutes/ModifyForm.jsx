@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router";
 import APIHandler from "../../utils/APIHandler";
+import { UsernameContext } from "../../contexts/UsernameContext";
 
 const collaboratorsAPIHandler = new APIHandler("collaborators/me");
 
@@ -12,6 +13,8 @@ export default function ModifyForm() {
   const { id } = useParams();
 
   const navigate = useNavigate();
+
+  const { setUsername } = useContext(UsernameContext);
 
   useEffect(() => {
     async function getAPI() {
@@ -38,6 +41,7 @@ export default function ModifyForm() {
       );
 
       setSuccess(body.message);
+      setUsername(sessionStorage.get("username"));
 
       setTimeout(() => {
         navigate("/collaborateurs/moi");
