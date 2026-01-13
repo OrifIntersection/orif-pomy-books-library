@@ -30,7 +30,8 @@ app.use("/api/v1/loans", loansRouter);
 app.all("*all", (req, res) => {
   res.sendFile(
     path.join(
-      __dirname,
+      "srv",
+      "orif-pomy-books-library",
       "orif-pomy-books-library-front-end",
       "dist",
       "index.html"
