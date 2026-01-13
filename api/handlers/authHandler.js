@@ -12,7 +12,7 @@ export async function attachCollaborator(req, res, next) {
   //  It allows us to get the collaborator ID for logged in users, even on routes that don't require authentication
   //
 
-  const token = req.headers.auth_token;
+  const token = req.headers["Auth-Token"];
   if (!token) return next();
 
   const decoded = jwt.verify(token, process.env.JWTSECRET);

@@ -1,9 +1,10 @@
 import { Outlet } from "react-router";
 import NavButton from "./NavButton.jsx";
-import { useUsername } from "../contexts/UsernameContext.jsx";
+import { useContext } from "react";
+import { UsernameContext } from "../contexts/UsernameContext.jsx";
 
 function Navbar() {
-  const { username } = useUsername();
+  const { username } = useContext(UsernameContext);
 
   return (
     <>

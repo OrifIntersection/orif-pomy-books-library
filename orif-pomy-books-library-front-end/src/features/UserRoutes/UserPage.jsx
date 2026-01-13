@@ -13,7 +13,7 @@ function LogoutButton() {
 
   function handleLogout() {
     window.sessionStorage.removeItem("auth_token");
-    window.sessionStorage.removeItem("name");
+    window.sessionStorage.removeItem("username");
     alert("Vous êtes déconnecté.");
 
     navigate("/livres");

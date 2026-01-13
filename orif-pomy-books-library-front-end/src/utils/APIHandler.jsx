@@ -17,7 +17,6 @@
 //  request bodies cannot be sent on GET requests
 //  so it's currently impossible to authorize for a GET route.
 //
-
 export default class APIHandler {
   constructor(url) {
     this.staticUrl = new URL(
@@ -30,14 +29,14 @@ export default class APIHandler {
 
   async fetchAPI(options = {}) {
     try {
-      if (window.sessionStorage.getItem("auth_token"))
-        this.authId = window.sessionStorage.getItem("auth_token");
+      if (window.sessionStorage.getItem("Auth-Token"))
+        this.authId = window.sessionStorage.getItem("Auth-Token");
 
       options.headers = {
         "Content-Type": "application/json",
         "Auth-Token": this.authId || "",
       };
-
+      console.log(options);
       const res = await fetch(this.url, options);
 
       if (res.status === 500)
@@ -51,8 +50,8 @@ export default class APIHandler {
       // we need the name to display on Navbar
 
       if (body.auth) {
-        window.sessionStorage.setItem("auth_token", body.auth.authToken);
-        window.localStorage.setItem("name", body.auth.name);
+        window.sessionStorage.setItem("Auth-Token", body.auth.authToken);
+        window.sessionStorage.setItem("username", body.auth.name);
       }
 
       console.log(`@${options.method}@ from ${this.url}: ${body.status}`);

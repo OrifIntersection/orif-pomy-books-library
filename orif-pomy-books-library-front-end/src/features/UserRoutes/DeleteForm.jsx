@@ -33,7 +33,7 @@ export default function DeleteForm() {
       setSuccess(body.message);
 
       window.sessionStorage.removeItem("auth_token");
-      window.sessionStorage.removeItem("name");
+      window.sessionStorage.removeItem("username");
       setTimeout(() => {
         navigate("/livres");
       }, input.meta.env.VITE_NAVIGATE_TIMEOUT);

@@ -33,7 +33,6 @@ app.all("*all", (req, res) => {
 });
 
 // global error handling middleware
-
 app.use((err, req, res, next) => {
   //
   // use to handle mongoose/express operational errors before reaching the final error handler

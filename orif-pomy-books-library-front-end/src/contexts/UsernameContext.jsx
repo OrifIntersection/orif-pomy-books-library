@@ -1,4 +1,4 @@
-import { useContext, createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const UsernameContext = createContext(null);
 
@@ -10,12 +10,4 @@ export function UsernameProvider({ children }) {
       {children}
     </UsernameContext.Provider>
   );
-}
-
-export function useUsername() {
-  const context = useContext(UsernameContext);
-  if (!context)
-    throw new Error("useUsername must be used within UsernameProvider");
-
-  return context;
 }
