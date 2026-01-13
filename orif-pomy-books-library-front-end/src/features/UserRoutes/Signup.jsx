@@ -23,7 +23,7 @@ export default function Signup() {
       const body = await collaboratorsAPIHandler.post({ name, email });
 
       setSuccess(body.message);
-      setUsername(sessionStorage.get("username"));
+      setUsername(sessionStorage.getItem("username"));
 
       setTimeout(() => {
         navigate("/livres");

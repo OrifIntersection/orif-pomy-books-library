@@ -26,7 +26,7 @@ export default function Login() {
       const body = await collaboratorsAPIHandler.post({ email });
 
       setSuccess(body.message);
-      setUsername(sessionStorage.get("username"));
+      setUsername(sessionStorage.getItem("username"));
 
       setTimeout(() => {
         navigate("/livres");
