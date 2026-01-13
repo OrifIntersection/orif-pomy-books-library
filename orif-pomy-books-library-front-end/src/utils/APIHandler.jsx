@@ -29,8 +29,8 @@ export default class APIHandler {
 
   async fetchAPI(options = {}) {
     try {
-      if (window.sessionStorage.getItem("Auth-Token"))
-        this.authId = window.sessionStorage.getItem("Auth-Token");
+      if (window.localStorage.getItem("Auth-Token"))
+        this.authId = window.localStorage.getItem("Auth-Token");
 
       options.headers = {
         "Content-Type": "application/json",
@@ -50,8 +50,8 @@ export default class APIHandler {
       // we need the name to display on Navbar
 
       if (body.auth) {
-        window.sessionStorage.setItem("Auth-Token", body.auth.authToken);
-        window.sessionStorage.setItem("username", body.auth.name);
+        window.localStorage.setItem("Auth-Token", body.auth.authToken);
+        window.localStorage.setItem("username", body.auth.name);
       }
 
       console.log(`@${options.method}@ from ${this.url}: ${body.status}`);

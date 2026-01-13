@@ -34,8 +34,8 @@ export default function DeleteForm() {
 
       setSuccess(body.message);
 
-      window.sessionStorage.removeItem("auth_token");
-      window.sessionStorage.removeItem("username");
+      window.localStorage.removeItem("Auth-Token");
+      window.localStorage.removeItem("username");
       setUsername(null);
 
       setTimeout(() => {

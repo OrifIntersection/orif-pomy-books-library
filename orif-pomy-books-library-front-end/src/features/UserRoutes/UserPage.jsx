@@ -15,8 +15,8 @@ function LogoutButton() {
   const { setUsername } = useContext(UsernameContext);
 
   function handleLogout() {
-    window.sessionStorage.removeItem("auth_token");
-    window.sessionStorage.removeItem("username");
+    window.localStorage.removeItem("Auth-Token");
+    window.localStorage.removeItem("username");
     setUsername(null);
     alert("Vous êtes déconnecté.");
 

@@ -41,7 +41,7 @@ export default function ModifyForm() {
       );
 
       setSuccess(body.message);
-      setUsername(sessionStorage.getItem("username"));
+      setUsername(localStorage.getItem("username"));
 
       setTimeout(() => {
         navigate("/collaborateurs/moi");
