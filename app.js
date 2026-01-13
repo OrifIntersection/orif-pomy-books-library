@@ -6,7 +6,6 @@ import loansRouter from "./api/routes/loansRoute.js";
 import mongoose from "mongoose";
 import AppError from "./api/utils/AppError.js";
 import dotenv from "dotenv";
-import path from "path";
 
 import nodemailer from "nodemailer";
 
@@ -29,13 +28,7 @@ app.use("/api/v1/loans", loansRouter);
 // handle all other routes, redirect to -> /dist/index.html
 app.all("*all", (req, res) => {
   res.sendFile(
-    path.join(
-      "srv",
-      "orif-pomy-books-library",
-      "orif-pomy-books-library-front-end",
-      "dist",
-      "index.html"
-    )
+    "/srv/orif-pomy-books-library/orif-pomy-books-library-front-end/dist/index.html"
   );
 });
 
