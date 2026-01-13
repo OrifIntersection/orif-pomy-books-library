@@ -26,12 +26,9 @@ app.use("/api/v1/books", booksRouter);
 app.use("/api/v1/collaborators", collaboratorsRouter);
 app.use("/api/v1/loans", loansRouter);
 
-// handle all other routes
+// handle all other routes, redirect to -> /dist/index.html
 app.all("*all", (req, res) => {
-  res.status(404).json({
-    status: "fail",
-    message: `Can't find ${req.originalUrl} on this server!`,
-  });
+  res.sendFile("orif-pomy-books-library-front-end/dist/index.html");
 });
 
 // global error handling middleware
