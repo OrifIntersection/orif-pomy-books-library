@@ -28,7 +28,14 @@ app.use("/api/v1/loans", loansRouter);
 
 // handle all other routes, redirect to -> /dist/index.html
 app.all("*all", (req, res) => {
-  res.sendFile("orif-pomy-books-library-front-end/dist/index.html");
+  res.sendFile(
+    path.join(
+      __dirname,
+      "orif-pomy-books-library-front-end",
+      "dist",
+      "index.html"
+    )
+  );
 });
 
 // global error handling middleware
