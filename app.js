@@ -17,6 +17,7 @@ dotenv.config({ path: "./config.env" });
 const app = express();
 
 app.use(express.json());
+app.use(express.static("orif-pomy-books-library-front-end/dist"));
 
 // routers
 app.use("/api/v1/books", booksRouter);
