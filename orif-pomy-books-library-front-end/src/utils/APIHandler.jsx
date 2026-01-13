@@ -52,7 +52,7 @@ export default class APIHandler {
 
       if (body.auth) {
         window.sessionStorage.setItem("auth_token", body.auth.authToken);
-        window.sessionStorage.setItem("name", body.auth.name);
+        window.localStorage.setItem("name", body.auth.name);
       }
 
       console.log(`@${options.method}@ from ${this.url}: ${body.status}`);

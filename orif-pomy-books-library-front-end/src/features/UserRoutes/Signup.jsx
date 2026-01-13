@@ -1,11 +1,14 @@
 import APIHandler from "../../utils/APIHandler";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const collaboratorsAPIHandler = new APIHandler("collaborators/signup");
 
 export default function Signup() {
   const [error, setError] = useState();
   const [success, setSuccess] = useState();
+
+  const navigate = useNavigate();
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -19,7 +22,7 @@ export default function Signup() {
       setSuccess(body.message);
 
       setTimeout(() => {
-        window.location.assign("/livres"); // reload to update navbar
+        navigate("/livres");
       }, import.meta.env.VITE_NAVIGATE_TIMEOUT);
     } catch (error) {
       console.error(error);

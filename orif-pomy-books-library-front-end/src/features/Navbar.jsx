@@ -1,8 +1,9 @@
 import { Outlet } from "react-router";
 import NavButton from "./NavButton.jsx";
+import { useUsername } from "../contexts/UsernameContext.jsx";
 
 function Navbar() {
-  const user = window.sessionStorage.getItem("name");
+  const { username } = useUsername();
 
   return (
     <>
@@ -19,10 +20,10 @@ function Navbar() {
             Content="+ Ajouter un livre"
             ClassName="navBarButton"
           />
-          {user ? (
+          {username ? (
             <NavButton
               Route="/collaborateurs/moi"
-              Content={user}
+              Content={username}
               ClassName="loginButton"
             />
           ) : (

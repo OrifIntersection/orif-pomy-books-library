@@ -11,6 +11,8 @@ export default function ModifyForm() {
   const [success, setSuccess] = useState();
   const { id } = useParams();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function getAPI() {
       try {
@@ -38,7 +40,7 @@ export default function ModifyForm() {
       setSuccess(body.message);
 
       setTimeout(() => {
-        window.location.assign("/collaborateurs/moi"); // reload to update navbar
+        navigate("/collaborateurs/moi");
       }, import.meta.env.VITE_NAVIGATE_TIMEOUT);
     } catch (error) {
       console.error(error);

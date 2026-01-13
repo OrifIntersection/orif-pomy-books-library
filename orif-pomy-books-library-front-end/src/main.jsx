@@ -8,6 +8,8 @@ import "./styles/Buttons.css";
 import "./styles/LoadingBar.css";
 import "./styles/StructuredInfo.css";
 
+import { UsernameProvider } from "./contexts/UsernameContext.jsx";
+
 import BookModifyForm from "./features/BookRoutes/ModifyForm.jsx";
 import BookDeleteForm from "./features/BookRoutes/DeleteForm.jsx";
 import BookAddForm from "./features/BookRoutes/AddForm.jsx";
@@ -28,30 +30,32 @@ import UserDeleteForm from "./features/UserRoutes/DeleteForm.jsx";
 import Navbar from "./features/Navbar.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <BrowserRouter>
-    <Routes>
-      <Route element={<Navbar />}>
-        <Route path="/livres?" element={<BookGetForm />} />
-        <Route path="/livres/:id" element={<BookGetByIdForm />} />
-        <Route path="/livres/:id/modifier" element={<BookModifyForm />} />
-        <Route path="/livres/:id/supprimer" element={<BookDeleteForm />} />
-        <Route path="/nouvelle-livre" element={<BookAddForm />} />
-        <Route path="/livres/:id/emprunter" element={<LoanAddForm />} />
-        <Route path="/emprunts/:id/supprimer" element={<LoanDeleteForm />} />
-        <Route path="/emprunts/:id/modifier" element={<LoanModifyForm />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/collaborateurs/moi" element={<UserPage />} />
-        <Route
-          path="/collaborateurs/moi/modifier"
-          element={<UserModifyForm />}
-        />
-        <Route
-          path="/collaborateurs/moi/supprimer"
-          element={<UserDeleteForm />}
-        />
-        <Route path="/collaborateurs/:id" element={<OtherUserPage />} />
-      </Route>
-    </Routes>
-  </BrowserRouter>
+  <UsernameProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Navbar />}>
+          <Route path="/livres?" element={<BookGetForm />} />
+          <Route path="/livres/:id" element={<BookGetByIdForm />} />
+          <Route path="/livres/:id/modifier" element={<BookModifyForm />} />
+          <Route path="/livres/:id/supprimer" element={<BookDeleteForm />} />
+          <Route path="/nouvelle-livre" element={<BookAddForm />} />
+          <Route path="/livres/:id/emprunter" element={<LoanAddForm />} />
+          <Route path="/emprunts/:id/supprimer" element={<LoanDeleteForm />} />
+          <Route path="/emprunts/:id/modifier" element={<LoanModifyForm />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/collaborateurs/moi" element={<UserPage />} />
+          <Route
+            path="/collaborateurs/moi/modifier"
+            element={<UserModifyForm />}
+          />
+          <Route
+            path="/collaborateurs/moi/supprimer"
+            element={<UserDeleteForm />}
+          />
+          <Route path="/collaborateurs/:id" element={<OtherUserPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  </UsernameProvider>
 );

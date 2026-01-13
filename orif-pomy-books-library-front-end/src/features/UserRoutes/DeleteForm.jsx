@@ -9,6 +9,8 @@ export default function DeleteForm() {
   const [error, setError] = useState({ get: null, delete: null });
   const [success, setSuccess] = useState();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function getAPI() {
       try {
@@ -33,7 +35,7 @@ export default function DeleteForm() {
       window.sessionStorage.removeItem("auth_token");
       window.sessionStorage.removeItem("name");
       setTimeout(() => {
-        window.location.assign("/livres");
+        navigate("/livres");
       }, input.meta.env.VITE_NAVIGATE_TIMEOUT);
     } catch (error) {
       console.error(error);

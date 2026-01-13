@@ -2,18 +2,21 @@ import APIHandler from "../../utils/APIHandler";
 import { useEffect, useState } from "react";
 import BookTableContent from "../BookTableContent.jsx";
 import NavButton from "../NavButton.jsx";
+import { useNavigate } from "react-router";
 
 // Get specifically the current logged in user's info
 const collaboratorsAPIHandler = new APIHandler("collaborators/me");
 const loansAPIHandler = new APIHandler("loans");
 
 function LogoutButton() {
+  const navigate = useNavigate();
+
   function handleLogout() {
     window.sessionStorage.removeItem("auth_token");
     window.sessionStorage.removeItem("name");
     alert("Vous êtes déconnecté.");
 
-    window.location.assign("/livres");
+    navigate("/livres");
   }
 
   return (
