@@ -36,7 +36,7 @@ export default class APIHandler {
         "Content-Type": "application/json",
         "Auth-Token": this.authId || "",
       };
-      console.log(options);
+
       const res = await fetch(this.url, options);
 
       if (res.status === 500)

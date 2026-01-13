@@ -41,12 +41,14 @@ export default function UserPage() {
       try {
         // we query the API for loans that belong to the current user & are not returned yet
         const collaboratorBody = await collaboratorsAPIHandler.get();
+        setUserInfo(collaboratorBody.data);
+
         const loansBody = await loansAPIHandler.get({
           mine: true,
           returned: false,
         });
 
-        setUserInfo(collaboratorBody.data);
+        // setUserInfo(collaboratorBody.data); if loansAPIHandler throws a 404 error, setUserInfo wouldn't be called...
         setUserLoans(loansBody.data);
       } catch (error) {
         console.error(error);
