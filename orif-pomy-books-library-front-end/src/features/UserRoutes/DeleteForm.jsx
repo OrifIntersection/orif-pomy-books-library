@@ -1,17 +1,16 @@
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router";
 import APIHandler from "../../utils/APIHandler";
-import { UsernameContext } from "../../contexts/UsernameContext";
+
+import useFormSubmit from "../../utils/useFormSubmit.jsx";
 
 const collaboratorsAPIHandler = new APIHandler("collaborators/me");
 
 export default function DeleteForm() {
   const [book, setBook] = useState();
-  const [error, setError] = useState({ get: null, delete: null });
-  const [success, setSuccess] = useState();
+  const [error, setError] = useState();
 
   const navigate = useNavigate();
-  const { setUsername } = useContext(UsernameContext);
 
   useEffect(() => {
     async function getAPI() {
@@ -20,38 +19,30 @@ export default function DeleteForm() {
         setBook(body.data);
       } catch (error) {
         console.error(error);
-        setError((prev) => ({ ...prev, get: error.message }));
+        setError(error.message);
       }
     }
     getAPI();
   }, []);
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-
-    try {
-      const body = await collaboratorsAPIHandler.delete();
-
-      setSuccess(body.message);
-
-      window.localStorage.removeItem("Auth-Token");
-      window.localStorage.removeItem("username");
-      setUsername(null);
-
+  const deleteForm = useFormSubmit({
+    onSubmit: function () {
+      return collaboratorsAPIHandler.delete();
+    },
+    onSuccess: function () {
       setTimeout(() => {
         navigate("/livres");
       }, input.meta.env.VITE_NAVIGATE_TIMEOUT);
-    } catch (error) {
-      console.error(error);
-      setError((prev) => ({ ...prev, delete: error.message }));
-    }
-  }
+    },
+  });
 
-  if (error.get) return <p className="structuredError">{error.get}</p>;
+  if (error) return <p className="structuredError">{error}</p>;
 
   return book ? (
     <form className="deleteForm" onSubmit={handleSubmit}>
-      {error.delete && <p className="structuredError">{error.delete}</p>}
+      {deleteForm.error && (
+        <p className="structuredError">{deleteForm.error}</p>
+      )}
       {success && <p className="structuredSuccess">{success}</p>}
       <p className="structuredInfo">
         Êtes vous sûr de vouloir supprimer votre compte?{" "}

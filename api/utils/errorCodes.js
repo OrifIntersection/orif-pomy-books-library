@@ -185,4 +185,9 @@ export const ERROR_CODES = {
     message: "Vous n'êtes pas identifié, veuillez login s'il vous plaît.",
     statusCode: 401,
   },
+  EXPIRED_AUTH: {
+    message:
+      "Votre session est expirée, veuillez login à nouveau s'il vous plaît.",
+    statusCode: 401,
+  },
 };

@@ -34,7 +34,7 @@ export default function UserPage() {
   const [userInfo, setUserInfo] = useState(null);
   const [userLoans, setUserLoans] = useState(null);
 
-  const [error, setError] = useState();
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function getAPI() {
@@ -84,15 +84,12 @@ export default function UserPage() {
         Route="/collaborateurs/moi/supprimer"
         Content="Supprimer mon profil"
       />
-      {fixedBooks && userInfo ? (
+      {error && <p className="structuredError">{error}</p>}
+      {fixedBooks && userInfo && (
         <div className="structuredInfo">
           Vos livres empruntés (cliquez sur un livre pour plus de détails):
           <BookTableContent books={fixedBooks} />
         </div>
-      ) : error ? (
-        <p className="structuredError">{error}</p>
-      ) : (
-        <p className="loadingBar">Loading...</p>
       )}
     </>
   );

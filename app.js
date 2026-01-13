@@ -39,12 +39,16 @@ app.use((err, req, res, next) => {
   //
 
   if (err.name === "CastError") return next(new AppError("MALFORMED_ID"));
+
   if (err.name === "ValidationError") {
     const messages = Object.values(err.errors).map((el) => el.message);
     return next(
       new AppError(`Invalid input data. ${messages.join(". ")}`, 400)
     );
   }
+
+  if (err.name === "TokenExpiredError")
+    return next(new AppError("EXPIRED_AUTH"));
 
   next(err);
 });
@@ -85,7 +89,7 @@ const transporter = nodemailer.createTransport({
 (async () => {
   try {
     const info = await transporter.sendMail({
-      from: "onboarding@resend.dev", // sender address
+      from: "testing@bibliotheque.applications.ws", // sender address
       to: "lithiumium@gmail.com", // list of recipients
       subject: "Hello", // subject line
       html: "<b>Hello world?</b>", // HTML body

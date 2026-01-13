@@ -29,8 +29,8 @@ export default class APIHandler {
 
   async fetchAPI(options = {}) {
     try {
-      if (window.localStorage.getItem("Auth-Token"))
-        this.authId = window.localStorage.getItem("Auth-Token");
+      if (localStorage.getItem("Auth-Token"))
+        this.authId = localStorage.getItem("Auth-Token");
 
       options.headers = {
         "Content-Type": "application/json",
@@ -40,20 +40,11 @@ export default class APIHandler {
       const res = await fetch(this.url, options);
 
       if (res.status === 500)
-        throw new Error("There was an unexpected error on the server");
+        throw new Error("Une erreur inattendue est survenue sur le serveur.");
 
       const body = await res.json();
 
       if (body.status === "fail") throw new Error(body.message);
-
-      // session storage management only runs when body contains an auth field
-      // we need the name to display on Navbar
-
-      if (body.auth) {
-        window.localStorage.setItem("Auth-Token", body.auth.authToken);
-        window.localStorage.setItem("username", body.auth.name);
-      }
-
       console.log(`@${options.method}@ from ${this.url}: ${body.status}`);
       if (body.message) console.log(body.message);
 

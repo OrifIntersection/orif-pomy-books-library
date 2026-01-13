@@ -1,8 +1,8 @@
 import APIHandler from "../../utils/APIHandler";
-import { useState, useContext } from "react";
 import NavButton from "../NavButton.jsx";
 import { useNavigate } from "react-router";
-import { UsernameContext } from "../../contexts/UsernameContext.jsx";
+
+import useFormSubmit from "../../utils/useFormSubmit.jsx";
 
 const collaboratorsAPIHandler = new APIHandler("collaborators/login");
 
@@ -13,29 +13,18 @@ export default function Login() {
   //  JWT token is used handled in APIHandler for authorization via headers
   //
 
-  const [error, setError] = useState();
-  const [success, setSuccess] = useState();
   const navigate = useNavigate();
 
-  const { setUsername } = useContext(UsernameContext);
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    const email = e.target.email.value;
-    try {
-      const body = await collaboratorsAPIHandler.post({ email });
-
-      setSuccess(body.message);
-      setUsername(localStorage.getItem("username"));
-
+  const { handleSubmit, success, error, loading } = useFormSubmit({
+    onSubmit: function (values) {
+      return collaboratorsAPIHandler.post({ email: values.email });
+    },
+    onSuccess: function () {
       setTimeout(() => {
         navigate("/livres");
       }, import.meta.env.VITE_NAVIGATE_TIMEOUT);
-    } catch (error) {
-      console.error(error);
-      setError(error.message);
-    }
-  }
+    },
+  });
 
   return (
     <form onSubmit={handleSubmit} className="loginForm">
