@@ -90,20 +90,19 @@
   border: none;
   border-radius: 8px;
   font-size: 14px;
-  font-weight: bold;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .addButton {
   display: inline-flex;
-  padding: 10px;
+  padding: 9px;
   background: rgb(0, 90, 170, 1);
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 14px;
-  font-weight: bold;
+
   cursor: pointer;
   transition: background 0.2s;
 }

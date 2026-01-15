@@ -1,6 +1,7 @@
 import { useSearchParams } from "react-router";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import BookTableContent from "../BookTableContent.jsx";
+import useFormSubmit from "../../utils/useFormSubmit.jsx";
 
 import APIHandler from "../../utils/APIHandler.jsx";
 
@@ -8,24 +9,15 @@ const booksAPIHandler = new APIHandler("books");
 
 export default function GetForm() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [books, setBooks] = useState();
-  const [error, setError] = useState();
+
+  const getForm = useFormSubmit({
+    onSubmit: function () {
+      return booksAPIHandler.get(searchParams);
+    },
+  });
 
   useEffect(() => {
-    async function getAPI() {
-      try {
-        const body = await booksAPIHandler.get(searchParams);
-        setBooks(body.data);
-
-        setError(null); // reset error message when a book is found
-      } catch (error) {
-        console.error(error);
-        setError(error.message);
-
-        setBooks(null); // reset book data when an error is sent
-      }
-    }
-    getAPI();
+    getForm.handleSubmit();
   }, [setSearchParams]);
 
   function submitSearch(e) {
@@ -67,10 +59,10 @@ export default function GetForm() {
         </div>
         <input type="submit" value="Recherche" />
       </form>
-      {error && <p className="structuredError">{error}</p>}
-      {books ? (
+      {getForm.error && <p className="structuredError">{getForm.error}</p>}
+      {getForm.res ? (
         <BookTableContent
-          books={books}
+          books={getForm.res}
           searchParams={searchParams}
           setSearchParams={setSearchParams}
         />

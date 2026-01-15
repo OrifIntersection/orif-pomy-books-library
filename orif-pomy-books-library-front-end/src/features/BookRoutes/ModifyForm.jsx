@@ -1,142 +1,141 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import APIHandler from "../../utils/APIHandler.jsx";
+import useFormSubmit from "../../utils/useFormSubmit.jsx";
+
+import SingleSelectWithOther from "../SingleSelectWithOther.jsx";
+import SelectWithOther from "../SelectWithOther.jsx";
 
 const booksAPIHandler = new APIHandler("books");
-
-// Needs to get -> Unique locations
-//              -> BookById
-//
-// Render BookById info, with dropdown menus & tagbuttons on Subjects, Genres + dropdown for location
-//
-// Then patch   -> BookById
+const distinctBooksAPIHandler = new APIHandler("books/distinct");
 
 export default function ModifyForm() {
-  const [book, setBook] = useState();
-  const [error, setError] = useState({ get: null, patch: null });
-  const [success, setSuccess] = useState();
-
-  const [distinctValues, setDistinctValues] = useState({
-    uniqueGenres: [],
-    uniqueSubjects: [],
-    uniqueLocations: [],
+  const [formState, setFormState] = useState({
+    Title: "",
+    Author: "",
+    Genre: [],
+    Subject: [],
+    Location: "",
   });
-
-  const [selectedSubjects, setSelectedSubjects] = useState([]);
-  const [selectedGenres, setSelectedGenres] = useState([]);
 
   const { id } = useParams();
   const navigate = useNavigate();
 
+  const getDistinctForm = useFormSubmit({
+    onSubmit: function () {
+      return distinctBooksAPIHandler.get();
+    },
+    onSuccess: function (res) {
+      res.data.uniqueGenres.push("-- Autre --");
+      res.data.uniqueSubjects.push("-- Autre --");
+      res.data.uniqueLocations.push("-- Autre --");
+    },
+  });
+
+  const getBookForm = useFormSubmit({
+    onSubmit: function () {
+      return booksAPIHandler.get("", id);
+    },
+    onSuccess: function (res) {
+      setFormState({
+        Title: res.data.Title,
+        Author: res.data.Author,
+        Genre: res.data.Genre,
+        Subject: res.data.Subject,
+        Location: res.data.Location,
+      });
+    },
+  });
+
+  const patchBookForm = useFormSubmit({
+    onSubmit: function () {
+      return booksAPIHandler.patch(formData, id);
+    },
+    onSuccess: function (res) {
+      setTimeout(() => {
+        navigate("/livres/" + res.data._id);
+      }, import.meta.env.VITE_NAVIGATE_TIMEOUT);
+    },
+  });
+
   useEffect(() => {
-    async function getAPI() {
-      try {
-        const body = await distinctBooksAPIHandler.get();
-
-        body.data.uniqueGenres.push("-- Autre --");
-        body.data.uniqueSubjects.push("-- Autre --");
-        body.data.uniqueLocations.push("-- Autre --");
-
-        setDistinctValues({
-          uniqueGenres: body.data.uniqueGenres,
-          uniqueSubjects: body.data.uniqueSubjects,
-          uniqueLocations: body.data.uniqueLocations,
-        });
-      } catch (error) {
-        console.error(error);
-        setError((prev) => ({ ...prev, get: error.message }));
-      }
-    }
-    getAPI();
+    getDistinctForm.handleSubmit();
+    getBookForm.handleSubmit();
   }, []);
 
-  //
-  // useEffect to getBookById from the API and render it
-  // runs once on page load to query for getBookById
-  //
+  console.log(formState);
 
-  useEffect(() => {
-    async function getAPI() {
-      try {
-        const body = await booksAPIHandler.get("", id);
-        setBook(body.data);
-        setSelectedGenres(body.data.Genre);
-        setSelectedSubjects(body.data.Subject);
-      } catch (error) {
-        console.error(error);
-        setError((prev) => ({ ...prev, get: error.message }));
-      }
-    }
-    getAPI();
-  }, []);
+  if (getBookForm.error || getDistinctForm.error)
+    return (
+      <p className="structuredError">
+        {getBookForm.error || getDistinctForm.error}
+      </p>
+    );
 
-  //
-  // function to be called when the form is submitted
-  // will PATCH the API based on user input
-  //
+  if (getBookForm.loading || getDistinctForm.loading)
+    return <p className="loadingBar">Loading...</p>;
 
-  async function handleFormSubmit(e) {
-    e.preventDefault();
+  return (
+    getBookForm.res && (
+      <form
+        onSubmit={(e) => patchBookForm.handleSubmit(e)}
+        className="bookForm"
+      >
+        {patchBookForm.error && (
+          <p className="structuredError">{patchBookForm.error}</p>
+        )}
+        {patchBookForm.success && (
+          <p className="structuredSuccess">{patchBookForm.success}</p>
+        )}
+        <label htmlFor="Title">
+          Titre <span style={{ color: "red" }}>*</span>:{" "}
+        </label>
+        <input
+          type="text"
+          name="Title"
+          onChange={(e) => {
+            setFormState((prev) => ({ ...prev, Title: e.target.value }));
+          }}
+          defaultValue={formState.Title}
+          required
+        />
+        <label htmlFor="Author">
+          Auteur <span style={{ color: "red" }}>*</span>:{" "}
+        </label>
+        <input
+          type="text"
+          name="Author"
+          onChange={(e) => {
+            setFormState((prev) => ({ ...prev, Author: e.target.value }));
+          }}
+          defaultValue={formState.Author}
+          required
+        />
 
-    const formData = new FormData(e.target);
+        <SelectWithOther
+          label="Genres"
+          formName="Genre"
+          formState={formState}
+          setFormState={setFormState}
+          listValues={getDistinctForm.res.uniqueGenres}
+        />
+        <SelectWithOther
+          label="Sujets"
+          formName="Subject"
+          formState={formState}
+          setFormState={setFormState}
+          listValues={getDistinctForm.res.uniqueSubjects}
+        />
+        <SingleSelectWithOther
+          label="Emplacement"
+          formName="Location"
+          formState={formState}
+          setFormState={setFormState}
+          listValues={getDistinctForm.res.uniqueLocations}
+        />
 
-    try {
-      await booksAPIHandler.patch(
-        {
-          Title: formData.get("Title"),
-          Author: formData.get("Author"),
-          Genre: selectedGenres,
-          Subject: selectedSubjects,
-          Location:
-            formData.get("Location") === "-- Autre --"
-              ? formData.get("customLocation")
-              : formData.get("Location"),
-        },
-        id
-      );
-
-      alert("le livre à été modifié !");
-
-      navigate("/livres/" + id);
-    } catch (error) {
-      console.error(error);
-      setError((prev) => ({ ...prev, patch: error.message }));
-    }
-  }
-
-  if (error.get) return <p className="structuredError">{error.get}</p>;
-
-  return book ? (
-    <form onSubmit={handleFormSubmit} className="modifyForm">
-      {error.patch ? <p className="structuredError">{error.patch}</p> : null}
-      <label htmlFor="title">Titre: </label>
-      <input type="text" name="title" defaultValue={book.Title} required />
-      <label htmlFor="author">Auteur: </label>
-      <input type="text" name="author" defaultValue={book.Author} required />
-      <label htmlFor="genre">Genre: </label>
-      <input
-        type="text"
-        name="genre"
-        defaultValue={book.Genre.join(", ")}
-        required
-      />
-      <label htmlFor="subject">Sujet: </label>
-      <input
-        type="text"
-        name="subject"
-        defaultValue={book.Subject.join(", ")}
-        required
-      />
-      <label htmlFor="location">Emplacement: </label>
-      <input
-        type="text"
-        name="location"
-        defaultValue={book.Location}
-        required
-      />
-      <input type="submit" value="Envoyer" />
-    </form>
-  ) : (
-    <p className="loadingBar">Loading...</p>
+        <input type="submit" value="Envoyer" />
+      </form>
+    )
   );
 }
