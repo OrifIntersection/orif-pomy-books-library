@@ -28,7 +28,7 @@ export async function getCollaborator(req, res, next) {
 
   res.status(200).json({
     status: "success",
-    message: `Details for collaborator with ID: ${collaborator._id} have been sent successfully`,
+    message: "Les détails pour ce collaborateur ont été retrouvés.",
     data: collaborator,
   });
 }

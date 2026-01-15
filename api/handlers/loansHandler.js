@@ -24,7 +24,7 @@ export async function getAllLoans(req, res, next) {
 
   return res.status(200).json({
     status: "success",
-    message: `Loans retrieved successfully.`,
+    message: "Les emprunts ont été retrouvés.",
     results: loans.length,
     data: loans,
   });
@@ -46,7 +46,7 @@ export async function getLoan(req, res, next) {
 
   return res.status(200).json({
     status: "success",
-    message: `Loan with ID: ${id} retrieved successfully.`,
+    message: "Cet emprunt à été retrouvé.",
     data: loanDoc,
   });
 }
@@ -70,17 +70,18 @@ export async function patchLoan(req, res, next) {
     .populate("Book")
     .populate("Collaborator");
   if (!loanDoc) throw new AppError("UNFOUND_LOAN_ID");
-  if (loanDoc.Collaborator._id.toString() !== collaboratorId.toString()) throw new AppError("CANNOT_MODIFY_OTHER_LOAN")
-  if (loanDoc.Returned === true) throw new AppError("CANNOT_RETURN_RETURNED_LOAN")
+  if (loanDoc.Collaborator._id.toString() !== collaboratorId.toString())
+    throw new AppError("CANNOT_MODIFY_OTHER_LOAN");
+  if (loanDoc.Returned === true)
+    throw new AppError("CANNOT_RETURN_RETURNED_LOAN");
 
   loanDoc.EndDate = new Date(endDate);
   await loanDoc.save();
-  
+
   return res.status(201).json({
     status: "success",
-    message: "Loan updated successfully.",
+    message: "Vous avez modifié votre emprunt. Redirection...",
   });
-
 }
 
 export async function postLoan(req, res, next) {
@@ -110,7 +111,7 @@ export async function postLoan(req, res, next) {
 
   return res.status(201).json({
     status: "success",
-    message: "Loan created successfully.",
+    message: "Vous avez emprunté ce livre. Redirection...",
     data: newLoan,
   });
 }
@@ -140,6 +141,6 @@ export async function deleteLoan(req, res, next) {
 
   return res.status(200).json({
     status: "success",
-    message: `Loan with ID: ${id} marked as returned.`,
+    message: "Vous avez rendu votre emprunt sur ce livre. Redirection...",
   });
 }

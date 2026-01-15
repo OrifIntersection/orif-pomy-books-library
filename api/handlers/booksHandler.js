@@ -71,7 +71,7 @@ export async function getAllBooks(req, res, next) {
 
   return res.status(200).json({
     status: "success",
-    message: `Books retrieved successfully.`,
+    message: "La recherche est fonctionnelle",
     results: books.length,
     data: books,
   });
@@ -109,7 +109,7 @@ export async function getBook(req, res, next) {
 
   return res.status(200).json({
     status: "success",
-    message: `Book with ID: ${bookId} retrieved successfully.`,
+    message: "Un livre à été trouvé",
     data: book,
   });
 }
@@ -146,6 +146,7 @@ export async function postBook(req, res, next) {
 
   res.status(201).json({
     status: "success",
+    message: "Votre livre à été crée avec succès. Redirection...",
     data: createdBook,
   });
 }
@@ -195,6 +196,7 @@ export async function patchBook(req, res, next) {
 
   res.status(200).json({
     status: "success",
+    message: "Le livre à été modifié. Redirection...",
     data: updatedBook,
   });
 }
@@ -221,7 +223,7 @@ export async function deleteBook(req, res, next) {
 
   res.status(200).json({
     status: "success",
-    message: `Book has been deleted`,
+    message: "Ce livre à été supprimé. Redirection...",
   });
 }
 

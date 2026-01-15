@@ -72,6 +72,7 @@ export async function signup(req, res, next) {
   res.status(201).json({
     status: "success",
     auth: { name: createdCollaborator.Name, authToken },
+    message: "Votre compte à été crée avec succès. Redirection...",
   });
 }
 
@@ -104,7 +105,7 @@ export async function login(req, res, next) {
 
   res.status(200).json({
     status: "success",
-    message: `collaborator with email: ${email} has logged in successfully`,
+    message: `Vous avez été authentifié avec succès. Redirection...`,
     auth: { name: collaborator.Name, authToken },
   });
 }
@@ -142,7 +143,7 @@ export async function modify(req, res, next) {
 
   res.status(200).json({
     status: "success",
-    message: `collaborator with id: ${collaboratorId} has been modified successfully.`,
+    message: `Vous avez modifié votre compte. Redirection...`,
     auth: { name, authToken }, // return new name & jwt on auth for frontend consistency
   });
 }
@@ -165,7 +166,7 @@ export async function deleteAccount(req, res, next) {
 
   res.status(200).json({
     status: "success",
-    message: "This collaborator has been deleted",
+    message: "Votre compte à été supprimé.",
     deauth: true,
   });
 }
