@@ -1,36 +1,32 @@
 import APIHandler from "../../utils/APIHandler";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router";
+
+import useFormSubmit from "../../utils/useFormSubmit";
 
 const collaboratorsAPIHandler = new APIHandler("collaborators");
 
 export default function OtherUserPage() {
-  const [collaborator, setCollaborator] = useState();
-  const [error, setError] = useState();
   const { id } = useParams();
 
-  useEffect(() => {
-    async function GetAPI() {
-      try {
-        const body = await collaboratorsAPIHandler.get("", id);
-        setCollaborator(body.data);
-      } catch (error) {
-        console.error(error);
-        setError(error.message);
-      }
-    }
+  const getForm = useFormSubmit({
+    onSubmit: function () {
+      return collaboratorsAPIHandler.get("", id);
+    },
+  });
 
-    GetAPI();
+  useEffect(() => {
+    getForm.handleSubmit();
   }, []);
 
-  if (error) return <p className="structuredError">{error}</p>;
+  if (getForm.error) return <p className="structuredError">{getForm.error}</p>;
 
-  return collaborator ? (
+  if (getForm.loading) return <p className="loadingBar">loading...</p>;
+
+  return (
     <>
-      <p className="structuredInfo">Compte de: {collaborator.Name}</p>
-      <p className="structuredInfo">Email: {collaborator.Email}</p>
+      <p className="structuredInfo">Compte de: {getForm.res?.Name}</p>
+      <p className="structuredInfo">Email: {getForm.res?.Email}</p>
     </>
-  ) : (
-    <p className="loadingBar">loading...</p>
   );
 }

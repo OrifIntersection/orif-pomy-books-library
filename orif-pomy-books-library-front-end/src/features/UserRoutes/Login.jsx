@@ -15,7 +15,7 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  const { handleSubmit, success, error, loading } = useFormSubmit({
+  const postForm = useFormSubmit({
     onSubmit: function (values) {
       return collaboratorsAPIHandler.post({ email: values.email });
     },
@@ -26,10 +26,12 @@ export default function Login() {
     },
   });
 
+  if (postForm.success)
+    return <p className="structuredSuccess">{postForm.success}</p>;
+
   return (
-    <form onSubmit={handleSubmit} className="loginForm">
-      {error && <p className="structuredError">{error}</p>}
-      {success && <p className="structuredSuccess">{success}</p>}
+    <form onSubmit={postForm.handleSubmit} className="loginForm">
+      {postForm.error && <p className="structuredError">{postForm.error}</p>}
       <label htmlFor="username">Email: </label>
       <input type="text" id="email" name="email" />
       <input type="submit" value="Login" />

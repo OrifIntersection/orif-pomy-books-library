@@ -58,7 +58,7 @@ export default function useFormSubmit({ onSubmit, onSuccess, onError }) {
       }
 
       setSuccess(res?.message ?? "Succès"); // if no message is returned by the server, default to 'succès'
-      setRes(res);
+      setRes(res.data);
       onSuccess?.(res);
     } catch (err) {
       // all errors should already be handled by the APIHandler, but just in case
