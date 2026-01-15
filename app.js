@@ -89,8 +89,8 @@ const transporter = nodemailer.createTransport({
 (async () => {
   try {
     const info = await transporter.sendMail({
-      from: "testing@bibliotheque.applications.ws", // sender address
-      to: ["lithiumium@gmail.com"], // list of recipients
+      from: "noreply@bibliotheque.applications.ws", // sender address
+      to: ["james.haesler@formation.orif.ch"], // list of recipients
       subject: "Hello", // subject line
       html: "<b>Hello world?</b>", // HTML body
     });
