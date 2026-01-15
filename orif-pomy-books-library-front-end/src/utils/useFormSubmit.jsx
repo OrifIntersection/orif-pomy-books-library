@@ -19,6 +19,7 @@ import { useState, useContext } from "react";
 import { UsernameContext } from "../contexts/UsernameContext";
 
 export default function useFormSubmit({ onSubmit, onSuccess, onError }) {
+  const [res, setRes] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(null);
   const [error, setError] = useState(null);
@@ -26,13 +27,18 @@ export default function useFormSubmit({ onSubmit, onSuccess, onError }) {
   const { setUsername } = useContext(UsernameContext);
 
   async function handleSubmit(e) {
-    e.preventDefault();
+    e?.preventDefault();
     setLoading(true);
     setError(null); // reset the error state when a new form is submitted
 
     try {
-      const formData = new FormData(e.target);
-      const values = Object.fromEntries(formData.entries());
+      let formData;
+      let values;
+
+      if (e) {
+        formData = new FormData(e.target);
+        values = Object.fromEntries(formData.entries());
+      }
 
       const res = await onSubmit(values);
 
@@ -45,13 +51,14 @@ export default function useFormSubmit({ onSubmit, onSuccess, onError }) {
         setUsername(res.auth.name);
       }
 
-      if (res.logout) {
+      if (res.deauth) {
         localStorage.removeItem("Auth-Token");
         localStorate.removeItem("username");
         setUsername(null);
       }
 
       setSuccess(res?.message ?? "Succès"); // if no message is returned by the server, default to 'succès'
+      setRes(res);
       onSuccess?.(res);
     } catch (err) {
       // all errors should already be handled by the APIHandler, but just in case
@@ -64,5 +71,5 @@ export default function useFormSubmit({ onSubmit, onSuccess, onError }) {
     }
   }
 
-  return { handleSubmit, loading, success, error };
+  return { handleSubmit, loading, success, error, res };
 }

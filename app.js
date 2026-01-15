@@ -64,11 +64,19 @@ app.use((err, req, res, next) => {
 
   console.error(err);
 
-  if (err.isOperational)
+  if (err.isOperational && statusCode === 401)
+    return res.status(statusCode).json({
+      status,
+      message,
+      deauth: true, // necessary to deauth if jwt is expired, or user's localstorage is not in sync with the server
+    });
+
+  if (err.isOperational) {
     return res.status(statusCode).json({
       status,
       message,
     });
+  }
 
   res.status(statusCode).json({
     status: "error",
@@ -86,7 +94,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-(async () => {
+/* (async () => {
   try {
     const info = await transporter.sendMail({
       from: "noreply@bibliotheque.applications.ws", // sender address
@@ -99,7 +107,7 @@ const transporter = nodemailer.createTransport({
   } catch (err) {
     console.error("Error while sending mail", err);
   }
-})();
+})(); */
 
 //
 // connect to database via mongoose

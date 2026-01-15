@@ -7,23 +7,13 @@ import useFormSubmit from "../../utils/useFormSubmit.jsx";
 const collaboratorsAPIHandler = new APIHandler("collaborators/me");
 
 export default function DeleteForm() {
-  const [book, setBook] = useState();
-  const [error, setError] = useState();
-
   const navigate = useNavigate();
 
-  useEffect(() => {
-    async function getAPI() {
-      try {
-        const body = await collaboratorsAPIHandler.get();
-        setBook(body.data);
-      } catch (error) {
-        console.error(error);
-        setError(error.message);
-      }
-    }
-    getAPI();
-  }, []);
+  const getForm = useFormSubmit({
+    onSubmit: function () {
+      return collaboratorsAPIHandler.get();
+    },
+  });
 
   const deleteForm = useFormSubmit({
     onSubmit: function () {
@@ -32,18 +22,26 @@ export default function DeleteForm() {
     onSuccess: function () {
       setTimeout(() => {
         navigate("/livres");
-      }, input.meta.env.VITE_NAVIGATE_TIMEOUT);
+      }, import.meta.env.VITE_NAVIGATE_TIMEOUT);
     },
   });
 
-  if (error) return <p className="structuredError">{error}</p>;
+  useEffect(() => {
+    getForm.handleSubmit();
+  }, []);
 
-  return book ? (
-    <form className="deleteForm" onSubmit={handleSubmit}>
+  if (getForm.error) return <p className="structuredError">{getForm.error}</p>;
+
+  if (getForm.loading) return <p className="loadingBar">Loading...</p>;
+
+  return (
+    <form className="deleteForm" onSubmit={deleteForm.handleSubmit}>
       {deleteForm.error && (
         <p className="structuredError">{deleteForm.error}</p>
       )}
-      {success && <p className="structuredSuccess">{success}</p>}
+      {deleteForm.success && (
+        <p className="structuredSuccess">{deleteForm.success}</p>
+      )}
       <p className="structuredInfo">
         Êtes vous sûr de vouloir supprimer votre compte?{" "}
         <span style={{ color: "red" }}>Vos données seront irrécupérables.</span>
@@ -54,7 +52,5 @@ export default function DeleteForm() {
         style={{ color: "red", fontWeight: "bold" }}
       />
     </form>
-  ) : (
-    <p className="loadingBar">Loading...</p>
   );
 }
