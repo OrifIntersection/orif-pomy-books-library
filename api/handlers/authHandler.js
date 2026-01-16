@@ -18,6 +18,8 @@ export async function attachCollaborator(req, res, next) {
 
   const decoded = jwt.verify(token, process.env.JWTSECRET);
 
+  if (!decoded.trusted) return next();
+
   const collaborator = await Collaborator.findById(decoded.id);
   if (!collaborator) return next();
 
@@ -89,7 +91,9 @@ export async function signup(req, res, next) {
   res.status(201).json({
     status: "success",
     message:
-      "Votre compte à été crée avec succès. Veuillez vérifier votre email et suivre l'URL envoyé pour vous authentifier, l'URL est valide pendant 15 minutes.",
+      "Votre compte à été crée avec succès. Veuillez vérifier votre email et suivre l'URL envoyé pour vous authentifier " +
+      "l'URL est valide pendant 15 minutes. " +
+      "Vous pouvez fermer ce fenêtre.",
   });
 }
 
@@ -139,7 +143,9 @@ export async function login(req, res, next) {
   res.status(200).json({
     status: "success",
     message:
-      "Un email à été envoyé. Veuillez vérifier votre email et suivre l'URL envoyé pour vous authentifier, l'URL est valide pendant 15 minutes.",
+      "Un email à été envoyé. Veuillez vérifier votre email et suivre l'URL envoyé pour vous authentifier " +
+      "l'URL est valide pendant 15 minutes. " +
+      "Vous pouvez fermer ce fenêtre.",
   });
 }
 
@@ -154,7 +160,7 @@ export async function authenticate(req, res, next) {
 
   const authToken = jwt.sign(
     // create a new token that is valid for 5 days.
-    { id: collaborator._id },
+    { id: collaborator._id, trusted: true }, // essentially, only tokens that are generated after the user has verified their email are trusted
     process.env.JWTSECRET,
     { expiresIn: "5d" }
   );
