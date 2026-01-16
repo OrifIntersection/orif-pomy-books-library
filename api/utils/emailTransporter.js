@@ -1,16 +1,19 @@
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
 
-dotenv.config({ path: "../../config.env" });
+let transporter;
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.resend.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: "resend",
-    pass: process.env.RESEND_API_KEY,
-  },
-});
+export default function Transporter() {
+  if (!transporter) {
+    transporter = nodemailer.createTransport({
+      host: "smtp.resend.com",
+      port: 587,
+      secure: false,
+      auth: {
+        user: "resend",
+        pass: process.env.RESEND_API_KEY,
+      },
+    });
+  }
 
-export default transporter;
+  return transporter;
+}

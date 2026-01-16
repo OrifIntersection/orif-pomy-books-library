@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { Collaborator } from "../models/collaboratorModel.js";
 import validator from "validator";
 import { parseWhitelist } from "../utils/emailHosts.js";
-import transporter from "../utils/emailTransporter.js";
+import Transporter from "../utils/emailTransporter.js";
 
 import { Loan } from "../models/loanModel.js";
 
@@ -69,6 +69,8 @@ export async function signup(req, res, next) {
     process.env.JWTSECRET,
     { expiresIn: "5d" }
   );
+
+  const transporter = Transporter();
 
   const URL = "https://bibliotheque.applications.ws/auth/" + authToken;
 
