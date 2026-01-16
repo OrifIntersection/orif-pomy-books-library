@@ -21,9 +21,8 @@ export default function DeleteForm() {
       return loansAPIHandler.delete(id);
     },
     onSuccess: function (res) {
-      console.log(res);
       setTimeout(() => {
-        navigate(`/livres/${res.data.Book._id}`);
+        navigate(`/livres/${res.data.Book}`);
       }, import.meta.env.VITE_NAVIGATE_TIMEOUT);
     },
   });
