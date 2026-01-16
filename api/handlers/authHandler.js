@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { Collaborator } from "../models/collaboratorModel.js";
 import validator from "validator";
 import { parseWhitelist } from "../utils/emailHosts.js";
+import { transporter } from "../utils/emailTransporter.js";
 
 import { Loan } from "../models/loanModel.js";
 
@@ -66,13 +67,26 @@ export async function signup(req, res, next) {
   const authToken = jwt.sign(
     { id: createdCollaborator._id },
     process.env.JWTSECRET,
-    { expiresIn: "1d" }
+    { expiresIn: "5d" }
   );
+
+  const URL = "https://bibliotheque.applications.ws/auth/" + authToken;
+
+  const sentEmail = await transporter.sendMail({
+    from: process.env.SENDER,
+    to: email,
+    subject: "Votre token d'authentification",
+    text:
+      "Veuillez cliquer sur cet URL pour vous authentifier auprès du bibliothèque ORIF Pomy: " +
+      URL,
+  });
+
+  console.log("Message sent: " + sentEmail.messageId);
 
   res.status(201).json({
     status: "success",
-    auth: { name: createdCollaborator.Name, authToken },
-    message: "Votre compte à été crée avec succès. Redirection...",
+    message:
+      "Votre compte à été crée avec succès. Veuillez vérifier votre email et suivre l'URL envoyé pour vous authentifier.",
   });
 }
 
@@ -100,7 +114,7 @@ export async function login(req, res, next) {
   if (!collaborator) throw new AppError("UNFOUND_EMAIL");
 
   const authToken = jwt.sign({ id: collaborator._id }, process.env.JWTSECRET, {
-    expiresIn: "1d",
+    expiresIn: "5d",
   });
 
   res.status(200).json({
@@ -138,7 +152,7 @@ export async function modify(req, res, next) {
   });
 
   const authToken = jwt.sign({ id: collaboratorId }, process.env.JWTSECRET, {
-    expiresIn: "1d",
+    expiresIn: "5d",
   });
 
   res.status(200).json({

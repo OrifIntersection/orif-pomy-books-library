@@ -7,8 +7,6 @@ import mongoose from "mongoose";
 import AppError from "./api/utils/AppError.js";
 import dotenv from "dotenv";
 
-import nodemailer from "nodemailer";
-
 // import global environment variables
 dotenv.config({ path: "./config.env" });
 
@@ -83,31 +81,6 @@ app.use((err, req, res, next) => {
     message: "Something went very wrong!",
   });
 });
-
-const transporter = nodemailer.createTransport({
-  host: "smtp.resend.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: "resend",
-    pass: process.env.RESEND_API_KEY,
-  },
-});
-
-/* (async () => {
-  try {
-    const info = await transporter.sendMail({
-      from: "noreply@bibliotheque.applications.ws", // sender address
-      to: ["james.haesler@formation.orif.ch"], // list of recipients
-      subject: "Hello", // subject line
-      html: "<b>Hello world?</b>", // HTML body
-    });
-
-    console.log("Message sent: %s", info.messageId);
-  } catch (err) {
-    console.error("Error while sending mail", err);
-  }
-})(); */
 
 //
 // connect to database via mongoose
