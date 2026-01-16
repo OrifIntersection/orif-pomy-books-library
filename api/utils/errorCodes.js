@@ -31,11 +31,6 @@ export const ERROR_CODES = {
       "L'identificateur fourni pour cette ressource est invalide. Veuillez vérifier les données.",
     statusCode: 400,
   },
-  MALFORMED_AUTH: {
-    message:
-      "Un problème est survenu avec votre token d'identification. Veuillez en redemander un en performant un login.",
-    statusCode: 400,
-  },
   INVALID_EMAIL: {
     message:
       "L'email fourni est invalide, notez que vous devez utiliser votre email orif. @formation.orif.ch, @orif.ch, ou autre.",
@@ -131,7 +126,7 @@ export const ERROR_CODES = {
   },
   NO_AUTH: {
     message:
-      "Vous n'avez pas envoyé de JWT, vous ne pouvez pas être identifié.",
+      "Vous n'avez pas envoyé token d'authentification, vous ne pouvez pas être identifié.",
     statusCode: 400,
   },
   EMAIL_EXISTS: {
@@ -197,7 +192,12 @@ export const ERROR_CODES = {
   },
   EXPIRED_AUTH: {
     message:
-      "Votre session est expirée, veuillez login à nouveau s'il vous plaît.",
+      "Votre session ou ce token est expirée, veuillez login à nouveau s'il vous plaît.",
+    statusCode: 401,
+  },
+  MALFORMED_AUTH: {
+    message:
+      "Un problème est survenu avec votre token d'identification. Veuillez en redemander un en performant un login.",
     statusCode: 401,
   },
 };

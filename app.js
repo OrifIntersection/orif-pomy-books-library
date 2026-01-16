@@ -48,6 +48,9 @@ app.use((err, req, res, next) => {
   if (err.name === "TokenExpiredError")
     return next(new AppError("EXPIRED_AUTH"));
 
+  if (err.name === "JsonWebTokenError")
+    return next(new AppError("MALFORMED_AUTH"));
+
   next(err);
 });
 
@@ -66,7 +69,7 @@ app.use((err, req, res, next) => {
     return res.status(statusCode).json({
       status,
       message,
-      deauth: true, // necessary to deauth if jwt is expired, or user's localstorage is not in sync with the server
+      deauth: true, // necessary to deauth if jwt is expired, or users localstorage is not in sync with the server
     });
 
   if (err.isOperational) {
