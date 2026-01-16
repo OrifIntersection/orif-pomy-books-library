@@ -1,4 +1,4 @@
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import { useEffect } from "react";
 import useFormSubmit from "../../utils/useFormSubmit";
 import APIHandler from "../../utils/APIHandler";
@@ -7,6 +7,7 @@ const collaboratorsAPIHandler = new APIHandler("collaborators/auth");
 
 export default function AuthForm() {
   const { auth } = useParams();
+  const navigate = useNavigate();
 
   const getForm = useFormSubmit({
     onSubmit: function () {
