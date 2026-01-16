@@ -62,8 +62,6 @@ export default function useFormSubmit({ onSubmit, onSuccess, onError }) {
       onSuccess?.(res);
     } catch (err) {
       // all errors should already be handled by the APIHandler, but just in case
-      console.log(err);
-
       if (err.deauth) {
         localStorage.removeItem("Auth-Token");
         localStorage.removeItem("username");
