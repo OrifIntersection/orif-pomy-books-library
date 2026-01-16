@@ -76,11 +76,12 @@ export async function patchLoan(req, res, next) {
     throw new AppError("CANNOT_RETURN_RETURNED_LOAN");
 
   loanDoc.EndDate = new Date(endDate);
-  await loanDoc.save();
+  const updatedLoan = await loanDoc.save();
 
   return res.status(201).json({
     status: "success",
     message: "Vous avez modifié votre emprunt. Redirection...",
+    data: updatedLoan,
   });
 }
 
@@ -137,10 +138,11 @@ export async function deleteLoan(req, res, next) {
     throw new AppError("CANNOT_RETURN_OTHER_LOAN");
 
   loan.Returned = true;
-  await loan.save();
+  const deletedLoan = await loan.save();
 
   return res.status(200).json({
     status: "success",
     message: "Vous avez rendu votre emprunt sur ce livre. Redirection...",
+    data: deletedLoan,
   });
 }
