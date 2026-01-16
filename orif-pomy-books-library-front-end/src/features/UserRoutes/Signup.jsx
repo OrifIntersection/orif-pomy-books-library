@@ -1,24 +1,16 @@
 import APIHandler from "../../utils/APIHandler";
-import { useNavigate } from "react-router";
 
 import useFormSubmit from "../../utils/useFormSubmit";
 
 const collaboratorsAPIHandler = new APIHandler("collaborators/signup");
 
 export default function Signup() {
-  const navigate = useNavigate();
-
   const postForm = useFormSubmit({
     onSubmit: function (values) {
       return collaboratorsAPIHandler.post({
         name: values.name,
         email: values.email,
       });
-    },
-    onSuccess: function () {
-      setTimeout(() => {
-        navigate("/livres");
-      }, import.meta.env.VITE_NAVIGATE_TIMEOUT);
     },
   });
 

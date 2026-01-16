@@ -1,6 +1,5 @@
 import APIHandler from "../../utils/APIHandler";
 import NavButton from "../NavButton.jsx";
-import { useNavigate } from "react-router";
 
 import useFormSubmit from "../../utils/useFormSubmit.jsx";
 
@@ -13,16 +12,9 @@ export default function Login() {
   //  JWT token is used handled in APIHandler for authorization via headers
   //
 
-  const navigate = useNavigate();
-
   const postForm = useFormSubmit({
     onSubmit: function (values) {
       return collaboratorsAPIHandler.post({ email: values.email });
-    },
-    onSuccess: function () {
-      setTimeout(() => {
-        navigate("/livres");
-      }, import.meta.env.VITE_NAVIGATE_TIMEOUT);
     },
   });
 
