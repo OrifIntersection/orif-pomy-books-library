@@ -53,7 +53,7 @@ export default function useFormSubmit({ onSubmit, onSuccess, onError }) {
 
       if (res.deauth) {
         localStorage.removeItem("Auth-Token");
-        localStorate.removeItem("username");
+        localStorage.removeItem("username");
         setUsername(null);
       }
 
@@ -62,6 +62,14 @@ export default function useFormSubmit({ onSubmit, onSuccess, onError }) {
       onSuccess?.(res);
     } catch (err) {
       // all errors should already be handled by the APIHandler, but just in case
+      console.log(err);
+
+      if (err.deauth) {
+        localStorage.removeItem("Auth-Token");
+        localStorage.removeItem("username");
+        setUsername(null);
+      }
+
       setError(
         err.message || "Une erreur inattendue est survenue sur le serveur."
       );

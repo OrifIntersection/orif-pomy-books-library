@@ -44,7 +44,7 @@ export default class APIHandler {
 
       const body = await res.json();
 
-      if (body.status === "fail") throw new Error(body.message);
+      if (body.status === "fail") throw body;
       console.log(`@${options.method}@ from ${this.url}: ${body.status}`);
       if (body.message) console.log(body.message);
 
