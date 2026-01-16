@@ -73,7 +73,7 @@ export async function signup(req, res, next) {
   const URL = "https://bibliotheque.applications.ws/auth/" + authToken;
 
   const sentEmail = await transporter.sendMail({
-    from: process.env.SENDER,
+    from: `'${process.env.SENDER_NAME}' <${process.env.SENDER_EMAIL}>`,
     to: email,
     subject: "Votre token d'authentification",
     text:
