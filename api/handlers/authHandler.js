@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { Collaborator } from "../models/collaboratorModel.js";
 import validator from "validator";
 import { parseWhitelist } from "../utils/emailHosts.js";
-import { transporter } from "../utils/emailTransporter.js";
+import transporter from "../utils/emailTransporter.js";
 
 import { Loan } from "../models/loanModel.js";
 
