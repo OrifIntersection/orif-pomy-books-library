@@ -1,4 +1,5 @@
 import { useParams } from "react-router";
+import { useEffect } from "react";
 import useFormSubmit from "../../utils/useFormSubmit";
 import APIHandler from "../../utils/APIHandler";
 
@@ -17,6 +18,10 @@ export default function AuthForm() {
       }, import.meta.env.VITE_NAVIGATE_TIMEOUT);
     },
   });
+
+  useEffect(() => {
+    getForm.handleSubmit();
+  }, []);
 
   if (getForm.error) return <p className="structuredError">{getForm.error}</p>;
   if (getForm.success)

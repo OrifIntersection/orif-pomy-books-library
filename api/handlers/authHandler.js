@@ -154,7 +154,7 @@ export async function authenticate(req, res, next) {
 
   const authToken = jwt.sign(
     // create a new token that is valid for 5 days.
-    { id: createdCollaborator._id },
+    { id: collaborator._id },
     process.env.JWTSECRET,
     { expiresIn: "5d" }
   );
