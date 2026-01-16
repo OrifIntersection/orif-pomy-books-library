@@ -22,6 +22,7 @@ import LoanModifyForm from "./features/LoanRoutes/ModifyForm.jsx";
 
 import UserPage from "./features/UserRoutes/UserPage.jsx";
 import OtherUserPage from "./features/UserRoutes/OtherUserPage.jsx";
+import UserAuthForm from "./features/UserRoutes/AuthForm.jsx";
 import Login from "./features/UserRoutes/Login.jsx";
 import Signup from "./features/UserRoutes/Signup.jsx";
 import UserModifyForm from "./features/UserRoutes/ModifyForm.jsx";
@@ -42,6 +43,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/livres/:id/emprunter" element={<LoanAddForm />} />
           <Route path="/emprunts/:id/supprimer" element={<LoanDeleteForm />} />
           <Route path="/emprunts/:id/modifier" element={<LoanModifyForm />} />
+          <Route path="/auth/:auth" element={<UserAuthForm />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/collaborateurs/moi" element={<UserPage />} />

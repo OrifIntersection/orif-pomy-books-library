@@ -3,6 +3,7 @@ import {
   login,
   signup,
   modify,
+  authenticate,
   deleteAccount,
   attachCollaborator,
   requireCollaborator,
@@ -13,9 +14,10 @@ const router = express.Router();
 
 router.post("/login", login); // /api/v1/collaborators/login
 router.post("/signup", signup); // /api/v1/collaborators/signup
+router.get("/auth/:auth", authenticate); // /api/v1/collaborators/auth
 
 router
-  .route("/me")                 // /api/v1/collaborators/me
+  .route("/me") // /api/v1/collaborators/me
   .get(attachCollaborator, requireCollaborator, getCollaborator)
   .delete(attachCollaborator, requireCollaborator, deleteAccount)
   .patch(attachCollaborator, requireCollaborator, modify);

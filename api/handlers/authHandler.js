@@ -65,9 +65,10 @@ export async function signup(req, res, next) {
   });
 
   const authToken = jwt.sign(
+    // temporary token that is only active for 15 minutes
     { id: createdCollaborator._id },
     process.env.JWTSECRET,
-    { expiresIn: "5d" }
+    { expiresIn: "15m" }
   );
 
   const transporter = Transporter();
@@ -75,7 +76,7 @@ export async function signup(req, res, next) {
   const URL = "https://bibliotheque.applications.ws/auth/" + authToken;
 
   const sentEmail = await transporter.sendMail({
-    from: `'${process.env.SENDER_NAME}' <${process.env.SENDER_EMAIL}>`,
+    from: `${process.env.SENDER_NAME} <${process.env.SENDER_EMAIL}>`,
     to: email,
     subject: "Votre token d'authentification",
     text:
@@ -88,7 +89,7 @@ export async function signup(req, res, next) {
   res.status(201).json({
     status: "success",
     message:
-      "Votre compte à été crée avec succès. Veuillez vérifier votre email et suivre l'URL envoyé pour vous authentifier.",
+      "Votre compte à été crée avec succès. Veuillez vérifier votre email et suivre l'URL envoyé pour vous authentifier, l'URL est valide pendant 15 minutes.",
   });
 }
 
@@ -116,8 +117,47 @@ export async function login(req, res, next) {
   if (!collaborator) throw new AppError("UNFOUND_EMAIL");
 
   const authToken = jwt.sign({ id: collaborator._id }, process.env.JWTSECRET, {
-    expiresIn: "5d",
+    // temporary token that is only active for 15 minutes
+    expiresIn: "15m",
   });
+
+  const transporter = Transporter();
+
+  const URL = "https://bibliotheque.applications.ws/auth/" + authToken;
+
+  const sentEmail = await transporter.sendMail({
+    from: `${process.env.SENDER_NAME} <${process.env.SENDER_EMAIL}>`,
+    to: email,
+    subject: "Votre token d'authentification",
+    text:
+      "Veuillez cliquer sur cet URL pour vous authentifier auprès du bibliothèque ORIF Pomy: " +
+      URL,
+  });
+
+  console.log("Message sent: " + sentEmail.messageId);
+
+  res.status(200).json({
+    status: "success",
+    message:
+      "Un email à été envoyé. Veuillez vérifier votre email et suivre l'URL envoyé pour vous authentifier, l'URL est valide pendant 15 minutes.",
+  });
+}
+
+export async function authenticate(req, res, next) {
+  const token = req.params.auth; // temporary token that is only active for 15 minutes
+  if (!token) throw new AppError("NO_AUTH");
+
+  const decoded = jwt.verify(token, process.env.JWTSECRET); // verify it is not expired
+
+  const collaborator = await Collaborator.findById(decoded.id);
+  if (!collaborator) throw new AppError("MALFORMED_AUTH");
+
+  const authToken = jwt.sign(
+    // create a new token that is valid for 5 days.
+    { id: createdCollaborator._id },
+    process.env.JWTSECRET,
+    { expiresIn: "5d" }
+  );
 
   res.status(200).json({
     status: "success",
