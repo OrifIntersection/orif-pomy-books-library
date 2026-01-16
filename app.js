@@ -6,12 +6,9 @@ import loansRouter from "./api/routes/loansRoute.js";
 import mongoose from "mongoose";
 import AppError from "./api/utils/AppError.js";
 import dotenv from "dotenv";
-import nodemailer from "nodemailer";
 
 // import global environment variables
 dotenv.config({ path: "./config.env" });
-
-import transporter from "./api/utils/emailTransporter.js";
 
 // global middleware
 const app = express();

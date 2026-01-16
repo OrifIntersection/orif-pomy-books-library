@@ -1,4 +1,7 @@
 import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+
+dotenv.config({ path: "../../config.env" });
 
 const transporter = nodemailer.createTransport({
   host: "smtp.resend.com",
