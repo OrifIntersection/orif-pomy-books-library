@@ -6,9 +6,12 @@ import loansRouter from "./api/routes/loansRoute.js";
 import mongoose from "mongoose";
 import AppError from "./api/utils/AppError.js";
 import dotenv from "dotenv";
+import nodemailer from "nodemailer";
 
 // import global environment variables
 dotenv.config({ path: "./config.env" });
+
+import transporter from "./api/utils/emailTransporter.js";
 
 // global middleware
 const app = express();
@@ -80,6 +83,16 @@ app.use((err, req, res, next) => {
     status: "error",
     message: "Something went very wrong!",
   });
+});
+
+const transporter = nodemailer.createTransport({
+  host: "smtp.resend.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: "resend",
+    pass: process.env.RESEND_API_KEY,
+  },
 });
 
 //
