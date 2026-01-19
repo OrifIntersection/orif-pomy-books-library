@@ -4,7 +4,6 @@ class ICS {
   }
 
   create() {
-    console.log(this.loan);
     const event = {
       start: this.loan.EndDate,
       duration: { days: 1 },

@@ -118,9 +118,9 @@ export async function postLoan(req, res, next) {
     .populate("Book")
     .populate("Collaborator");
 
-  const calendarEvent = new ICS(populatedLoan).create();
+  const ICSHandler = new ICS(populatedLoan);
 
-  const { calendarError, calendarValue } = ics.createEvent(calendarEvent);
+  const { calendarError, calendarValue } = ics.createEvent(ICSHandler.create());
 
   if (calendarError) console.log(calendarError);
   console.log(calendarValue);
