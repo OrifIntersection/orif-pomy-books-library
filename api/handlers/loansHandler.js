@@ -120,10 +120,10 @@ export async function postLoan(req, res, next) {
 
   const ICSHandler = new ICS(populatedLoan);
 
-  const { calendarError, calendarValue } = ics.createEvent(ICSHandler.create());
+  const { error, value } = ics.createEvent(ICSHandler.create());
 
-  if (calendarError) console.log(calendarError);
-  console.log(calendarValue);
+  if (error) console.log(error);
+  console.log(value);
 
   const transporter = Transporter();
 
