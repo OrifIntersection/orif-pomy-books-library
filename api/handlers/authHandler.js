@@ -91,8 +91,8 @@ export async function signup(req, res, next) {
   res.status(201).json({
     status: "success",
     message:
-      "Votre compte à été crée avec succès. Veuillez vérifier votre email et suivre l'URL envoyé pour vous authentifier " +
-      "l'URL est valide pendant 15 minutes. " +
+      "Votre compte à été crée avec succès. Veuillez vérifier votre email et suivre l'URL envoyé pour vous authentifier. \n" +
+      "l'URL sera valide pendant 15 minutes. \n" +
       "Vous pouvez fermer ce fenêtre.",
   });
 }
@@ -143,8 +143,8 @@ export async function login(req, res, next) {
   res.status(200).json({
     status: "success",
     message:
-      "Un email à été envoyé. Veuillez vérifier votre email et suivre l'URL envoyé pour vous authentifier " +
-      "l'URL est valide pendant 15 minutes. " +
+      "Un email à été envoyé. Veuillez vérifier votre email et suivre l'URL envoyé pour vous authentifier. \n " +
+      "l'URL sera valide pendant 15 minutes. \n" +
       "Vous pouvez fermer ce fenêtre.",
   });
 }

@@ -1,5 +1,8 @@
 import { Loan } from "../models/loanModel.js";
 import AppError from "../utils/AppError.js";
+import Transporter from "../utils/emailTransporter.js";
+import * as ics from "ics";
+import ICS from "../utils/CreateICS.js";
 
 export async function getAllLoans(req, res, next) {
   //
@@ -69,6 +72,7 @@ export async function patchLoan(req, res, next) {
   const loanDoc = await Loan.findById(id)
     .populate("Book")
     .populate("Collaborator");
+
   if (!loanDoc) throw new AppError("UNFOUND_LOAN_ID");
   if (loanDoc.Collaborator._id.toString() !== collaboratorId.toString())
     throw new AppError("CANNOT_MODIFY_OTHER_LOAN");
@@ -110,9 +114,37 @@ export async function postLoan(req, res, next) {
   loan.EndDate = new Date(endDate);
   const newLoan = await loan.save();
 
+  const populatedLoan = await newLoan.populate("Book").populate("Collaborator");
+
+  const event = new ICS(populatedLoan);
+
+  const { error, value } = ics.createEvent(event);
+
+  if (error) console.log(error);
+
+  const transporter = Transporter();
+
+  const sentEmail = await transporter.sendMail({
+    from: `${process.env.SENDER_NAME} <${process.env.SENDER_EMAIL}>`,
+    to: email,
+    subject: "Votre emprunt",
+    text:
+      "Vous avec emprunté " +
+      populatedLoan.Book.Title +
+      " Voici un évênement que vous pouvez ajouter à votre calendrier si vous souhaitez.",
+    icalEvent: {
+      filename: "invitation.ics",
+      method: "PUBLISH",
+      content: value,
+    },
+  });
+
+  console.log("Message sent: " + sentEmail.messageId);
+
   return res.status(201).json({
     status: "success",
-    message: "Vous avez emprunté ce livre. Redirection...",
+    message:
+      "Vous avez emprunté ce livre. Un email sera envoyé avec plus de détails. Redirection...",
     data: newLoan,
   });
 }

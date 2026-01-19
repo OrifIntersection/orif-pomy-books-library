@@ -17,4 +17,11 @@
   text-shadow: 0px 1px 0px black;
 }
 
+.footer {
+  width: 100%;
+  padding: 8px;
+  background: rgb(0, 90, 170);
+  color: white;
+  font-size: 15px;
+}
 
