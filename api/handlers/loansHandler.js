@@ -123,6 +123,7 @@ export async function postLoan(req, res, next) {
   const { calendarError, calendarValue } = ics.createEvent(calendarEvent);
 
   if (calendarError) console.log(calendarError);
+  console.log(calendarValue);
 
   const transporter = Transporter();
 
