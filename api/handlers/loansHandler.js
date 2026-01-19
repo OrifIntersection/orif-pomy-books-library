@@ -134,11 +134,13 @@ export async function postLoan(req, res, next) {
       "Vous avec emprunté " +
       populatedLoan.Book.Title +
       " Voici un évênement que vous pouvez ajouter à votre calendrier si vous souhaitez.",
-    icalEvent: {
-      filename: "invitation.ics",
-      method: "PUBLISH",
-      content: value,
-    },
+    alternatives: [
+      {
+        contentType: "text/calendar; method=PUBLISH",
+        content: value,
+        filename: "invitation.ics",
+      },
+    ],
   });
 
   console.log("Message sent: " + sentEmail.messageId);
