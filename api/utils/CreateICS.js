@@ -5,7 +5,7 @@ class ICS {
 
   create() {
     const event = {
-      start: [this.loan.EndDate],
+      start: Date.parse(this.loan.EndDate),
       duration: { days: 1 },
       title: `Rendre Emprunt: ${this.loan.Book.Title}`,
       location: this.loan.Book.Location,
