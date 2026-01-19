@@ -99,7 +99,7 @@ export async function patchLoan(req, res, next) {
     text:
       "Vous avez emprunté " +
       populatedLoan.Book.Title +
-      " Voici un évênement que vous pouvez ajouter à votre calendrier si vous souhaitez.",
+      "\nVoici un évênement que vous pouvez ajouter à votre calendrier si vous souhaitez.",
     alternatives: [
       {
         contentType: "text/calendar; method=PUBLISH",
@@ -163,7 +163,7 @@ export async function postLoan(req, res, next) {
     text:
       "Vous avez emprunté " +
       populatedLoan.Book.Title +
-      " Voici un évênement que vous pouvez ajouter à votre calendrier si vous souhaitez.",
+      "\nVoici un évênement que vous pouvez ajouter à votre calendrier si vous souhaitez.",
     alternatives: [
       {
         contentType: "text/calendar; method=PUBLISH",
