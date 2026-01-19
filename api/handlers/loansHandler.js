@@ -144,7 +144,7 @@ export async function postLoan(req, res, next) {
     Collaborator: collaboratorId,
     EndDate: new Date(endDate),
   });
-  const newLoan = loan.save();
+  const newLoan = await loan.save();
 
   const populatedLoan = await Loan.findById(newLoan._id)
     .populate("Book")
