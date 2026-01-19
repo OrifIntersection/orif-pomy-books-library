@@ -118,17 +118,17 @@ export async function postLoan(req, res, next) {
     .populate("Book")
     .populate("Collaborator");
 
-  const event = new ICS(populatedLoan);
+  const calendarEvent = new ICS(populatedLoan).create();
 
-  const { error, value } = ics.createEvent(event);
+  const { calendarError, calendarValue } = ics.createEvent(calendarEvent);
 
-  if (error) console.log(error);
+  if (calendarError) console.log(calendarError);
 
   const transporter = Transporter();
 
   const sentEmail = await transporter.sendMail({
     from: `${process.env.SENDER_NAME} <${process.env.SENDER_EMAIL}>`,
-    to: email,
+    to: populatedLoan.Collaborator.Email,
     subject: "Votre emprunt",
     text:
       "Vous avec emprunté " +
@@ -137,7 +137,7 @@ export async function postLoan(req, res, next) {
     icalEvent: {
       filename: "invitation.ics",
       method: "PUBLISH",
-      content: value,
+      content: calendarValue,
     },
   });
 
