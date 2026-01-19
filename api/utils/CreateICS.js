@@ -21,6 +21,7 @@ class ICS {
           email: this.loan.Collaborator.Email,
         },
       ],
+      productId: "bibliothèqueorif/ics",
     };
 
     return event;
