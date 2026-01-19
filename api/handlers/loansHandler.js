@@ -123,7 +123,6 @@ export async function postLoan(req, res, next) {
   const { error, value } = ics.createEvent(ICSHandler.create());
 
   if (error) console.log(error);
-  console.log(value);
 
   const transporter = Transporter();
 
@@ -138,7 +137,7 @@ export async function postLoan(req, res, next) {
     icalEvent: {
       filename: "invitation.ics",
       method: "PUBLISH",
-      content: calendarValue,
+      content: value,
     },
   });
 
