@@ -114,7 +114,9 @@ export async function postLoan(req, res, next) {
   loan.EndDate = new Date(endDate);
   const newLoan = await loan.save();
 
-  const populatedLoan = await newLoan.populate("Book").populate("Collaborator");
+  const populatedLoan = await Loan.findById(newLoan._id)
+    .populate("Book")
+    .populate("Collaborator");
 
   const event = new ICS(populatedLoan);
 
