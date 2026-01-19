@@ -82,9 +82,39 @@ export async function patchLoan(req, res, next) {
   loanDoc.EndDate = new Date(endDate);
   const updatedLoan = await loanDoc.save();
 
+  const populatedLoan = await Loan.findById(updatedLoan._id)
+    .populate("Book")
+    .populate("Collaborator");
+
+  const ICSHandler = new ICS(populatedLoan);
+
+  const { value } = ics.createEvent(ICSHandler.create());
+
+  const transporter = Transporter();
+
+  const sentEmail = await transporter.sendMail({
+    from: `${process.env.SENDER_NAME} <${process.env.SENDER_EMAIL}>`,
+    to: populatedLoan.Collaborator.Email,
+    subject: "Votre emprunt",
+    text:
+      "Vous avez emprunté " +
+      populatedLoan.Book.Title +
+      " Voici un évênement que vous pouvez ajouter à votre calendrier si vous souhaitez.",
+    alternatives: [
+      {
+        contentType: "text/calendar; method=PUBLISH",
+        content: value,
+        filename: "invitation.ics",
+      },
+    ],
+  });
+
+  console.log("Message sent: " + sentEmail.messageId);
+
   return res.status(201).json({
     status: "success",
-    message: "Vous avez modifié votre emprunt. Redirection...",
+    message:
+      "Vous avez modifié votre emprunt. Un email sera envoyé aussi. Redirection...",
     data: updatedLoan,
   });
 }
@@ -109,10 +139,12 @@ export async function postLoan(req, res, next) {
   const existingLoan = await Loan.exists({ Book: bookId, Returned: false });
   if (existingLoan) throw new AppError("CANNOT_LOAN_WHILE_LOANED");
 
-  let loan = new Loan({ Book: bookId, Collaborator: collaboratorId });
-
-  loan.EndDate = new Date(endDate);
-  const newLoan = await loan.save();
+  const loan = new Loan({
+    Book: bookId,
+    Collaborator: collaboratorId,
+    EndDate: new Date(endDate),
+  });
+  const newLoan = loan.save();
 
   const populatedLoan = await Loan.findById(newLoan._id)
     .populate("Book")
@@ -120,9 +152,7 @@ export async function postLoan(req, res, next) {
 
   const ICSHandler = new ICS(populatedLoan);
 
-  const { error, value } = ics.createEvent(ICSHandler.create());
-
-  if (error) console.log(error);
+  const { value } = ics.createEvent(ICSHandler.create());
 
   const transporter = Transporter();
 
@@ -131,7 +161,7 @@ export async function postLoan(req, res, next) {
     to: populatedLoan.Collaborator.Email,
     subject: "Votre emprunt",
     text:
-      "Vous avec emprunté " +
+      "Vous avez emprunté " +
       populatedLoan.Book.Title +
       " Voici un évênement que vous pouvez ajouter à votre calendrier si vous souhaitez.",
     alternatives: [
@@ -148,7 +178,7 @@ export async function postLoan(req, res, next) {
   return res.status(201).json({
     status: "success",
     message:
-      "Vous avez emprunté ce livre. Un email sera envoyé avec plus de détails. Redirection...",
+      "Vous avez emprunté ce livre. Un email sera envoyé aussi. Redirection...",
     data: newLoan,
   });
 }

@@ -43,6 +43,7 @@ export default function AddForm() {
     getForm.res && (
       <>
         {postForm.error && <p className="structuredError">{postForm.error}</p>}
+        {postForm.loading && <p className="structuredSuccess">Chargement...</p>}
         {postForm.success && (
           <p className="structuredSuccess">{postForm.success}</p>
         )}

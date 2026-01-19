@@ -41,6 +41,9 @@ export default function ModifyForm() {
         {patchForm.error && (
           <p className="structuredError">{patchForm.error}</p>
         )}
+        {patchForm.loading && (
+          <p className="structuredSuccess">Chargement...</p>
+        )}
         {patchForm.success && (
           <p className="structuredSuccess">{patchForm.success}</p>
         )}
